@@ -36,4 +36,19 @@ class AdPlacement extends Model
     {
         return $this->advertisements->first();
     }
+
+    /**
+     * The banner a slot should show, or null when the slot is off, empty, or
+     * holds a banner that has been switched off.
+     */
+    public static function bannerFor(string $slug): ?Advertisement
+    {
+        $placement = static::query()
+            ->where('slug', $slug)
+            ->where('active', 'y')
+            ->with('advertisements')
+            ->first();
+
+        return $placement?->advertisements->firstWhere('active', true);
+    }
 }

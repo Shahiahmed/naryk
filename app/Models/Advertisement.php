@@ -6,6 +6,7 @@ use App\Casts\Flag;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable(['name', 'type', 'url', 'image', 'size', 'ga', 'active'])]
 class Advertisement extends Model
@@ -43,5 +44,12 @@ class Advertisement extends Model
         }
 
         return str_contains($image, '/') ? $image : 'ad/'.$image;
+    }
+
+    public function imageUrl(): ?string
+    {
+        $path = self::imagePath($this->image);
+
+        return $path ? Storage::disk('public')->url($path) : null;
     }
 }

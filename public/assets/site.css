@@ -1,0 +1,448 @@
+/*
+ * Naryk.kz front end.
+ * Colours are sampled from the reference images in the client's brief:
+ * dark green background, warm grey-green columns, vivid green accents.
+ * Written as plain CSS on purpose — the production server has no npm.
+ */
+
+:root {
+    --green-dark: #2f553c;
+    --green-darker: #1e412e;
+    --green-accent: #00a658;
+    --column-bg: #e6e5de;
+    --page-bg: #f4f4f0;
+    --ink: #16181d;
+    --ink-muted: #5f6672;
+    --hairline: #d8d7cf;
+    --shell: 1280px;
+    --gap: 24px;
+    --radius: 10px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.45;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.shell {
+    max-width: var(--shell);
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+/* ---------- header ---------- */
+
+.site-header {
+    background: var(--green-dark);
+    color: #fff;
+}
+
+.site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    min-height: 72px;
+}
+
+.site-header__logo img {
+    max-height: 40px;
+    width: auto;
+}
+
+.site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.site-nav__link {
+    color: #e8f2ea;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.site-nav__link:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* ---------- ticker ---------- */
+
+.ticker {
+    background: var(--green-darker);
+    color: #fff;
+    overflow: hidden;
+    padding: 8px 0;
+    font-size: 14px;
+}
+
+.ticker__track {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 60s linear infinite;
+}
+
+.ticker:hover .ticker__track {
+    animation-play-state: paused;
+}
+
+.ticker__group {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.ticker__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ticker__logo {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    object-fit: contain;
+    background: #fff;
+}
+
+.ticker__code {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.ticker__arrow--up {
+    color: #4ade80;
+}
+
+.ticker__arrow--down {
+    color: #f87171;
+}
+
+.ticker__arrow--flat {
+    color: #cbd5e1;
+}
+
+.ticker__sep {
+    margin: 0 8px;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+@keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ticker__track {
+        animation: none;
+    }
+    .ticker {
+        overflow-x: auto;
+    }
+}
+
+/* ---------- three columns ---------- */
+
+.columns {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr) 300px;
+    gap: var(--gap);
+    align-items: start;
+    padding: var(--gap) 0 48px;
+}
+
+/*
+ * Only the centre column scrolls: the sides stick once they reach the top.
+ */
+.columns__side {
+    position: sticky;
+    top: 16px;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    background: var(--column-bg);
+    border-radius: var(--radius);
+    padding: 16px;
+}
+
+.columns__main {
+    min-width: 0;
+}
+
+.column-title {
+    margin: 0 0 12px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--green-dark);
+}
+
+/* ---------- feed cards ---------- */
+
+.feed {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card {
+    background: var(--column-bg);
+    border-radius: var(--radius);
+    padding: 18px 20px 16px;
+}
+
+.card__media {
+    display: block;
+    margin: -18px -20px 14px;
+}
+
+.card__image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.card__title {
+    margin: 0 0 8px;
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.card__lead {
+    margin: 0 0 12px;
+    color: var(--ink-muted);
+    font-size: 17px;
+}
+
+/* Tall image: the text sits on the photo, low. */
+.card--tall {
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.card--tall__image {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+}
+
+.card--tall__overlay {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 24px 20px 18px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0));
+}
+
+.card__title--inverse {
+    color: #fff;
+}
+
+.card__link:hover {
+    text-decoration: none;
+}
+
+/* ---------- meta ---------- */
+
+.meta {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--ink-muted);
+}
+
+.meta__rubric {
+    color: var(--green-accent);
+    font-weight: 600;
+}
+
+.meta--inverse,
+.meta--inverse .meta__date {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.meta--inverse .meta__rubric {
+    color: #6ee7a8;
+}
+
+/* ---------- PR badge ---------- */
+
+.pr-badge {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--green-accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+/* ---------- side cards ---------- */
+
+.aside-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.aside-card {
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hairline);
+}
+
+.aside-card:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.aside-card__media img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.aside-card__title {
+    margin: 0 0 6px;
+    font-size: 15px;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+/* ---------- banner + load more ---------- */
+
+.banner {
+    text-align: center;
+}
+
+.banner img {
+    margin: 0 auto;
+    border-radius: var(--radius);
+}
+
+.load-more {
+    display: block;
+    width: 100%;
+    margin: 24px 0 0;
+    padding: 14px;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--green-dark);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.load-more:hover {
+    background: var(--green-darker);
+}
+
+.load-more[disabled] {
+    opacity: 0.6;
+    cursor: default;
+}
+
+/* ---------- footer ---------- */
+
+.site-footer {
+    margin-top: 40px;
+    background: var(--green-dark);
+    color: #dfe9e2;
+    padding: 32px 0 16px;
+    font-size: 15px;
+}
+
+.site-footer__inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--gap);
+}
+
+.site-footer__logo {
+    max-height: 40px;
+    width: auto;
+    margin-bottom: 12px;
+}
+
+.site-footer__desc {
+    margin: 0;
+    max-width: 44ch;
+}
+
+.site-footer__nav,
+.site-footer__contacts,
+.site-footer__socials {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.site-footer__socials {
+    margin-top: 12px;
+}
+
+.site-footer__legal {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 1100px) {
+    .columns {
+        grid-template-columns: minmax(0, 1fr) 280px;
+    }
+    .columns__side--left {
+        grid-column: 1 / -1;
+        position: static;
+        max-height: none;
+    }
+}
+
+@media (max-width: 800px) {
+    .columns,
+    .site-footer__inner {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .columns__side {
+        position: static;
+        max-height: none;
+    }
+    .card__title {
+        font-size: 20px;
+    }
+}

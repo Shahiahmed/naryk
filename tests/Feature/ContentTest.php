@@ -50,8 +50,21 @@ it('reads legacy yes/no columns as booleans', function () {
     $post = Post::where('marquee', 'yes')->firstOrFail();
 
     expect($post->marquee)->toBeTrue()
-        ->and($post->show_image)->toBeTrue()
         ->and($post->pr_news)->toBeFalse();
+});
+
+it('reads the card layout out of show_image', function () {
+    $wide = new Post(['show_image' => Post::LAYOUT_WIDE]);
+    $tall = new Post(['show_image' => Post::LAYOUT_TALL]);
+    $text = new Post(['show_image' => Post::LAYOUT_TEXT]);
+
+    expect($wide->layout())->toBe(Post::LAYOUT_WIDE)
+        ->and($tall->layout())->toBe(Post::LAYOUT_TALL)
+        ->and($text->layout())->toBe(Post::LAYOUT_TEXT);
+
+    // One legacy row holds `public`, one holds NULL. Neither is a layout.
+    expect((new Post(['show_image' => 'public']))->layout())->toBe(Post::LAYOUT_WIDE)
+        ->and((new Post)->layout())->toBe(Post::LAYOUT_WIDE);
 });
 
 it('writes booleans back as the words the column uses', function () {

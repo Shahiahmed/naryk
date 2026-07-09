@@ -66,9 +66,22 @@ class PostForm
                                 ? Str::after($state, 'images/')
                                 : null),
 
-                        Toggle::make('show_image')
-                            ->label('Показывать обложку в статье')
-                            ->default(true),
+                        Select::make('show_image')
+                            ->label('Вид карточки в ленте')
+                            ->options([
+                                Post::LAYOUT_WIDE => 'Горизонтальная обложка — заголовок и лид под ней',
+                                Post::LAYOUT_TALL => 'Вертикальная обложка — заголовок поверх, без лида',
+                                Post::LAYOUT_TEXT => 'Без обложки — заголовок и лид',
+                            ])
+                            // Two legacy rows hold `public` and NULL; both mean wide.
+                            ->formatStateUsing(fn (?string $state): string => match ($state) {
+                                Post::LAYOUT_TALL => Post::LAYOUT_TALL,
+                                Post::LAYOUT_TEXT => Post::LAYOUT_TEXT,
+                                default => Post::LAYOUT_WIDE,
+                            })
+                            ->default(Post::LAYOUT_WIDE)
+                            ->selectablePlaceholder(false)
+                            ->required(),
                     ]),
 
                 Section::make('Публикация')

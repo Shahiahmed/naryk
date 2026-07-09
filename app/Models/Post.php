@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'post_title', 'post_name', 'post_content', 'post_summary', 'post_image',
@@ -19,6 +20,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Post extends Model
 {
     public const TYPE = 'post';
+
+    /**
+     * How the feed renders a post. `show_image` is a varchar, not an enum, so
+     * the third layout fits the client's schema untouched. Legacy rows carry
+     * `yes`, which has always meant a wide image above the title.
+     */
+    public const LAYOUT_WIDE = 'yes';
+
+    public const LAYOUT_TALL = 'vertical';
+
+    public const LAYOUT_TEXT = 'no';
 
     protected $table = 'posts';
 
@@ -60,11 +72,28 @@ class Post extends Model
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
             'post_hits' => 'integer',
-            'show_image' => Flag::class.':yes,no',
             'marquee' => Flag::class.':yes,no',
             // Every row in the dump is off, so the on-value is an assumption.
             'pr_news' => Flag::class.':1,0',
         ];
+    }
+
+    /**
+     * One row stores `public` and one stores NULL — neither is a layout, and
+     * both should fall back to the wide image the site has always shown.
+     */
+    public function layout(): string
+    {
+        return match ($this->show_image) {
+            self::LAYOUT_TALL => self::LAYOUT_TALL,
+            self::LAYOUT_TEXT => self::LAYOUT_TEXT,
+            default => self::LAYOUT_WIDE,
+        };
+    }
+
+    public function hasImage(): bool
+    {
+        return $this->layout() !== self::LAYOUT_TEXT && filled($this->post_image);
     }
 
     /**
@@ -111,6 +140,33 @@ class Post extends Model
     }
 
     /**
+     * @param  Builder<self>  $query
+     */
+    public function scopePublished(Builder $query): void
+    {
+        $query->where('post_status', 'publish')->where('post_visibility', 'public');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     */
+    public function scopeInCategory(Builder $query, string $slug): void
+    {
+        $query->whereHas(
+            'categories.term',
+            fn (Builder $term): Builder => $term->where('slug', $slug),
+        );
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     */
+    public function scopeNewest(Builder $query): void
+    {
+        $query->orderByDesc('created_at')->orderByDesc('id');
+    }
+
+    /**
      * `post_image` holds a path relative to images/, e.g. 2026/07/abc.jpeg.
      */
     public static function imagePath(?string $image): ?string
@@ -120,5 +176,29 @@ class Post extends Model
         }
 
         return str_starts_with($image, 'images/') ? $image : 'images/'.$image;
+    }
+
+    public function imageUrl(): ?string
+    {
+        $path = self::imagePath($this->post_image);
+
+        return $path ? Storage::disk('public')->url($path) : null;
+    }
+
+    public function url(): string
+    {
+        return '/'.trim(Setting::get('permalinks', 'permalink', 'news'), '/').'/'.$this->post_name;
+    }
+
+    /**
+     * The lead is one sentence: the editors write it in `post_summary`, wrapped
+     * in the HTML their old rich editor produced.
+     */
+    public function lead(): ?string
+    {
+        $text = trim(html_entity_decode(strip_tags((string) $this->post_summary), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        $text = trim(preg_replace('/\s+/u', ' ', $text) ?? '');
+
+        return $text !== '' ? $text : null;
     }
 }
