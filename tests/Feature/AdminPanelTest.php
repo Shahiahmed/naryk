@@ -1,9 +1,11 @@
 <?php
 
+use App\Filament\Resources\Users\Pages\EditUser;
 use App\Models\Permission;
 use App\Models\User;
 use Filament\Auth\Pages\Login;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
 uses(DatabaseTransactions::class);
@@ -88,4 +90,36 @@ it('fills the legacy alias column when creating a permission', function () {
     $permission = Permission::create(['name' => 'read-widgets', 'guard_name' => 'web']);
 
     expect($permission->fresh()->alias)->toBe('read-widgets');
+});
+
+it('resolves a bare photo filename into the avatar directory', function () {
+    expect(User::photoPath('DJM02813.jpg'))->toBe('avatar/DJM02813.jpg')
+        ->and(User::photoPath('avatar/DJM02813.jpg'))->toBe('avatar/DJM02813.jpg')
+        ->and(User::photoPath(null))->toBeNull()
+        ->and(User::photoPath(''))->toBeNull();
+});
+
+it('renders the avatar from the avatar directory in the users table', function () {
+    $superadmin = User::role('superadmin')->firstOrFail();
+    $withPhoto = User::where('photo', 'DJM02813.jpg')->firstOrFail();
+
+    expect(Storage::disk('public')->exists('avatar/'.$withPhoto->photo))->toBeTrue();
+
+    $this->actingAs($superadmin)
+        ->get('/admin/users')
+        ->assertOk()
+        ->assertSee('/storage/avatar/DJM02813.jpg', escape: false);
+});
+
+it('keeps the bare filename in the column when saving the edit form', function () {
+    $superadmin = User::role('superadmin')->firstOrFail();
+    $target = User::where('photo', 'DJM02813.jpg')->firstOrFail();
+
+    Livewire::actingAs($superadmin)
+        ->test(EditUser::class, ['record' => $target->getKey()])
+        ->fillForm(['occupation' => 'Тестовая должность'])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect($target->fresh()->photo)->toBe('DJM02813.jpg');
 });

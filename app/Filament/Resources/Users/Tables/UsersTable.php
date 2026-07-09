@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -20,7 +21,7 @@ class UsersTable
                     ->label('Фото')
                     ->disk('public')
                     ->circular()
-                    ->defaultImageUrl(asset('favicon.ico')),
+                    ->getStateUsing(fn (User $record): ?string => User::photoPath($record->photo)),
 
                 TextColumn::make('name')
                     ->label('Имя')

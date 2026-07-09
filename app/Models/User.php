@@ -46,4 +46,17 @@ class User extends Authenticatable implements FilamentUser
             && $this->banned_at === null
             && $this->hasAnyRole(self::PANEL_ROLES);
     }
+
+    /**
+     * `users.photo` holds a bare filename; the file lives in avatar/ on the
+     * public disk. Tolerate a value that already carries the directory.
+     */
+    public static function photoPath(?string $photo): ?string
+    {
+        if (blank($photo)) {
+            return null;
+        }
+
+        return str_contains($photo, '/') ? $photo : 'avatar/'.$photo;
+    }
 }

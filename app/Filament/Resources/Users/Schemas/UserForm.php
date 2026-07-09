@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use App\Models\User;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -57,7 +58,11 @@ class UserForm
                             ->disk('public')
                             ->directory('avatar')
                             ->imageEditor()
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            // The column stores a bare filename, the file lives in
+                            // avatar/. Same convention as advertisements.image.
+                            ->formatStateUsing(fn (?string $state): ?string => filled($state) ? User::photoPath($state) : null)
+                            ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? basename($state) : null),
 
                         TextInput::make('occupation')
                             ->label('Должность')
