@@ -20,12 +20,13 @@ class Post extends Model
 {
     public const TYPE = 'post';
 
+    protected $table = 'posts';
+
     /**
      * `meta_description` is NOT NULL without a default, and `post_guid` and
      * `post_mime_type` are NOT NULL too — an insert that omits them fails.
      */
     protected $attributes = [
-        'post_type' => self::TYPE,
         'post_status' => 'publish',
         'post_visibility' => 'public',
         'comment_status' => 'open',
@@ -38,12 +39,18 @@ class Post extends Model
     ];
 
     /**
-     * `pages` live in the same table, told apart by `post_type`.
+     * Posts and pages share this table, told apart by `post_type`. Both read
+     * the type through late static binding, so App\Models\Page only has to
+     * redeclare the constant.
      */
     protected static function booted(): void
     {
         static::addGlobalScope('post_type', function (Builder $query): void {
-            $query->where('posts.post_type', self::TYPE);
+            $query->where('posts.post_type', static::TYPE);
+        });
+
+        static::creating(function (self $post): void {
+            $post->post_type ??= static::TYPE;
         });
     }
 
