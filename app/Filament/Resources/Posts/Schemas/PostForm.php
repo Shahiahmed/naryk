@@ -48,9 +48,10 @@ class PostForm
                             ->label('Текст')
                             ->required(),
 
-                        Textarea::make('post_summary')
+                        // 333 of the 363 non-empty summaries hold HTML.
+                        RichEditor::make('post_summary')
                             ->label('Краткое описание')
-                            ->rows(3),
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'strike', 'superscript', 'subscript']),
 
                         FileUpload::make('post_image')
                             ->label('Обложка')
@@ -156,11 +157,10 @@ class PostForm
                             ->default('')
                             ->selectablePlaceholder(false),
 
+                        // `pr_news` is toggled straight from the post list, as it
+                        // was in the old admin — it has no field on this form.
                         Toggle::make('marquee')
                             ->label('В бегущей строке'),
-
-                        Toggle::make('pr_news')
-                            ->label('PR-материал'),
                     ]),
 
                 Section::make('SEO')

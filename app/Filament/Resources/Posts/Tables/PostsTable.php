@@ -7,9 +7,9 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
@@ -46,9 +46,8 @@ class PostsTable
                     })
                     ->color(fn (?string $state): string => $state === 'hide' ? 'gray' : 'success'),
 
-                IconColumn::make('pr_news')
-                    ->label('PR')
-                    ->boolean(),
+                ToggleColumn::make('pr_news')
+                    ->label('PR'),
 
                 TextColumn::make('categories.term.name')
                     ->label('Категория')
