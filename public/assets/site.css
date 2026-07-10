@@ -823,15 +823,37 @@ a:hover {
 }
 
 .site-footer__nav,
-.site-footer__contacts,
-.site-footer__socials {
+.site-footer__contacts {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
 .site-footer__socials {
-    margin-top: 12px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.social-link {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.social-link:hover {
+    background: #fff;
+    color: var(--green-dark);
+    text-decoration: none;
+}
+
+.icon {
+    display: block;
 }
 
 .site-footer__legal {

@@ -4,6 +4,7 @@ namespace App\View\Composers;
 
 use App\Models\Menu;
 use App\Models\Setting;
+use App\Support\Social;
 use Illuminate\View\View;
 
 class SiteComposer
@@ -19,7 +20,7 @@ class SiteComposer
             'logo' => Setting::assetPath($settings['logo_image']['logowebsite'] ?? null),
             'logoFooter' => Setting::assetPath($settings['logo_image']['logowebsite_footer'] ?? null),
             'favicon' => Setting::assetPath($settings['logo_image']['favicon'] ?? null),
-            'socials' => array_filter($settings['social_media'] ?? []),
+            'socials' => Social::links($settings['social_media'] ?? []),
         ]);
     }
 }

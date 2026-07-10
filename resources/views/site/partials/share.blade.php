@@ -9,6 +9,13 @@
         'whatsapp' => "https://api.whatsapp.com/send?text={$title}%20{$url}",
         'telegram' => "https://t.me/share/url?url={$url}&text={$title}",
     ];
+
+    $labels = [
+        'facebook' => 'Facebook',
+        'twitter' => 'X',
+        'whatsapp' => 'WhatsApp',
+        'telegram' => 'Telegram',
+    ];
 @endphp
 
 <div class="share {{ $modifier ?? '' }}">
@@ -17,6 +24,9 @@
            href="{{ $link }}"
            target="_blank"
            rel="noopener noreferrer"
-           aria-label="{{ ucfirst($network) }}">{{ mb_strtoupper(mb_substr($network, 0, 1)) }}</a>
+           title="{{ $labels[$network] }}"
+           aria-label="{{ $labels[$network] }}">
+            @include('site.partials.icon', ['name' => $network])
+        </a>
     @endforeach
 </div>

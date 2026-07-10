@@ -96,7 +96,10 @@
 
             <div class="site-footer__socials">
                 @foreach ($socials as $network => $url)
-                    <a href="{{ $url }}" rel="noopener noreferrer" target="_blank">{{ ucfirst($network) }}</a>
+                    <a class="social-link" href="{{ $url }}" rel="noopener noreferrer" target="_blank"
+                       title="{{ ucfirst($network) }}" aria-label="{{ ucfirst($network) }}">
+                        @include('site.partials.icon', ['name' => $network])
+                    </a>
                 @endforeach
             </div>
         </div>
