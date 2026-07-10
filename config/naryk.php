@@ -2,6 +2,14 @@
 
 return [
 
+    /*
+     * The settings table records `news` as the post prefix, and 8000 indexed
+     * articles already live under it. Both the route and Post::url() read this
+     * value so they cannot drift apart; the admin's Permalinks tab shows what
+     * the old site stored but does not move the URLs.
+     */
+    'post_prefix' => env('NARYK_POST_PREFIX', 'news'),
+
     'feed' => [
         // "15 материалдан кейін «тағы да» деген кнопка керек"
         'per_page' => 15,

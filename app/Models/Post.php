@@ -170,9 +170,42 @@ class Post extends Model
     /**
      * @param  Builder<self>  $query
      */
+    public function scopeInTag(Builder $query, string $slug): void
+    {
+        $query->whereHas(
+            'tags.term',
+            fn (Builder $term): Builder => $term->where('slug', $slug),
+        );
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     */
     public function scopeNewest(Builder $query): void
     {
         $query->orderByDesc('created_at')->orderByDesc('id');
+    }
+
+    /**
+     * Bump the view counter without touching `updated_at` — the column drives
+     * the sitemap, and a read should not reorder the feed.
+     */
+    public function recordHit(): void
+    {
+        static::withoutTimestamps(fn () => $this->increment('post_hits'));
+    }
+
+    /**
+     * `ads_show` picks the banner slot inside an article: `hide` shows none,
+     * `iworld` swaps in the Its-World slot, anything else takes the default.
+     */
+    public function bannerPlacement(): ?string
+    {
+        return match ($this->ads_show) {
+            'hide' => null,
+            'iworld' => 'its-world',
+            default => 'single-720',
+        };
     }
 
     /**
@@ -196,7 +229,7 @@ class Post extends Model
 
     public function url(): string
     {
-        return '/'.trim(Setting::get('permalinks', 'permalink', 'news'), '/').'/'.$this->post_name;
+        return '/'.trim((string) config('naryk.post_prefix'), '/').'/'.$this->post_name;
     }
 
     /**

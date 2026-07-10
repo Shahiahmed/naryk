@@ -91,7 +91,8 @@
     </div>
 
     <div class="shell site-footer__legal">
-        © {{ date('Y') }} {{ $settings['site_information']['company_name'] ?? 'Naryk.kz' }}
+        © 2016–{{ date('Y') }} {{ $settings['site_information']['company_name'] ?? 'Naryk.kz' }}
+        авторлық және жанама құқықтар сақталған.
     </div>
 </footer>
 

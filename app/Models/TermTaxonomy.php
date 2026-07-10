@@ -35,4 +35,15 @@ class TermTaxonomy extends Model
     {
         return $this->term?->slug;
     }
+
+    /**
+     * The settings table records `with_prefix_category` for categories, which
+     * is the scheme the 8000 indexed articles already link to.
+     */
+    public function url(): string
+    {
+        $prefix = $this->taxonomy === Tag::TAXONOMY ? 'tag' : 'category';
+
+        return "/{$prefix}/{$this->slug}";
+    }
 }
