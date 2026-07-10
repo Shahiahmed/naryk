@@ -91,9 +91,18 @@ class Post extends Model
         };
     }
 
+    /**
+     * A handful of rows point at files the client's storage archive never had.
+     * Rather than render a broken image, such a post falls back to the
+     * text-only card.
+     */
     public function hasImage(): bool
     {
-        return $this->layout() !== self::LAYOUT_TEXT && filled($this->post_image);
+        if ($this->layout() === self::LAYOUT_TEXT || blank($this->post_image)) {
+            return false;
+        }
+
+        return Storage::disk('public')->exists(self::imagePath($this->post_image));
     }
 
     /**

@@ -2,7 +2,7 @@
     /** @var \App\Models\Post $post */
     $withImage ??= false;
     $category = $post->categories->first();
-    $image = $withImage ? $post->imageUrl() : null;
+    $image = $withImage && $post->hasImage() ? $post->imageUrl() : null;
 @endphp
 
 <article class="aside-card">

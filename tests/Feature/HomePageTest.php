@@ -6,6 +6,8 @@ use App\Support\Quotes;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 uses(DatabaseTransactions::class);
 
@@ -123,13 +125,26 @@ it('leaves the special projects column out until the category exists', function 
     $response->assertDontSee('Арнайы жобалар');
 });
 
+/**
+ * A path whose file really is in storage — most of the newest posts point at
+ * images the client's archive never shipped.
+ */
+function anExistingImage(): string
+{
+    $files = Storage::disk('public')->files('images/2026/06');
+
+    expect($files)->not->toBeEmpty();
+
+    return Str::after($files[0], 'images/');
+}
+
 it('renders a tall card with the title on the image and no lead', function () {
     fakeQuotes();
 
     $post = Post::published()->newest()->firstOrFail();
     $post->update([
         'show_image' => Post::LAYOUT_TALL,
-        'post_image' => '2026/07/W7UGbq3ulC.jpeg',
+        'post_image' => anExistingImage(),
         'post_summary' => '<p>Лид, который не должен появиться.</p>',
     ]);
 
@@ -143,16 +158,31 @@ it('renders a tall card with the title on the image and no lead', function () {
 it('renders a text-only card with a lead and no image', function () {
     fakeQuotes();
 
+    $image = anExistingImage();
     $post = Post::published()->newest()->firstOrFail();
     $post->update([
         'show_image' => Post::LAYOUT_TEXT,
-        'post_image' => '2026/07/W7UGbq3ulC.jpeg',
+        'post_image' => $image,
         'post_summary' => '<p>Тек лид қана.</p>',
     ]);
 
     $this->get('/')
         ->assertSeeText('Тек лид қана.')
-        ->assertDontSee('W7UGbq3ulC.jpeg', escape: false);
+        ->assertDontSee($image, escape: false);
+});
+
+it('falls back to a text card when the image file is missing', function () {
+    fakeQuotes();
+
+    $post = Post::published()->newest()->firstOrFail();
+    $post->update([
+        'show_image' => Post::LAYOUT_TALL,
+        'post_image' => '2026/07/does-not-exist.jpeg',
+    ]);
+
+    expect($post->hasImage())->toBeFalse();
+
+    $this->get('/')->assertDontSee('does-not-exist.jpeg', escape: false);
 });
 
 it('marks a PR post with a badge', function () {
