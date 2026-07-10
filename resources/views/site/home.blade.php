@@ -26,18 +26,7 @@
             </div>
 
             @if ($feed->hasMorePages())
-                {{--
-                    The brief asks for a button. Scrolling loads the next page
-                    on its own; the button stays as the fallback for browsers
-                    without IntersectionObserver, and for when a fetch fails.
-                --}}
-                <div class="feed-status" id="feed-status" role="status" aria-live="polite" hidden>
-                    Жүктелуде…
-                </div>
-
                 <button class="load-more" type="button" id="load-more">Тағы да</button>
-
-                <div id="feed-sentinel" aria-hidden="true"></div>
             @endif
         </div>
 

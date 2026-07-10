@@ -50,14 +50,6 @@ it('shows fifteen posts and a load-more button', function () {
         ->and($feed->hasMorePages())->toBeTrue();
 });
 
-it('ships the sentinel the scroll loader watches, and keeps the button as a fallback', function () {
-    fakeQuotes();
-
-    $this->get('/')
-        ->assertSee('id="feed-sentinel"', escape: false)
-        ->assertSee('id="load-more"', escape: false);
-});
-
 it('puts the newest post first', function () {
     fakeQuotes();
 
