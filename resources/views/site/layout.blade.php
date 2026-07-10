@@ -30,6 +30,10 @@
 </head>
 <body>
 
+{{--
+    Every logo the client ships is dark green, so the masthead is light and the
+    dark green lives in the ticker, the buttons and the footer.
+--}}
 <header class="site-header">
     <div class="shell site-header__inner">
         <a class="site-header__logo" href="/">
@@ -40,20 +44,22 @@
                 {{ $settings['site_information']['company_name'] ?? 'Naryk.kz' }}
             @endif
         </a>
+    </div>
 
-        @if ($headerMenu)
-            <nav class="site-nav">
+    <div class="site-nav">
+        <div class="shell site-nav__inner">
+            @if ($headerMenu)
                 @foreach ($headerMenu->items as $item)
                     <a class="site-nav__link {{ $item->class }}" href="{{ $item->link }}">{{ $item->label }}</a>
                 @endforeach
-            </nav>
-        @endif
+            @endif
 
-        <form class="site-search" method="GET" action="{{ route('search') }}" role="search">
-            <input class="site-search__input" type="search" name="q"
-                   value="{{ request()->routeIs('search') ? request('q') : '' }}"
-                   placeholder="Іздеу…" aria-label="Іздеу">
-        </form>
+            <form class="site-search" method="GET" action="{{ route('search') }}" role="search">
+                <input class="site-search__input" type="search" name="q"
+                       value="{{ request()->routeIs('search') ? request('q') : '' }}"
+                       placeholder="Іздеу…" aria-label="Іздеу">
+            </form>
+        </div>
     </div>
 </header>
 

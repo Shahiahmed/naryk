@@ -9,6 +9,7 @@
     --green-dark: #2f553c;
     --green-darker: #1e412e;
     --green-accent: #00a658;
+    --green-pale: #dfeadf;
     --column-bg: #e6e5de;
     --page-bg: #f4f4f0;
     --ink: #16181d;
@@ -56,37 +57,58 @@ a:hover {
 
 /* ---------- header ---------- */
 
+/*
+ * The logo files are all dark green, so the masthead stays light. The dark
+ * green carries the ticker, the buttons and the footer instead.
+ */
 .site-header {
-    background: var(--green-dark);
-    color: #fff;
+    background: #fff;
 }
 
 .site-header__inner {
     display: flex;
     align-items: center;
-    gap: 32px;
-    min-height: 72px;
+    justify-content: center;
+    min-height: 96px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.site-header__logo {
+    color: var(--green-dark);
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
 }
 
 .site-header__logo img {
-    max-height: 40px;
+    max-height: 64px;
     width: auto;
 }
 
 .site-nav {
+    background: var(--green-pale);
+}
+
+.site-nav__inner {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    min-height: 52px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .site-nav__link {
-    color: #e8f2ea;
+    color: var(--green-dark);
     font-weight: 600;
-    font-size: 15px;
+    font-size: 16px;
 }
 
 .site-nav__link:hover {
-    color: #fff;
+    color: var(--green-darker);
     text-decoration: none;
 }
 
@@ -96,17 +118,17 @@ a:hover {
 
 .site-search__input {
     width: 200px;
-    padding: 8px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 8px 14px;
+    border: 1px solid var(--hairline);
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
+    background: #fff;
+    color: var(--ink);
     font: inherit;
     font-size: 14px;
 }
 
 .site-search__input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--ink-muted);
 }
 
 /* ---------- ticker ---------- */
@@ -785,10 +807,14 @@ a:hover {
     gap: var(--gap);
 }
 
+/* The footer logo is dark green too: give it a light chip to sit on. */
 .site-footer__logo {
     max-height: 40px;
     width: auto;
     margin-bottom: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #fff;
 }
 
 .site-footer__desc {
