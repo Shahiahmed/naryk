@@ -48,6 +48,12 @@
                 @endforeach
             </nav>
         @endif
+
+        <form class="site-search" method="GET" action="{{ route('search') }}" role="search">
+            <input class="site-search__input" type="search" name="q"
+                   value="{{ request()->routeIs('search') ? request('q') : '' }}"
+                   placeholder="Іздеу…" aria-label="Іздеу">
+        </form>
     </div>
 </header>
 

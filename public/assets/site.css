@@ -90,6 +90,25 @@ a:hover {
     text-decoration: none;
 }
 
+.site-search {
+    margin-left: auto;
+}
+
+.site-search__input {
+    width: 200px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+}
+
+.site-search__input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
 /* ---------- ticker ---------- */
 
 .ticker {
@@ -618,6 +637,138 @@ a:hover {
     color: var(--ink-muted);
 }
 
+/* ---------- page, contact, search, 404 ---------- */
+
+.article--wide {
+    margin: 12px 0 40px;
+}
+
+.contact {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin: 12px 0 48px;
+    align-items: start;
+}
+
+.contact__desc {
+    color: var(--ink-muted);
+}
+
+.contact__list dt {
+    font-weight: 600;
+    margin-top: 12px;
+}
+
+.contact__list dd {
+    margin: 2px 0 0;
+    color: var(--ink-muted);
+}
+
+.contact__form-wrap {
+    background: var(--column-bg);
+    border-radius: var(--radius);
+    padding: 24px;
+}
+
+.contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Hidden from people, not from bots: `display:none` is too obvious. */
+.honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.field__label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.field__input {
+    padding: 10px 12px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: #fff;
+    font: inherit;
+}
+
+.field__input:focus {
+    outline: 2px solid var(--green-accent);
+    outline-offset: 1px;
+}
+
+.field__error {
+    color: #b91c1c;
+    font-size: 13px;
+}
+
+.alert {
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.alert--success {
+    background: #dcfce7;
+    color: #14532d;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    margin: 16px 0 24px;
+}
+
+.search-form .field__input {
+    flex: 1;
+}
+
+.search-form__button {
+    width: auto;
+    margin: 0;
+    padding: 10px 24px;
+}
+
+.notfound {
+    text-align: center;
+    padding: 80px 0 100px;
+}
+
+.notfound__code {
+    margin: 0;
+    font-size: 88px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--green-dark);
+}
+
+.notfound__title {
+    margin: 8px 0;
+}
+
+.notfound__text {
+    color: var(--ink-muted);
+}
+
+.notfound__link {
+    display: inline-block;
+    width: auto;
+    padding: 12px 28px;
+}
+
 /* ---------- footer ---------- */
 
 .site-footer {
@@ -693,8 +844,21 @@ a:hover {
     .columns,
     .article-layout,
     .grid,
+    .contact,
     .site-footer__inner {
         grid-template-columns: minmax(0, 1fr);
+    }
+    .site-header__inner {
+        flex-wrap: wrap;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+    .site-search {
+        margin-left: 0;
+        width: 100%;
+    }
+    .site-search__input {
+        width: 100%;
     }
     .columns__side {
         position: static;
