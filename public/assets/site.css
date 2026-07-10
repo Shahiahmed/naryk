@@ -392,6 +392,26 @@ a:hover {
     cursor: default;
 }
 
+.load-more[hidden] {
+    display: none;
+}
+
+.feed-status {
+    margin-top: 20px;
+    padding: 12px;
+    text-align: center;
+    color: var(--ink-muted);
+}
+
+.feed-status[hidden] {
+    display: none;
+}
+
+/* Watched by the IntersectionObserver that pulls in the next page. */
+#feed-sentinel {
+    height: 1px;
+}
+
 /* ---------- article ---------- */
 
 .article-layout {
