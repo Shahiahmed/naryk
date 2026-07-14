@@ -150,6 +150,27 @@ find /var/www/naryk/storage/app/public -type f | wc -l   # 20117
 curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8081/storage/assets/logo.svg   # 200
 ```
 
+### 4a. Лимиты загрузки PHP
+
+Стоковый PHP на Ubuntu разрешает загрузку **2 МБ**. Фото с камеры весит 3–5 МБ, и
+редакция получает молчаливый отказ — обложка просто не ставится.
+
+```bash
+cat > /etc/php/8.3/fpm/conf.d/99-naryk.ini <<'INI'
+upload_max_filesize = 12M
+post_max_size = 16M
+memory_limit = 256M
+max_execution_time = 120
+INI
+
+systemctl reload php8.3-fpm
+
+# проверка
+php-fpm8.3 -i | grep -E 'upload_max_filesize|post_max_size'
+```
+
+`client_max_body_size 100M` в nginx уже стоит — он не был ограничением.
+
 ### 5. Сборка, права, nginx
 
 ```bash

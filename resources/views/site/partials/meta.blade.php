@@ -8,7 +8,8 @@
     @if ($category)
         <a class="meta__rubric" href="/category/{{ $category->term->slug }}">{{ $category->term->name }}</a>
     @endif
+    {{-- Point 28: the time of day is gone; the date stays. --}}
     <time class="meta__date" datetime="{{ $post->created_at->toIso8601String() }}">
-        {{ $post->created_at->format('d.m.Y') }} · {{ $post->created_at->format('H:i') }}
+        {{ $post->created_at->format('d.m.Y') }}
     </time>
 </div>

@@ -14,6 +14,16 @@ class SiteComposer
     {
         $settings = Setting::tree();
 
+        /*
+         * Point 25: the footer address is press.naryk@gmail.com. The settings
+         * row still holds info@naryk.kz, so override it here rather than write
+         * to the client's table; the admin panel can still change it.
+         */
+        $settings['site_information']['siteemail'] = filled($settings['site_information']['siteemail'] ?? null)
+            && $settings['site_information']['siteemail'] !== 'info@naryk.kz'
+                ? $settings['site_information']['siteemail']
+                : 'press.naryk@gmail.com';
+
         $view->with([
             'settings' => $settings,
             'headerMenu' => Menu::with('items')->where('name', 'header')->first(),

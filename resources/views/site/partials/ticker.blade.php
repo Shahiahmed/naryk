@@ -4,7 +4,8 @@
 @endphp
 
 @if ($items)
-    <div class="ticker" aria-label="KASE" @if ($quotes['time']) title="{{ $quotes['time'] }}" @endif>
+    {{-- Point 8: inset from the edges, not bleeding across the screen. --}}
+    <div class="ticker shell" aria-label="KASE" @if ($quotes['time']) title="{{ $quotes['time'] }}" @endif>
         {{-- Duplicated once so the marquee can loop without a visible seam. --}}
         <div class="ticker__track">
             @foreach ([1, 2] as $pass)

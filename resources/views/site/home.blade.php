@@ -22,7 +22,10 @@
         {{-- Centre: the only column that scrolls. --}}
         <div class="columns__main">
             <div class="feed" id="feed">
-                @include('site.partials.feed-slice')
+                @include('site.partials.feed-slice', [
+                    'expertOpinions' => $expertOpinions,
+                    'specialProjects' => $specialProjects,
+                ])
             </div>
 
             @if ($feed->hasMorePages())

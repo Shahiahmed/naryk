@@ -11,8 +11,10 @@
         <a href="{{ $post->url() }}" class="card__link">
             <img class="card--tall__image" src="{{ $image }}" alt="" loading="lazy">
             <div class="card--tall__overlay">
-                @includeWhen($post->pr_news, 'site.partials.pr-badge')
-                <h2 class="card__title card__title--inverse">{{ $post->post_title }}</h2>
+                <h2 class="card__title card__title--inverse">
+                    @includeWhen($post->pr_news, 'site.partials.pr-badge')
+                    {{ $post->post_title }}
+                </h2>
                 @include('site.partials.meta', ['post' => $post, 'category' => $category, 'inverse' => true])
             </div>
         </a>
@@ -30,9 +32,9 @@
             </a>
         @endif
 
-        @includeWhen($post->pr_news, 'site.partials.pr-badge')
-
+        {{-- Point 21: PR runs inline, and the headline carries on after it. --}}
         <h2 class="card__title">
+            @includeWhen($post->pr_news, 'site.partials.pr-badge')
             <a href="{{ $post->url() }}">{{ $post->post_title }}</a>
         </h2>
 

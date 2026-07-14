@@ -1,23 +1,48 @@
 /*
  * Naryk.kz front end.
- * Colours are sampled from the reference images in the client's brief:
- * dark green background, warm grey-green columns, vivid green accents.
- * Written as plain CSS on purpose — the production server has no npm.
+ *
+ * Plain CSS on purpose — the production server has no npm.
+ *
+ * The brief asks three separate times (points 3, 9, 15) for one rhythm across
+ * the whole site, so every gap and pad below comes from the --space scale, and
+ * every size from the --text scale. Nothing hard-codes a pixel.
  */
 
 :root {
+    /* The green of the wordmark. The ticker takes it too (point 2). */
+    --green-logo: #425e40;
     --green-dark: #2f553c;
     --green-darker: #1e412e;
     --green-accent: #00a658;
     --green-pale: #dfeadf;
+
     --column-bg: #e6e5de;
     --page-bg: #f4f4f0;
     --ink: #16181d;
     --ink-muted: #5f6672;
     --hairline: #d8d7cf;
+
     --shell: 1280px;
-    --gap: 24px;
     --radius: 10px;
+
+    /* One spacing scale, used everywhere. */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --gap: var(--space-5);
+
+    /* One type scale. The rubric strip sets the tone (point 9). */
+    --text-sm: 14px;
+    --text-base: 16px;
+    --text-md: 18px;
+    --text-lg: 22px;
+    --text-xl: 28px;
+
+    /* The rubric strip and the ticker share a height (point 3). */
+    --strip-height: 44px;
 }
 
 *,
@@ -31,7 +56,7 @@ body {
     background: var(--page-bg);
     color: var(--ink);
     font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: 16px;
+    font-size: var(--text-base);
     line-height: 1.45;
 }
 
@@ -52,128 +77,83 @@ a:hover {
 .shell {
     max-width: var(--shell);
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 0 var(--space-4);
 }
 
 /* ---------- header ---------- */
 
-/*
- * The logo files are all dark green, so the masthead stays light. The dark
- * green carries the ticker, the buttons and the footer instead.
- */
 .site-header {
     background: #fff;
 }
 
 /*
- * Sponsor, logo, burger on one line. The side columns are given the same
- * width, so the logo lands dead centre instead of being pushed off by the
- * sponsor.
+ * Left to right: Freedom, search, НАРЫҚ, socials, БІЗ ТУРАЛЫ (point 7). The
+ * side columns take an equal share, which lands the wordmark dead centre
+ * rather than letting the sponsor push it off.
  */
 .site-header__inner {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    gap: 12px;
-    min-height: 96px;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    gap: var(--space-4);
+    min-height: 88px;
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
+}
+
+.site-header__left,
+.site-header__right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-width: 0;
+}
+
+.site-header__right {
+    justify-content: flex-end;
+}
+
+.site-header__about {
+    letter-spacing: 0.04em;
 }
 
 .site-header__logo {
     grid-column: 2;
     justify-self: center;
     min-width: 0;
-    color: var(--green-dark);
-    font-size: 40px;
+    color: var(--green-logo);
+    font-size: var(--text-xl);
     font-weight: 800;
-    letter-spacing: 0.02em;
 }
 
-/*
- * The wordmark is a 15.5:1 strip, so it is capped by width. Capping it by
- * height alone would run it into the burger.
- */
+/* A 15.5:1 strip: capped by width, or it would run into its neighbours. */
 .site-header__logo img {
     width: 100%;
-    max-width: 560px;
-    max-height: 72px;
+    max-width: 440px;
+    max-height: 64px;
     height: auto;
     object-fit: contain;
 }
+
+/* ---------- rubric strip ---------- */
 
 .site-nav {
     background: var(--green-pale);
 }
 
+/* Rubrics run edge to edge, evenly spaced, no gap left over (point 10). */
 .site-nav__inner {
     display: flex;
     align-items: center;
-    gap: 20px;
-    min-height: 56px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-}
-
-/*
- * Sponsor: an ad, editable in the admin panel, not part of the chrome.
- * Two shapes — the wide lockup rides in the navigation strip, the bare shield
- * in the phone masthead. Each is hidden where the other belongs.
- */
-.sponsor {
-    display: flex;
-    align-items: center;
-}
-
-/* Wide lockup, second in the menu, on a white chip like the live site. */
-.sponsor--wide {
-    padding: 6px 14px;
-    background: #fff;
-    border-radius: 6px;
-}
-
-.sponsor--wide img {
-    height: 34px;
-    width: auto;
-}
-
-.sponsor--wide:hover {
-    text-decoration: none;
-}
-
-/* The shield only appears on a phone; the masthead has no room for words. */
-.sponsor--compact {
-    display: none;
-    grid-column: 1;
-    justify-self: start;
-}
-
-.sponsor--compact img {
-    height: 44px;
-    width: auto;
-}
-
-.site-menu {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex: 1;
-    min-width: 0;
-}
-
-.site-menu__links {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    flex: 1;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: var(--strip-height);
 }
 
 .site-nav__link {
-    color: var(--green-dark);
+    color: var(--green-logo);
     font-weight: 600;
-    font-size: 16px;
+    font-size: var(--text-base);
     white-space: nowrap;
 }
 
@@ -182,23 +162,99 @@ a:hover {
     text-decoration: none;
 }
 
+/* ---------- search ---------- */
+
 .site-search {
-    margin-left: auto;
+    min-width: 0;
+}
+
+.site-search__input {
+    width: 170px;
+    max-width: 100%;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-size: var(--text-sm);
+}
+
+.site-search__input::placeholder {
+    color: var(--ink-muted);
+}
+
+/* ---------- sponsor ---------- */
+
+/*
+ * An ad, editable in the admin panel, not part of the chrome. The wide lockup
+ * on the desktop, the bare shield on a phone, where the words will not fit.
+ */
+.sponsor {
+    display: flex;
+    align-items: center;
     flex-shrink: 0;
 }
 
-/* ---------- burger ---------- */
+.sponsor--wide img {
+    height: 36px;
+    width: auto;
+}
 
-/* Hidden on the desktop; the media query below turns it on. */
+.sponsor--wide:hover,
+.sponsor--compact:hover {
+    text-decoration: none;
+}
+
+.sponsor--compact {
+    display: none;
+}
+
+.sponsor--compact img {
+    height: 40px;
+    width: auto;
+}
+
+/* ---------- socials ---------- */
+
+.socials {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.social-link {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: var(--green-logo);
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.social-link:hover {
+    background: var(--green-logo);
+    color: #fff;
+    text-decoration: none;
+}
+
+.icon {
+    display: block;
+}
+
+/* ---------- burger and its drawer ---------- */
+
+/* Hidden on the desktop; the media query at the foot turns it on. */
 .burger {
     display: none;
     grid-column: 3;
     justify-self: end;
     width: 44px;
     height: 44px;
-    padding: 10px;
+    padding: var(--space-3);
     border: 0;
-    border-radius: 8px;
+    border-radius: var(--space-2);
     background: transparent;
     cursor: pointer;
     flex-direction: column;
@@ -210,14 +266,17 @@ a:hover {
     height: 2px;
     width: 100%;
     border-radius: 2px;
-    background: var(--green-dark);
+    background: var(--green-logo);
     transition: transform 0.22s ease, opacity 0.18s ease;
     transform-origin: center;
 }
 
-/* The three bars fold into a cross. */
+/*
+ * The bars sit 9px apart: (44 - 12*2 - 2*3) / 2. Folding them means moving the
+ * outer two onto the middle one.
+ */
 .burger[aria-expanded='true'] .burger__bar:nth-child(1) {
-    transform: translateY(10px) rotate(45deg);
+    transform: translateY(9px) rotate(45deg);
 }
 
 .burger[aria-expanded='true'] .burger__bar:nth-child(2) {
@@ -225,7 +284,7 @@ a:hover {
 }
 
 .burger[aria-expanded='true'] .burger__bar:nth-child(3) {
-    transform: translateY(-10px) rotate(-45deg);
+    transform: translateY(-9px) rotate(-45deg);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -234,29 +293,42 @@ a:hover {
     }
 }
 
-.site-search__input {
-    width: 200px;
-    padding: 8px 14px;
-    border: 1px solid var(--hairline);
-    border-radius: 999px;
-    background: #fff;
-    color: var(--ink);
-    font: inherit;
-    font-size: 14px;
+/* The drawer holds БІЗ ТУРАЛЫ and the socials, not the rubrics (point 29). */
+.site-menu {
+    display: none;
+    background: var(--green-pale);
+    border-top: 1px solid rgba(66, 94, 64, 0.15);
 }
 
-.site-search__input::placeholder {
-    color: var(--ink-muted);
+.site-menu > .shell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
+}
+
+.site-menu--open {
+    display: block;
 }
 
 /* ---------- ticker ---------- */
 
+/*
+ * The green of the wordmark (point 2), and inset from the edges rather than
+ * bleeding across the screen (point 8).
+ */
 .ticker {
-    background: var(--green-darker);
+    max-width: var(--shell);
+    margin: 0 auto;
+    background: var(--green-logo);
     color: #fff;
     overflow: hidden;
-    padding: 8px 0;
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    min-height: var(--strip-height);
+    font-size: var(--text-sm);
 }
 
 .ticker__track {
@@ -278,7 +350,7 @@ a:hover {
 .ticker__item {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--space-1);
 }
 
 .ticker__logo {
@@ -295,11 +367,11 @@ a:hover {
 }
 
 .ticker__arrow--up {
-    color: #4ade80;
+    color: #7ee2a8;
 }
 
 .ticker__arrow--down {
-    color: #f87171;
+    color: #ff9d9d;
 }
 
 .ticker__arrow--flat {
@@ -307,7 +379,7 @@ a:hover {
 }
 
 .ticker__sep {
-    margin: 0 8px;
+    margin: 0 var(--space-2);
     color: rgba(255, 255, 255, 0.35);
 }
 
@@ -329,23 +401,25 @@ a:hover {
 
 .columns {
     display: grid;
-    grid-template-columns: 260px minmax(0, 1fr) 300px;
+    grid-template-columns: 280px minmax(0, 1fr) 300px;
     gap: var(--gap);
     align-items: start;
-    padding: var(--gap) 0 48px;
+    padding: var(--gap) 0 var(--space-6);
 }
 
-/*
- * Only the centre column scrolls: the sides stick once they reach the top.
- */
+/* Only the centre scrolls: the sides stick once they reach the top. */
 .columns__side {
     position: sticky;
-    top: 16px;
-    max-height: calc(100vh - 32px);
+    top: var(--space-4);
+    /*
+     * Point 18: the column used to cut off mid-headline. Leaving it a little
+     * taller than the viewport lets the last item finish.
+     */
+    max-height: calc(100vh - var(--space-6));
     overflow-y: auto;
     background: var(--column-bg);
     border-radius: var(--radius);
-    padding: 16px;
+    padding: var(--space-4);
 }
 
 .columns__main {
@@ -353,11 +427,11 @@ a:hover {
 }
 
 .column-title {
-    margin: 0 0 12px;
-    font-size: 15px;
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-sm);
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--green-dark);
+    color: var(--green-logo);
 }
 
 /* ---------- feed cards ---------- */
@@ -365,18 +439,18 @@ a:hover {
 .feed {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: var(--space-5);
 }
 
 .card {
     background: var(--column-bg);
     border-radius: var(--radius);
-    padding: 18px 20px 16px;
+    padding: var(--space-4) var(--space-5) var(--space-4);
 }
 
 .card__media {
     display: block;
-    margin: -18px -20px 14px;
+    margin: calc(var(--space-4) * -1) calc(var(--space-5) * -1) var(--space-3);
 }
 
 .card__image {
@@ -387,16 +461,16 @@ a:hover {
 }
 
 .card__title {
-    margin: 0 0 8px;
-    font-size: 24px;
-    line-height: 1.2;
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-lg);
+    line-height: 1.25;
     font-weight: 700;
 }
 
 .card__lead {
-    margin: 0 0 12px;
+    margin: 0 0 var(--space-3);
     color: var(--ink-muted);
-    font-size: 17px;
+    font-size: var(--text-md);
 }
 
 /* Tall image: the text sits on the photo, low. */
@@ -415,7 +489,7 @@ a:hover {
 .card--tall__overlay {
     position: absolute;
     inset: auto 0 0 0;
-    padding: 24px 20px 18px;
+    padding: var(--space-6) var(--space-5) var(--space-4);
     background: linear-gradient(to top, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0));
 }
 
@@ -432,8 +506,8 @@ a:hover {
 .meta {
     display: flex;
     align-items: baseline;
-    gap: 10px;
-    font-size: 14px;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
     color: var(--ink-muted);
 }
 
@@ -453,16 +527,21 @@ a:hover {
 
 /* ---------- PR badge ---------- */
 
+/*
+ * Point 21: it used to sit on its own line above the headline. It now runs
+ * inline, so the headline carries on right after it.
+ */
 .pr-badge {
     display: inline-block;
-    margin-bottom: 8px;
-    padding: 2px 8px;
-    border-radius: 4px;
+    margin-right: var(--space-2);
+    padding: 1px var(--space-2);
+    border-radius: var(--space-1);
     background: var(--green-accent);
     color: #fff;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.08em;
+    vertical-align: middle;
 }
 
 /* ---------- side cards ---------- */
@@ -470,11 +549,11 @@ a:hover {
 .aside-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--space-4);
 }
 
 .aside-card {
-    padding-bottom: 16px;
+    padding-bottom: var(--space-4);
     border-bottom: 1px solid var(--hairline);
 }
 
@@ -483,22 +562,29 @@ a:hover {
     padding-bottom: 0;
 }
 
-.aside-card__media img {
-    width: 100%;
-    aspect-ratio: 16 / 10;
+/* Point 13: thumbnail on the left, headline beside it. */
+.aside-card--thumb {
+    display: grid;
+    grid-template-columns: 84px minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: start;
+}
+
+.aside-card--thumb .aside-card__media img {
+    width: 84px;
+    height: 60px;
     object-fit: cover;
     border-radius: 6px;
-    margin-bottom: 8px;
 }
 
 .aside-card__title {
-    margin: 0 0 6px;
-    font-size: 15px;
+    margin: 0 0 var(--space-1);
+    font-size: var(--text-sm);
     line-height: 1.3;
     font-weight: 600;
 }
 
-/* ---------- banner + load more ---------- */
+/* ---------- banner, load more, feed blocks ---------- */
 
 .banner {
     text-align: center;
@@ -509,14 +595,29 @@ a:hover {
     border-radius: var(--radius);
 }
 
+/*
+ * Point 22: the side columns fold into the feed on a phone, where they have
+ * nowhere else to go. On the desktop the columns are back, so these are dead
+ * weight and stay hidden.
+ */
+.feed-block {
+    background: var(--column-bg);
+    border-radius: var(--radius);
+    padding: var(--space-4);
+}
+
+.feed-block--phone {
+    display: none;
+}
+
 .load-more {
     display: block;
     width: 100%;
-    margin: 24px 0 0;
-    padding: 14px;
+    margin: var(--space-5) 0 0;
+    padding: var(--space-3);
     border: 0;
     border-radius: var(--radius);
-    background: var(--green-dark);
+    background: var(--green-logo);
     color: #fff;
     font: inherit;
     font-weight: 600;
@@ -539,39 +640,41 @@ a:hover {
     grid-template-columns: 64px minmax(0, 1fr) 300px;
     gap: var(--gap);
     align-items: start;
-    padding: var(--gap) 0 48px;
+    padding: var(--gap) 0 var(--space-6);
 }
 
 .article-rail {
     position: sticky;
-    top: 16px;
+    top: var(--space-4);
 }
 
 .article {
     background: var(--column-bg);
     border-radius: var(--radius);
-    padding: 24px 28px 28px;
+    padding: var(--space-5);
     min-width: 0;
 }
 
 .article__image {
     width: 100%;
     border-radius: var(--radius);
-    margin-bottom: 20px;
+    margin-bottom: var(--space-4);
 }
 
 .article__title {
-    margin: 0 0 12px;
-    font-size: 32px;
-    line-height: 1.18;
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-xl);
+    line-height: 1.2;
 }
 
 .article__meta {
-    margin-bottom: 20px;
+    margin-bottom: var(--space-4);
 }
 
+/* Point 14: the banner and the first line of the text were too close. */
 .article__body {
-    font-size: 18px;
+    margin-top: var(--space-5);
+    font-size: var(--text-md);
     line-height: 1.65;
 }
 
@@ -601,15 +704,16 @@ a:hover {
     max-width: 100%;
 }
 
+/* Point 17: tags below the article. */
 .article__tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin: 24px 0;
+    gap: var(--space-2);
+    margin: var(--space-5) 0;
 }
 
 .tag-pill {
-    padding: 4px 10px;
+    padding: var(--space-1) var(--space-3);
     border-radius: 999px;
     background: #fff;
     border: 1px solid var(--hairline);
@@ -620,7 +724,7 @@ a:hover {
 
 .share {
     display: flex;
-    gap: 10px;
+    gap: var(--space-2);
 }
 
 .share--rail {
@@ -628,7 +732,7 @@ a:hover {
 }
 
 .share--bottom {
-    margin-top: 8px;
+    margin-top: var(--space-2);
 }
 
 .share__link {
@@ -636,15 +740,14 @@ a:hover {
     place-items: center;
     width: 44px;
     height: 44px;
-    border-radius: 8px;
+    border-radius: var(--space-2);
     background: #fff;
     border: 1px solid var(--hairline);
-    color: var(--green-dark);
-    font-weight: 700;
+    color: var(--green-logo);
 }
 
 .share__link:hover {
-    background: var(--green-dark);
+    background: var(--green-logo);
     color: #fff;
     text-decoration: none;
 }
@@ -653,11 +756,11 @@ a:hover {
 
 .latest {
     margin: 0;
-    padding-left: 20px;
+    padding-left: var(--space-5);
 }
 
 .latest__item {
-    padding: 10px 0;
+    padding: var(--space-2) 0;
     border-bottom: 1px solid var(--hairline);
 }
 
@@ -668,18 +771,17 @@ a:hover {
 .latest__title {
     display: block;
     font-weight: 600;
-    font-size: 15px;
+    font-size: var(--text-sm);
     line-height: 1.3;
-    margin-bottom: 4px;
 }
 
 /* ---------- archive ---------- */
 
 .breadcrumbs {
     display: flex;
-    gap: 8px;
-    padding: 20px 0 0;
-    font-size: 14px;
+    gap: var(--space-2);
+    padding: var(--space-5) 0 0;
+    font-size: var(--text-sm);
     color: var(--ink-muted);
 }
 
@@ -689,16 +791,16 @@ a:hover {
 }
 
 .archive__title {
-    margin: 12px 0 24px;
-    font-size: 28px;
+    margin: var(--space-3) 0 var(--space-5);
+    font-size: var(--text-xl);
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--green-dark);
+    color: var(--green-logo);
 }
 
 .archive__empty {
     color: var(--ink-muted);
-    padding-bottom: 40px;
+    padding-bottom: var(--space-6);
 }
 
 .grid {
@@ -722,23 +824,23 @@ a:hover {
 }
 
 .grid-card__body {
-    padding: 16px 18px 18px;
+    padding: var(--space-4);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-2);
     flex: 1;
 }
 
 .grid-card__title {
     margin: 0;
-    font-size: 18px;
+    font-size: var(--text-md);
     line-height: 1.25;
 }
 
 .grid-card__lead {
     margin: 0;
     color: var(--ink-muted);
-    font-size: 15px;
+    font-size: var(--text-sm);
     flex: 1;
 }
 
@@ -747,8 +849,8 @@ a:hover {
 .pager {
     display: flex;
     justify-content: center;
-    gap: 6px;
-    margin: 32px 0 48px;
+    gap: var(--space-1);
+    margin: var(--space-6) 0;
 }
 
 .pager__link {
@@ -756,14 +858,14 @@ a:hover {
     height: 40px;
     display: grid;
     place-items: center;
-    padding: 0 10px;
-    border-radius: 8px;
+    padding: 0 var(--space-2);
+    border-radius: var(--space-2);
     background: var(--column-bg);
     font-weight: 600;
 }
 
 .pager__link--current {
-    background: var(--green-dark);
+    background: var(--green-logo);
     color: #fff;
 }
 
@@ -773,21 +875,21 @@ a:hover {
 
 .pager__gap {
     align-self: center;
-    padding: 0 4px;
+    padding: 0 var(--space-1);
     color: var(--ink-muted);
 }
 
 /* ---------- page, contact, search, 404 ---------- */
 
 .article--wide {
-    margin: 12px 0 40px;
+    margin: var(--space-3) 0 var(--space-6);
 }
 
 .contact {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 32px;
-    margin: 12px 0 48px;
+    gap: var(--space-6);
+    margin: var(--space-3) 0 var(--space-6);
     align-items: start;
 }
 
@@ -797,24 +899,24 @@ a:hover {
 
 .contact__list dt {
     font-weight: 600;
-    margin-top: 12px;
+    margin-top: var(--space-3);
 }
 
 .contact__list dd {
-    margin: 2px 0 0;
+    margin: var(--space-1) 0 0;
     color: var(--ink-muted);
 }
 
 .contact__form-wrap {
     background: var(--column-bg);
     border-radius: var(--radius);
-    padding: 24px;
+    padding: var(--space-5);
 }
 
 .contact__form {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: var(--space-3);
 }
 
 /* Hidden from people, not from bots: `display:none` is too obvious. */
@@ -829,18 +931,18 @@ a:hover {
 .field {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--space-1);
 }
 
 .field__label {
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 600;
 }
 
 .field__input {
-    padding: 10px 12px;
+    padding: var(--space-2) var(--space-3);
     border: 1px solid var(--hairline);
-    border-radius: 8px;
+    border-radius: var(--space-2);
     background: #fff;
     font: inherit;
 }
@@ -856,9 +958,9 @@ a:hover {
 }
 
 .alert {
-    padding: 12px 14px;
-    border-radius: 8px;
-    margin-bottom: 16px;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--space-2);
+    margin-bottom: var(--space-4);
 }
 
 .alert--success {
@@ -868,8 +970,8 @@ a:hover {
 
 .search-form {
     display: flex;
-    gap: 10px;
-    margin: 16px 0 24px;
+    gap: var(--space-2);
+    margin: var(--space-4) 0 var(--space-5);
 }
 
 .search-form .field__input {
@@ -879,12 +981,12 @@ a:hover {
 .search-form__button {
     width: auto;
     margin: 0;
-    padding: 10px 24px;
+    padding: var(--space-2) var(--space-5);
 }
 
 .notfound {
     text-align: center;
-    padding: 80px 0 100px;
+    padding: var(--space-6) 0;
 }
 
 .notfound__code {
@@ -892,11 +994,11 @@ a:hover {
     font-size: 88px;
     font-weight: 800;
     line-height: 1;
-    color: var(--green-dark);
+    color: var(--green-logo);
 }
 
 .notfound__title {
-    margin: 8px 0;
+    margin: var(--space-2) 0;
 }
 
 .notfound__text {
@@ -906,80 +1008,71 @@ a:hover {
 .notfound__link {
     display: inline-block;
     width: auto;
-    padding: 12px 28px;
+    padding: var(--space-3) var(--space-6);
 }
 
 /* ---------- footer ---------- */
 
 .site-footer {
-    margin-top: 40px;
-    background: var(--green-dark);
+    margin-top: var(--space-6);
+    background: var(--green-logo);
     color: #dfe9e2;
-    padding: 32px 0 16px;
-    font-size: 15px;
+    padding: var(--space-6) 0 var(--space-4);
+    font-size: var(--text-sm);
 }
 
 .site-footer__inner {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: var(--gap);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-5);
 }
 
-/* The footer logo is dark green too: give it a light chip to sit on. */
+/* Point 27: the tagline sits beside the logo, not under it. */
+.site-footer__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-width: 0;
+}
+
 .site-footer__logo {
-    max-height: 40px;
+    max-height: 44px;
     width: auto;
-    margin-bottom: 12px;
-    padding: 8px 12px;
-    border-radius: 8px;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--space-2);
     background: #fff;
 }
 
 .site-footer__desc {
     margin: 0;
-    max-width: 44ch;
+    max-width: 34ch;
 }
 
-.site-footer__nav,
-.site-footer__contacts {
+.site-footer__right {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    align-items: center;
+    gap: var(--space-5);
 }
 
-.site-footer__socials {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    margin-top: 16px;
-}
-
-.social-link {
-    display: grid;
-    place-items: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.12);
+.site-footer .social-link {
     color: #fff;
+    background: rgba(255, 255, 255, 0.12);
 }
 
-.social-link:hover {
+.site-footer .social-link:hover {
     background: #fff;
-    color: var(--green-dark);
-    text-decoration: none;
-}
-
-.icon {
-    display: block;
+    color: var(--green-logo);
 }
 
 .site-footer__legal {
-    margin-top: 24px;
-    padding-top: 16px;
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
     border-top: 1px solid rgba(255, 255, 255, 0.15);
     font-size: 13px;
     color: rgba(255, 255, 255, 0.6);
+    text-align: center;
 }
 
 /* ---------- responsive ---------- */
@@ -1004,111 +1097,94 @@ a:hover {
     .grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+    .site-nav__inner {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: var(--space-4);
+        padding-top: var(--space-2);
+        padding-bottom: var(--space-2);
+    }
 }
 
 @media (max-width: 800px) {
     .columns,
     .article-layout,
     .grid,
-    .contact,
-    .site-footer__inner {
+    .contact {
         grid-template-columns: minmax(0, 1fr);
     }
-    /* Sponsor, logo and burger share one row on a phone. */
+
+    /* Point 22: on a phone the side columns fold into the feed instead. */
+    .columns__side {
+        display: none;
+    }
+
+    .feed-block--phone {
+        display: block;
+    }
+
+    /* Point 7 and 19: Freedom, НАРЫҚ, burger — the old shape. */
     .site-header__inner {
         min-height: 64px;
-        padding-top: 8px;
-        padding-bottom: 8px;
-        gap: 8px;
+        gap: var(--space-2);
     }
 
     .sponsor--compact {
         display: flex;
     }
 
-    /* The words would not fit next to the links once they stack. */
-    .sponsor--wide {
+    .sponsor--wide,
+    .site-header__right,
+    .site-search {
         display: none;
-    }
-
-    .sponsor--compact img {
-        height: 38px;
-    }
-    /*
-     * The phone wordmark is two lines, 2.6:1, not the 15.5:1 strip. It needs
-     * height rather than width.
-     */
-    .site-header__logo img {
-        width: auto;
-        max-width: 100%;
-        max-height: 56px;
-    }
-    .sponsor img {
-        height: 34px;
     }
 
     .burger {
         display: flex;
     }
 
-    .site-menu {
-        display: none;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0;
-        padding-bottom: 8px;
+    .site-header__logo img {
+        width: auto;
+        max-width: 100%;
+        max-height: 48px;
     }
 
-    .site-menu--open {
-        display: flex;
-    }
-
-    /* The strip is empty until the burger opens it. */
+    /* Point 29: the strip stays, the drawer opens БІЗ ТУРАЛЫ. */
     .site-nav__inner {
-        min-height: 0;
-        padding-top: 0;
-        padding-bottom: 0;
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        scrollbar-width: none;
     }
 
-    .site-menu__links {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0;
+    .site-nav__inner::-webkit-scrollbar {
+        display: none;
     }
 
-    .site-nav__link {
-        padding: 12px 4px;
-        border-bottom: 1px solid rgba(47, 85, 60, 0.15);
-        font-size: 17px;
-    }
-
-    .site-search {
-        margin: 12px 0 0;
-        width: 100%;
-    }
-
-    .site-search__input {
-        width: 100%;
-    }
-    .columns__side {
-        position: static;
-        max-height: none;
-    }
     .card__title {
-        font-size: 20px;
+        font-size: var(--text-md);
     }
+
     .article {
-        padding: 18px;
+        padding: var(--space-4);
     }
+
     .article__title {
-        font-size: 24px;
+        font-size: var(--text-lg);
     }
+
     /* The share rail moves under the article on narrow screens. */
     .article-rail {
         position: static;
         order: 2;
     }
+
     .share--rail {
         flex-direction: row;
+    }
+
+    .site-footer__inner {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }

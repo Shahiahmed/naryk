@@ -9,13 +9,30 @@ namespace App\Support;
 class Social
 {
     protected const BASE = [
+        'telegram' => 'https://t.me/',
+        'instagram' => 'https://www.instagram.com/',
+        'tiktok' => 'https://www.tiktok.com/@',
+        'threads' => 'https://www.threads.com/@',
         'facebook' => 'https://www.facebook.com/',
         'twitter' => 'https://twitter.com/',
-        'instagram' => 'https://www.instagram.com/',
         'youtube' => 'https://www.youtube.com/',
         'linkedin' => 'https://www.linkedin.com/in/',
-        'telegram' => 'https://t.me/',
         'whatsapp' => 'https://wa.me/',
+    ];
+
+    /**
+     * The accounts the client gave. The settings table has no rows for tiktok
+     * or threads and holds `naryk.kz` — not a valid handle — for telegram, so
+     * these stand in until someone edits them in the admin panel.
+     *
+     * @var array<string, string>
+     */
+    public const DEFAULTS = [
+        'telegram' => 'https://t.me/narykkz',
+        'instagram' => 'https://www.instagram.com/narykkz',
+        'tiktok' => 'https://www.tiktok.com/@naryk.kz',
+        'threads' => 'https://www.threads.com/@narykkz',
+        'facebook' => 'https://www.facebook.com/naryk.kz',
     ];
 
     public static function url(string $network, ?string $value): ?string
@@ -38,6 +55,9 @@ class Social
     }
 
     /**
+     * Only the five networks the client listed, in the order they listed them.
+     * The old theme showed every row it found, including empty ones.
+     *
      * @param  array<string, string|null>  $settings
      * @return array<string, string>
      */
@@ -45,8 +65,12 @@ class Social
     {
         $links = [];
 
-        foreach ($settings as $network => $value) {
-            if ($url = self::url($network, $value)) {
+        foreach (Icons::ORDER as $network) {
+            $url = self::url($network, $settings[$network] ?? null)
+                ?? self::DEFAULTS[$network]
+                ?? null;
+
+            if ($url) {
                 $links[$network] = $url;
             }
         }

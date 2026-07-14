@@ -98,13 +98,12 @@ class ManageSettings extends Page
                 TextInput::make('site_information.siteemail')->label('E-mail')->email(),
                 Textarea::make('site_information.contactdescription')->label('Описание формы обратной связи')->rows(2)->columnSpanFull(),
 
-                TextInput::make('social_media.facebook')->label('Facebook'),
-                TextInput::make('social_media.twitter')->label('Twitter'),
-                TextInput::make('social_media.youtube')->label('YouTube'),
-                TextInput::make('social_media.instagram')->label('Instagram'),
-                TextInput::make('social_media.linkedin')->label('LinkedIn'),
+                // The five the site shows, in the order it shows them.
                 TextInput::make('social_media.telegram')->label('Telegram'),
-                TextInput::make('social_media.whatsapp')->label('WhatsApp'),
+                TextInput::make('social_media.instagram')->label('Instagram'),
+                TextInput::make('social_media.tiktok')->label('TikTok'),
+                TextInput::make('social_media.threads')->label('Threads'),
+                TextInput::make('social_media.facebook')->label('Facebook')->columnSpanFull(),
             ]);
     }
 

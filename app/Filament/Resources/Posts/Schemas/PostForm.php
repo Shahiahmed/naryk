@@ -61,6 +61,15 @@ class PostForm
                             // column stores the path without the images/ prefix.
                             ->directory('images/'.now()->format('Y/m'))
                             ->imageEditor()
+                            /*
+                             * A camera photo runs to 3-5 MB and PHP's stock
+                             * upload_max_filesize is 2M, so the upload used to
+                             * fail with no message at all. State the limit and
+                             * let Filament say so when it is passed. The server
+                             * limit has to be raised to match — see DEPLOY.md.
+                             */
+                            ->maxSize(10 * 1024)
+                            ->helperText('JPG, PNG или WebP, до 10 МБ. Вертикальные фото тоже подходят — выберите вид карточки ниже.')
                             ->formatStateUsing(fn (?string $state): ?string => Post::imagePath($state))
                             ->dehydrateStateUsing(fn (?string $state): ?string => filled($state)
                                 ? Str::after($state, 'images/')

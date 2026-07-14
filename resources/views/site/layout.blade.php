@@ -34,22 +34,33 @@
     Every logo the client ships is dark green, so the masthead is light and the
     dark green lives in the ticker, the buttons and the footer.
 --}}
+@php
+    $siteName = $settings['site_information']['company_name'] ?? 'Naryk.kz';
+    $tagline = $settings['site_information']['sitedescription'] ?? null;
+    $logoDesktop = file_exists(public_path('img/logo-desktop.png')) ? asset('img/logo-desktop.png') : null;
+    $logoPhone = file_exists(public_path('img/logo-phone.png')) ? asset('img/logo-phone.png') : null;
+@endphp
+
 {{--
-    The masthead is one row: sponsor, logo, burger. On a phone the three sit
-    side by side; on the desktop the burger drops out and the logo centres.
+    Desktop masthead, left to right: Freedom, search, НАРЫҚ, socials, БІЗ ТУРАЛЫ.
+    On a phone it collapses to the old shape — Freedom, НАРЫҚ, burger — and the
+    burger opens БІЗ ТУРАЛЫ rather than the rubrics.
 --}}
 <header class="site-header">
     <div class="shell site-header__inner">
-        {{-- Phone only: the wide lockup lives in the strip below. --}}
-        @include('site.partials.sponsor', ['sponsor' => $sponsor, 'wide' => false])
+        <div class="site-header__left">
+            {{-- The wide lockup on the desktop, the bare shield on a phone. --}}
+            @include('site.partials.sponsor', ['sponsor' => $sponsor, 'wide' => true])
+            @include('site.partials.sponsor', ['sponsor' => $sponsor, 'wide' => false])
+
+            <form class="site-search" method="GET" action="{{ route('search') }}" role="search">
+                <input class="site-search__input" type="search" name="q"
+                       value="{{ request()->routeIs('search') ? request('q') : '' }}"
+                       placeholder="Іздеу…" aria-label="Іздеу">
+            </form>
+        </div>
 
         <a class="site-header__logo" href="/">
-            @php
-                $siteName = $settings['site_information']['company_name'] ?? 'Naryk.kz';
-                $logoDesktop = file_exists(public_path('img/logo-desktop.png')) ? asset('img/logo-desktop.png') : null;
-                $logoPhone = file_exists(public_path('img/logo-phone.png')) ? asset('img/logo-phone.png') : null;
-            @endphp
-
             @if ($logoDesktop)
                 {{-- The browser picks the file; no JS, no layout shift. --}}
                 <picture>
@@ -65,6 +76,12 @@
             @endif
         </a>
 
+        <div class="site-header__right">
+            @include('site.partials.socials', ['socials' => $socials, 'modifier' => 'socials--header'])
+
+            <a class="site-nav__link site-header__about" href="/about">БІЗ ТУРАЛЫ</a>
+        </div>
+
         <button class="burger" type="button" id="burger"
                 aria-label="Мәзір" aria-expanded="false" aria-controls="site-menu">
             <span class="burger__bar"></span>
@@ -73,30 +90,25 @@
         </button>
     </div>
 
-    <div class="site-nav">
-        <div class="shell site-nav__inner">
-            <div class="site-menu" id="site-menu">
-                @if ($headerMenu)
-                    <nav class="site-menu__links">
-                        @foreach ($headerMenu->items as $item)
-                            <a class="site-nav__link {{ $item->class }}" href="{{ $item->link }}">{{ $item->label }}</a>
-
-                            {{-- The sponsor sits second, as on the live site. --}}
-                            @if ($loop->first)
-                                @include('site.partials.sponsor', ['sponsor' => $sponsor, 'wide' => true])
-                            @endif
-                        @endforeach
-                    </nav>
-                @endif
-
-                <form class="site-search" method="GET" action="{{ route('search') }}" role="search">
-                    <input class="site-search__input" type="search" name="q"
-                           value="{{ request()->routeIs('search') ? request('q') : '' }}"
-                           placeholder="Іздеу…" aria-label="Іздеу">
-                </form>
-            </div>
+    {{-- Phone only: the burger opens БІЗ ТУРАЛЫ, not the rubrics. --}}
+    <div class="site-menu" id="site-menu">
+        <div class="shell">
+            <a class="site-nav__link" href="/about">БІЗ ТУРАЛЫ</a>
+            @include('site.partials.socials', ['socials' => $socials, 'modifier' => 'socials--menu'])
         </div>
     </div>
+
+    {{-- The rubric strip: same height and rhythm as the ticker. --}}
+    @if ($headerMenu)
+        <nav class="site-nav">
+            <div class="shell site-nav__inner">
+                @foreach ($headerMenu->items as $item)
+                    @continue($item->link === '/about')
+                    <a class="site-nav__link {{ $item->class }}" href="{{ $item->link }}">{{ $item->label }}</a>
+                @endforeach
+            </div>
+        </nav>
+    @endif
 </header>
 
 @yield('ticker')
@@ -105,39 +117,26 @@
     @yield('content')
 </main>
 
+{{--
+    Points 23-27: the new wordmark, the tagline beside it rather than under it,
+    the five socials, press.naryk@gmail.com — no phone number, no Home/Contact.
+--}}
 <footer class="site-footer">
     <div class="shell site-footer__inner">
         <div class="site-footer__brand">
-            @if ($logoFooter)
-                <img src="{{ Storage::disk('public')->url($logoFooter) }}" alt="" class="site-footer__logo">
+            @if ($logoDesktop)
+                <img src="{{ $logoDesktop }}" alt="{{ $siteName }}" class="site-footer__logo">
             @endif
-            <p class="site-footer__desc">{{ $settings['site_information']['sitedescription'] ?? '' }}</p>
+
+            @if ($tagline)
+                <p class="site-footer__desc">{{ $tagline }}</p>
+            @endif
         </div>
 
-        @if ($footerMenu)
-            <nav class="site-footer__nav">
-                @foreach ($footerMenu->items as $item)
-                    <a href="{{ $item->link }}">{{ $item->label }}</a>
-                @endforeach
-            </nav>
-        @endif
+        <div class="site-footer__right">
+            @include('site.partials.socials', ['socials' => $socials, 'modifier' => 'socials--footer'])
 
-        <div class="site-footer__contacts">
-            @if ($email = $settings['site_information']['siteemail'] ?? null)
-                <a href="mailto:{{ $email }}">{{ $email }}</a>
-            @endif
-            @if ($phone = $settings['site_information']['sitephone'] ?? null)
-                <a href="tel:{{ preg_replace('/\D+/', '', $phone) }}">{{ $phone }}</a>
-            @endif
-
-            <div class="site-footer__socials">
-                @foreach ($socials as $network => $url)
-                    <a class="social-link" href="{{ $url }}" rel="noopener noreferrer" target="_blank"
-                       title="{{ ucfirst($network) }}" aria-label="{{ ucfirst($network) }}">
-                        @include('site.partials.icon', ['name' => $network])
-                    </a>
-                @endforeach
-            </div>
+            <a href="mailto:{{ $email = $settings['site_information']['siteemail'] ?? 'press.naryk@gmail.com' }}">{{ $email }}</a>
         </div>
     </div>
 

@@ -49,15 +49,29 @@ it('renders both sponsor shapes, and hides each where the other belongs', functi
         ->and($html)->toContain('img/broker.svg');
 });
 
-it('puts the sponsor second in the menu', function () {
+it('orders the masthead: freedom, search, wordmark, socials, about', function () {
     $html = $this->get('/about')->assertOk()->getContent();
 
-    $firstLink = strpos($html, 'site-nav__link');
+    // Point 7.
     $sponsor = strpos($html, 'sponsor--wide');
-    $secondLink = strpos($html, 'site-nav__link', $firstLink + 1);
+    $search = strpos($html, 'site-search__input');
+    $wordmark = strpos($html, 'site-header__logo');
+    $socials = strpos($html, 'socials--header');
+    $about = strpos($html, 'site-header__about');
 
-    expect($sponsor)->toBeGreaterThan($firstLink)
-        ->and($sponsor)->toBeLessThan($secondLink);
+    expect($sponsor)->toBeLessThan($search)
+        ->and($search)->toBeLessThan($wordmark)
+        ->and($wordmark)->toBeLessThan($socials)
+        ->and($socials)->toBeLessThan($about);
+});
+
+it('keeps the about link out of the rubric strip, since it sits in the masthead', function () {
+    $html = $this->get('/about')->assertOk()->getContent();
+
+    $strip = str($html)->after('site-nav__inner')->before('</nav>')->toString();
+
+    expect($strip)->not->toContain('/about')
+        ->and($strip)->toContain('/category/');
 });
 
 it('lets the admin panel replace both sponsor shapes at once', function () {

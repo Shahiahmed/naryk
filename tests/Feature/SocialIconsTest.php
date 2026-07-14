@@ -30,26 +30,37 @@ it('drops the networks the client never filled in', function () {
         ->and(Social::url('myspace', 'anything'))->toBeNull();
 });
 
-it('builds only the links that resolve', function () {
+it('shows only the five networks the client listed, in their order', function () {
+    // Point 4. The old theme printed every row it found, including the empty
+    // ones and networks the client no longer uses.
     $links = Social::links([
         'facebook' => 'https://www.facebook.com/naryk.kz',
-        'youtube' => null,
+        'youtube' => 'https://youtube.com/naryk',
         'linkedin' => '?',
         'whatsapp' => '77781121332',
     ]);
 
-    expect($links)->toBe([
-        'facebook' => 'https://www.facebook.com/naryk.kz',
-        'whatsapp' => 'https://wa.me/77781121332',
-    ]);
+    expect(array_keys($links))->toBe(['telegram', 'instagram', 'tiktok', 'threads', 'facebook'])
+        ->and($links['facebook'])->toBe('https://www.facebook.com/naryk.kz');
 });
 
-it('has a glyph for every network the settings can hold', function () {
-    foreach (['facebook', 'twitter', 'instagram', 'youtube', 'linkedin', 'telegram', 'whatsapp'] as $network) {
+it('falls back to the accounts the client gave', function () {
+    // The settings hold `naryk.kz` for telegram, which is not a valid handle,
+    // and have no rows at all for tiktok or threads.
+    $links = Social::links(['telegram' => 'naryk.kz']);
+
+    expect($links['telegram'])->toBe('https://t.me/naryk.kz')
+        ->and($links['tiktok'])->toBe('https://www.tiktok.com/@naryk.kz')
+        ->and($links['threads'])->toBe('https://www.threads.com/@narykkz');
+});
+
+it('has a glyph for every network it shows', function () {
+    foreach (Icons::ORDER as $network) {
         expect(Icons::has($network))->toBeTrue();
     }
 
-    expect(Icons::path('myspace'))->toBeNull();
+    expect(Icons::ORDER)->toBe(['telegram', 'instagram', 'tiktok', 'threads', 'facebook'])
+        ->and(Icons::path('myspace'))->toBeNull();
 });
 
 it('renders the share buttons as inline svg, not letters', function () {
@@ -57,17 +68,21 @@ it('renders the share buttons as inline svg, not letters', function () {
 
     $html = $this->get($post->url())->assertOk()->getContent();
 
-    expect($html)->toContain('<svg class="icon')
-        ->and(substr_count($html, '<svg class="icon'))->toBeGreaterThanOrEqual(8);
+    expect($html)->toContain('<svg class="icon');
 
-    // Two rails of four buttons each. The footer carries its own Telegram
-    // icon, so count the share buttons rather than the label.
+    // Two rails, one beside the article and one below it.
     expect(substr_count($html, 'share__link--telegram'))->toBe(2);
 });
 
-it('draws the footer icons from the settings', function () {
+it('draws the same five icons in the header and the footer', function () {
     $html = $this->get('/about')->assertOk()->getContent();
 
-    expect($html)->toContain('social-link')
-        ->and($html)->toContain('https://wa.me/77781121332');
+    expect($html)->toContain('socials--header')
+        ->and($html)->toContain('socials--footer')
+        ->and($html)->toContain('https://www.tiktok.com/@naryk.kz')
+        ->and($html)->toContain('https://www.threads.com/@narykkz');
+
+    // Point 24: no leftovers from the old theme.
+    expect($html)->not->toContain('wa.me')
+        ->and($html)->not->toContain('linkedin.com');
 });
