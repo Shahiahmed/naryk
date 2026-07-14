@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Pages\Schemas;
 
-use App\Models\Post;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -58,10 +57,10 @@ class PageForm
                             ->disk('public')
                             ->directory('images/'.now()->format('Y/m'))
                             ->imageEditor()
-                            ->formatStateUsing(fn (?string $state): ?string => Post::imagePath($state))
-                            ->dehydrateStateUsing(fn (?string $state): ?string => filled($state)
-                                ? Str::after($state, 'images/')
-                                : null),
+                            ->maxSize(10 * 1024)
+                            ->helperText('JPG, PNG или WebP, до 10 МБ.'),
+                        // The images/ prefix is translated by HandlesPostImage
+                        // on the page, not here: see the note in that trait.
 
                         Select::make('post_status')
                             ->label('Статус')

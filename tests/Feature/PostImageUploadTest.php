@@ -96,3 +96,37 @@ it('replaces the cover of an existing post', function () {
 
     expect(Storage::disk('public')->exists(Post::imagePath($after)))->toBeTrue();
 });
+
+it('writes the new cover into the row, not just onto the disk', function () {
+    /*
+     * The bug this guards: in production the file landed in images/, the post
+     * saved, and post_image kept its old value. Everything looked fine and the
+     * cover was silently lost. Assert against the raw column, and against the
+     * file the upload actually produced.
+     */
+    $post = Post::published()->whereNotNull('post_image')->newest()->firstOrFail();
+
+    Livewire::actingAs(imageAdmin())
+        ->test(EditPost::class, ['record' => $post->getKey()])
+        ->fillForm(['post_image' => [UploadedFile::fake()->image('cover.jpg', 1200, 675)]])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    $stored = DB::table('posts')->where('id', $post->id)->value('post_image');
+
+    // The column names a real file, under images/, with no prefix of its own.
+    expect($stored)->not->toStartWith('images/')
+        ->and(Storage::disk('public')->exists('images/'.$stored))->toBeTrue();
+});
+
+it('leaves the cover alone when the editor clears it', function () {
+    $post = Post::published()->whereNotNull('post_image')->newest()->firstOrFail();
+
+    Livewire::actingAs(imageAdmin())
+        ->test(EditPost::class, ['record' => $post->getKey()])
+        ->fillForm(['post_image' => null])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect($post->fresh()->post_image)->toBeNull();
+});

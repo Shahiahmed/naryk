@@ -69,11 +69,9 @@ class PostForm
                              * limit has to be raised to match — see DEPLOY.md.
                              */
                             ->maxSize(10 * 1024)
-                            ->helperText('JPG, PNG или WebP, до 10 МБ. Вертикальные фото тоже подходят — выберите вид карточки ниже.')
-                            ->formatStateUsing(fn (?string $state): ?string => Post::imagePath($state))
-                            ->dehydrateStateUsing(fn (?string $state): ?string => filled($state)
-                                ? Str::after($state, 'images/')
-                                : null),
+                            ->helperText('JPG, PNG или WebP, до 10 МБ. Вертикальные фото тоже подходят — выберите вид карточки ниже.'),
+                        // The images/ prefix is translated by HandlesPostImage
+                        // on the page, not here: see the note in that trait.
 
                         Select::make('show_image')
                             ->label('Вид карточки в ленте')
