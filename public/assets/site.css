@@ -999,9 +999,14 @@ a:hover {
         padding-bottom: 8px;
         gap: 8px;
     }
+    /*
+     * The phone wordmark is two lines, 2.6:1, not the 15.5:1 strip. It needs
+     * height rather than width.
+     */
     .site-header__logo img {
+        width: auto;
         max-width: 100%;
-        max-height: 48px;
+        max-height: 56px;
     }
     .sponsor img {
         height: 34px;
