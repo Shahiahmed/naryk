@@ -83,15 +83,23 @@ a:hover {
 .site-header__logo {
     grid-column: 2;
     justify-self: center;
+    min-width: 0;
     color: var(--green-dark);
     font-size: 40px;
     font-weight: 800;
     letter-spacing: 0.02em;
 }
 
+/*
+ * The wordmark is a 15.5:1 strip, so it is capped by width. Capping it by
+ * height alone would run it into the burger.
+ */
 .site-header__logo img {
-    max-height: 64px;
-    width: auto;
+    width: 100%;
+    max-width: 560px;
+    max-height: 72px;
+    height: auto;
+    object-fit: contain;
 }
 
 .site-nav {
@@ -992,7 +1000,8 @@ a:hover {
         gap: 8px;
     }
     .site-header__logo img {
-        max-height: 40px;
+        max-width: 100%;
+        max-height: 48px;
     }
     .sponsor img {
         height: 34px;

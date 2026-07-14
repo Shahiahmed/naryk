@@ -50,11 +50,24 @@
         @endif
 
         <a class="site-header__logo" href="/">
-            @if ($logo)
-                <img src="{{ Storage::disk('public')->url($logo) }}"
-                     alt="{{ $settings['site_information']['company_name'] ?? 'Naryk.kz' }}">
+            @php
+                $siteName = $settings['site_information']['company_name'] ?? 'Naryk.kz';
+                $logoDesktop = file_exists(public_path('img/logo-desktop.png')) ? asset('img/logo-desktop.png') : null;
+                $logoPhone = file_exists(public_path('img/logo-phone.png')) ? asset('img/logo-phone.png') : null;
+            @endphp
+
+            @if ($logoDesktop)
+                {{-- The browser picks the file; no JS, no layout shift. --}}
+                <picture>
+                    @if ($logoPhone)
+                        <source media="(max-width: 800px)" srcset="{{ $logoPhone }}">
+                    @endif
+                    <img src="{{ $logoDesktop }}" alt="{{ $siteName }}">
+                </picture>
+            @elseif ($logo)
+                <img src="{{ Storage::disk('public')->url($logo) }}" alt="{{ $siteName }}">
             @else
-                {{ $settings['site_information']['company_name'] ?? 'Naryk.kz' }}
+                {{ $siteName }}
             @endif
         </a>
 

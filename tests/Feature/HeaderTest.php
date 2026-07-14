@@ -54,6 +54,49 @@ it('lets the admin panel replace the sponsor', function () {
         ->and($sponsor['title'])->toBe('Демо-спонсор');
 });
 
+it('uses the wordmark the client supplied', function () {
+    $html = $this->get('/about')->assertOk()->getContent();
+
+    expect($html)->toContain('img/logo-desktop.png');
+});
+
+it('offers the phone wordmark only once it holds anything', function () {
+    $phone = public_path('img/logo-phone.png');
+    $html = $this->get('/about')->assertOk()->getContent();
+
+    if (! file_exists($phone)) {
+        expect($html)->not->toContain('logo-phone.png');
+
+        return;
+    }
+
+    // The file the client first sent was blank — transparent and white, not a
+    // single coloured pixel. Rendering it would leave the phone header empty.
+    $image = imagecreatefrompng($phone);
+    $width = imagesx($image);
+    $height = imagesy($image);
+    $hasInk = false;
+
+    for ($x = 0; $x < $width && ! $hasInk; $x += max(1, (int) ($width / 60))) {
+        for ($y = 0; $y < $height; $y += max(1, (int) ($height / 60))) {
+            $rgba = imagecolorat($image, $x, $y);
+            $alpha = ($rgba >> 24) & 0x7F;
+            $red = ($rgba >> 16) & 0xFF;
+            $green = ($rgba >> 8) & 0xFF;
+            $blue = $rgba & 0xFF;
+
+            if ($alpha < 100 && ($red < 240 || $green < 240 || $blue < 240)) {
+                $hasInk = true;
+                break;
+            }
+        }
+    }
+
+    imagedestroy($image);
+
+    expect($hasInk)->toBeTrue('public/img/logo-phone.png is blank — ask the client to re-export it');
+});
+
 it('serves the sponsor logo with a viewBox, so it scales', function () {
     $svg = file_get_contents(public_path('img/broker.svg'));
 
