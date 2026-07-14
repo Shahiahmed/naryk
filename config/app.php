@@ -59,13 +59,15 @@ return [
     | Application Timezone
     |--------------------------------------------------------------------------
     |
-    | Here you may specify the default timezone for your application, which
-    | will be used by the PHP date and date-time functions. The timezone
-    | is set to "UTC" by default as it is suitable for most use cases.
+    | The client's `posts` table stores local Almaty time, not UTC: the
+    | publishing hours in it run 09:00-18:00, which is a working day there and
+    | nothing at all in UTC. Laravel's default would have written new posts
+    | five hours early, dropping them into the wrong place in a feed that is
+    | ordered by date.
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'Asia/Almaty'),
 
     /*
     |--------------------------------------------------------------------------

@@ -94,6 +94,20 @@ it('drives every gap from one spacing scale', function () {
     expect($raw)->toBeEmpty('these gaps bypass the spacing scale: '.implode(' | ', $raw));
 });
 
+it('keeps time in Almaty, where the client writes it', function () {
+    /*
+     * The publishing hours in the client's table run 09:00-18:00 — a working
+     * day in Almaty, and nothing at all in UTC. Laravel's default would have
+     * stamped new posts five hours early and dropped them into the wrong place
+     * in a feed ordered by date.
+     */
+    expect(config('app.timezone'))->toBe('Asia/Almaty');
+
+    $post = Post::published()->newest()->firstOrFail();
+
+    expect($post->created_at->timezone->getName())->toBe('Asia/Almaty');
+});
+
 it('shows the press address in the footer, and no phone number', function () {
     // Points 25 and 26.
     $html = $this->get('/about')->assertOk()->getContent();
