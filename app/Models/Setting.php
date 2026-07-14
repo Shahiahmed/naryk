@@ -23,12 +23,22 @@ class Setting extends Model
     }
 
     /**
+     * Updates what exists and only inserts a row that carries a value. An empty
+     * field on a setting the client never had must not add a row to their
+     * table.
+     *
      * @param  array<string, array<string, mixed>>  $tree
      */
     public static function persist(array $tree): void
     {
         foreach ($tree as $group => $values) {
             foreach ($values as $name => $value) {
+                $setting = static::where('group', $group)->where('name', $name)->first();
+
+                if (! $setting && blank($value)) {
+                    continue;
+                }
+
                 static::updateOrCreate(
                     ['group' => $group, 'name' => $name],
                     ['value' => blank($value) ? null : (string) $value],

@@ -63,6 +63,7 @@ class ManageSettings extends Page
                     self::informationTab(),
                     self::contactTab(),
                     self::propertiesTab(),
+                    self::sponsorTab(),
                     self::configTab(),
                     self::permalinksTab(),
                 ]),
@@ -118,6 +119,31 @@ class ManageSettings extends Page
                 self::assetUpload('logo_image.ogimage', 'Open Graph'),
                 self::assetUpload('logo_image.logodashboard', 'Логотип админки'),
                 self::assetUpload('logo_image.logoauth', 'Логотип на входе'),
+            ]);
+    }
+
+    /**
+     * The sponsor logo sits in the navigation on the live site. It is an ad,
+     * not chrome, so it belongs in the settings rather than the template —
+     * changing the sponsor or its UTM tags must not need a developer.
+     */
+    protected static function sponsorTab(): Tab
+    {
+        return Tab::make('Спонсор')
+            ->columns(2)
+            ->schema([
+                self::assetUpload('sponsor.logo', 'Логотип в меню')
+                    ->helperText('SVG или PNG. Показывается слева от пунктов меню.'),
+
+                TextInput::make('sponsor.url')
+                    ->label('Ссылка')
+                    ->url()
+                    ->helperText('Вместе с UTM-метками, если они нужны.'),
+
+                TextInput::make('sponsor.title')
+                    ->label('Подпись')
+                    ->helperText('Для alt и подсказки при наведении.')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -179,6 +205,8 @@ class ManageSettings extends Page
         return FileUpload::make($name)
             ->label($label)
             ->image()
+            // `image()` alone rejects SVG, and the site logo is one.
+            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'image/x-icon'])
             ->disk('public')
             ->directory('assets')
             // The setting stores a bare filename.

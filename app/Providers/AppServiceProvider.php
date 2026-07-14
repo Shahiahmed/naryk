@@ -21,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer('site.layout', SiteComposer::class);
+        // Every site view, not just the layout: a child view that extends it
+        // still needs the settings, and tests read them off the root view.
+        // `errors.*` covers the 404 page, which extends the same layout.
+        View::composer(['site.*', 'errors.*'], SiteComposer::class);
     }
 }

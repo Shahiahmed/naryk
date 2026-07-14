@@ -28,9 +28,14 @@ it('hides menus from a redactor', function () {
 it('loads the items of a menu in their stored order', function () {
     $header = Menu::where('name', 'header')->firstOrFail();
 
-    expect($header->items->pluck('label')->all())->toBe([
-        'Билік', 'Қаржы', 'Бизнес', 'Әлеумет', 'Сыртқы сауда', 'Қаржылық сауат',
-    ]);
+    // Editors add and reorder items, so assert the ordering rather than a
+    // fixed list of labels.
+    $sorts = $header->items->pluck('sort')->all();
+
+    expect($sorts)->toBe(collect($sorts)->sort()->values()->all())
+        ->and($header->items)->not->toBeEmpty();
+
+    expect($header->items->pluck('label'))->toContain('Қаржы', 'Бизнес');
 });
 
 it('does not shadow the menu relation with the menu column', function () {

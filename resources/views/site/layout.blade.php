@@ -48,17 +48,35 @@
 
     <div class="site-nav">
         <div class="shell site-nav__inner">
-            @if ($headerMenu)
-                @foreach ($headerMenu->items as $item)
-                    <a class="site-nav__link {{ $item->class }}" href="{{ $item->link }}">{{ $item->label }}</a>
-                @endforeach
+            @if ($sponsor)
+                <a class="sponsor" href="{{ $sponsor['url'] }}" target="_blank" rel="noopener sponsored"
+                   title="{{ $sponsor['title'] }}">
+                    <img src="{{ $sponsor['logo'] }}" alt="{{ $sponsor['title'] }}" height="36">
+                </a>
             @endif
 
-            <form class="site-search" method="GET" action="{{ route('search') }}" role="search">
-                <input class="site-search__input" type="search" name="q"
-                       value="{{ request()->routeIs('search') ? request('q') : '' }}"
-                       placeholder="Іздеу…" aria-label="Іздеу">
-            </form>
+            <button class="burger" type="button" id="burger"
+                    aria-label="Мәзір" aria-expanded="false" aria-controls="site-menu">
+                <span class="burger__bar"></span>
+                <span class="burger__bar"></span>
+                <span class="burger__bar"></span>
+            </button>
+
+            <div class="site-menu" id="site-menu">
+                @if ($headerMenu)
+                    <nav class="site-menu__links">
+                        @foreach ($headerMenu->items as $item)
+                            <a class="site-nav__link {{ $item->class }}" href="{{ $item->link }}">{{ $item->label }}</a>
+                        @endforeach
+                    </nav>
+                @endif
+
+                <form class="site-search" method="GET" action="{{ route('search') }}" role="search">
+                    <input class="site-search__input" type="search" name="q"
+                           value="{{ request()->routeIs('search') ? request('q') : '' }}"
+                           placeholder="Іздеу…" aria-label="Іздеу">
+                </form>
+            </div>
         </div>
     </div>
 </header>

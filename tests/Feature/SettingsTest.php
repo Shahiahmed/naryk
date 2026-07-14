@@ -74,6 +74,19 @@ it('saves a changed setting without touching the others', function () {
         ->and(DB::table('settings')->count())->toBe($before);
 });
 
+it('does not add a row for a setting left empty', function () {
+    $before = DB::table('settings')->count();
+
+    // The sponsor group has no rows in the client's dump. Opening the page and
+    // saving it untouched must not create them.
+    Livewire::actingAs(settingsAdmin())
+        ->test(ManageSettings::class)
+        ->call('save');
+
+    expect(DB::table('settings')->count())->toBe($before)
+        ->and(Setting::get('sponsor', 'logo'))->toBeNull();
+});
+
 it('resolves the logo path into the assets directory', function () {
     expect(Setting::assetPath('logo.svg'))->toBe('assets/logo.svg')
         ->and(Setting::assetPath('assets/logo.svg'))->toBe('assets/logo.svg')
