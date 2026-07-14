@@ -34,8 +34,21 @@
     Every logo the client ships is dark green, so the masthead is light and the
     dark green lives in the ticker, the buttons and the footer.
 --}}
+{{--
+    The masthead is one row: sponsor, logo, burger. On a phone the three sit
+    side by side; on the desktop the burger drops out and the logo centres.
+--}}
 <header class="site-header">
     <div class="shell site-header__inner">
+        @if ($sponsor)
+            <a class="sponsor" href="{{ $sponsor['url'] }}" target="_blank" rel="noopener sponsored"
+               title="{{ $sponsor['title'] }}">
+                <img src="{{ $sponsor['logo'] }}" alt="{{ $sponsor['title'] }}">
+            </a>
+        @else
+            <span class="sponsor sponsor--empty"></span>
+        @endif
+
         <a class="site-header__logo" href="/">
             @if ($logo)
                 <img src="{{ Storage::disk('public')->url($logo) }}"
@@ -44,24 +57,17 @@
                 {{ $settings['site_information']['company_name'] ?? 'Naryk.kz' }}
             @endif
         </a>
+
+        <button class="burger" type="button" id="burger"
+                aria-label="Мәзір" aria-expanded="false" aria-controls="site-menu">
+            <span class="burger__bar"></span>
+            <span class="burger__bar"></span>
+            <span class="burger__bar"></span>
+        </button>
     </div>
 
     <div class="site-nav">
         <div class="shell site-nav__inner">
-            @if ($sponsor)
-                <a class="sponsor" href="{{ $sponsor['url'] }}" target="_blank" rel="noopener sponsored"
-                   title="{{ $sponsor['title'] }}">
-                    <img src="{{ $sponsor['logo'] }}" alt="{{ $sponsor['title'] }}" height="36">
-                </a>
-            @endif
-
-            <button class="burger" type="button" id="burger"
-                    aria-label="Мәзір" aria-expanded="false" aria-controls="site-menu">
-                <span class="burger__bar"></span>
-                <span class="burger__bar"></span>
-                <span class="burger__bar"></span>
-            </button>
-
             <div class="site-menu" id="site-menu">
                 @if ($headerMenu)
                     <nav class="site-menu__links">

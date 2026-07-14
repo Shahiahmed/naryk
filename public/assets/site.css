@@ -65,16 +65,24 @@ a:hover {
     background: #fff;
 }
 
+/*
+ * Sponsor, logo, burger on one line. The side columns are given the same
+ * width, so the logo lands dead centre instead of being pushed off by the
+ * sponsor.
+ */
 .site-header__inner {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: center;
+    gap: 12px;
     min-height: 96px;
     padding-top: 12px;
     padding-bottom: 12px;
 }
 
 .site-header__logo {
+    grid-column: 2;
+    justify-self: center;
     color: var(--green-dark);
     font-size: 40px;
     font-weight: 800;
@@ -101,16 +109,20 @@ a:hover {
 
 /* Sponsor block: an ad, editable in the admin panel, not part of the chrome. */
 .sponsor {
+    grid-column: 1;
+    justify-self: start;
     display: flex;
     align-items: center;
-    flex-shrink: 0;
-    padding: 4px 12px 4px 0;
-    border-right: 1px solid rgba(47, 85, 60, 0.2);
 }
 
 .sponsor img {
-    height: 36px;
+    height: 48px;
     width: auto;
+}
+
+/* Holds column 1 open when no sponsor is set, so the logo stays centred. */
+.sponsor--empty {
+    display: block;
 }
 
 .site-menu {
@@ -150,7 +162,8 @@ a:hover {
 /* Hidden on the desktop; the media query below turns it on. */
 .burger {
     display: none;
-    margin-left: auto;
+    grid-column: 3;
+    justify-self: end;
     width: 44px;
     height: 44px;
     padding: 10px;
@@ -971,23 +984,26 @@ a:hover {
     .site-footer__inner {
         grid-template-columns: minmax(0, 1fr);
     }
+    /* Sponsor, logo and burger share one row on a phone. */
     .site-header__inner {
-        min-height: 72px;
-        padding-top: 10px;
-        padding-bottom: 10px;
+        min-height: 64px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        gap: 8px;
     }
     .site-header__logo img {
-        max-height: 46px;
+        max-height: 40px;
+    }
+    .sponsor img {
+        height: 34px;
     }
 
-    /* Sponsor, burger, and the menu it opens. */
     .burger {
         display: flex;
     }
 
     .site-menu {
         display: none;
-        flex-basis: 100%;
         flex-direction: column;
         align-items: stretch;
         gap: 0;
@@ -998,8 +1014,11 @@ a:hover {
         display: flex;
     }
 
+    /* The strip is empty until the burger opens it. */
     .site-nav__inner {
-        flex-wrap: wrap;
+        min-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
     }
 
     .site-menu__links {
