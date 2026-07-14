@@ -27,21 +27,26 @@ class SiteComposer
     }
 
     /**
-     * The sponsor block in the navigation. Editable in the admin panel, but it
-     * falls back to the Freedom Broker logo the old site shipped, so a fresh
-     * install looks right before anyone touches the settings.
+     * The sponsor block. Editable in the admin panel, but it falls back to the
+     * Freedom Broker artwork the old site shipped, so a fresh install looks
+     * right before anyone touches the settings.
+     *
+     * Two shapes: the wide lockup with the words for the navigation strip, and
+     * the bare shield for the phone masthead, where the wide one will not fit.
+     * A logo uploaded in the admin panel replaces both.
      *
      * @param  array<string, string|null>  $sponsor
-     * @return array{logo: string, url: ?string, title: string}|null
+     * @return array{logo: string, wide: string, url: string, title: string}
      */
-    protected function sponsor(array $sponsor): ?array
+    protected function sponsor(array $sponsor): array
     {
-        $logo = filled($sponsor['logo'] ?? null)
+        $uploaded = filled($sponsor['logo'] ?? null)
             ? Storage::disk('public')->url(Setting::assetPath($sponsor['logo']))
-            : asset('img/broker.svg');
+            : null;
 
         return [
-            'logo' => $logo,
+            'logo' => $uploaded ?? asset('img/broker.svg'),
+            'wide' => $uploaded ?? asset('img/broker-wide.svg'),
             'url' => filled($sponsor['url'] ?? null)
                 ? $sponsor['url']
                 : 'https://fbroker.kz/?utm_source=naryk.kz&utm_medium=banner&utm_campaign=PR_2025',

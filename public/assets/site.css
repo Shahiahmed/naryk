@@ -115,22 +115,42 @@ a:hover {
     padding-bottom: 6px;
 }
 
-/* Sponsor block: an ad, editable in the admin panel, not part of the chrome. */
+/*
+ * Sponsor: an ad, editable in the admin panel, not part of the chrome.
+ * Two shapes — the wide lockup rides in the navigation strip, the bare shield
+ * in the phone masthead. Each is hidden where the other belongs.
+ */
 .sponsor {
-    grid-column: 1;
-    justify-self: start;
     display: flex;
     align-items: center;
 }
 
-.sponsor img {
-    height: 48px;
+/* Wide lockup, second in the menu, on a white chip like the live site. */
+.sponsor--wide {
+    padding: 6px 14px;
+    background: #fff;
+    border-radius: 6px;
+}
+
+.sponsor--wide img {
+    height: 34px;
     width: auto;
 }
 
-/* Holds column 1 open when no sponsor is set, so the logo stays centred. */
-.sponsor--empty {
-    display: block;
+.sponsor--wide:hover {
+    text-decoration: none;
+}
+
+/* The shield only appears on a phone; the masthead has no room for words. */
+.sponsor--compact {
+    display: none;
+    grid-column: 1;
+    justify-self: start;
+}
+
+.sponsor--compact img {
+    height: 44px;
+    width: auto;
 }
 
 .site-menu {
@@ -145,7 +165,9 @@ a:hover {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
     gap: 20px;
+    flex: 1;
 }
 
 .site-nav__link {
@@ -998,6 +1020,19 @@ a:hover {
         padding-top: 8px;
         padding-bottom: 8px;
         gap: 8px;
+    }
+
+    .sponsor--compact {
+        display: flex;
+    }
+
+    /* The words would not fit next to the links once they stack. */
+    .sponsor--wide {
+        display: none;
+    }
+
+    .sponsor--compact img {
+        height: 38px;
     }
     /*
      * The phone wordmark is two lines, 2.6:1, not the 15.5:1 strip. It needs

@@ -40,14 +40,8 @@
 --}}
 <header class="site-header">
     <div class="shell site-header__inner">
-        @if ($sponsor)
-            <a class="sponsor" href="{{ $sponsor['url'] }}" target="_blank" rel="noopener sponsored"
-               title="{{ $sponsor['title'] }}">
-                <img src="{{ $sponsor['logo'] }}" alt="{{ $sponsor['title'] }}">
-            </a>
-        @else
-            <span class="sponsor sponsor--empty"></span>
-        @endif
+        {{-- Phone only: the wide lockup lives in the strip below. --}}
+        @include('site.partials.sponsor', ['sponsor' => $sponsor, 'wide' => false])
 
         <a class="site-header__logo" href="/">
             @php
@@ -86,6 +80,11 @@
                     <nav class="site-menu__links">
                         @foreach ($headerMenu->items as $item)
                             <a class="site-nav__link {{ $item->class }}" href="{{ $item->link }}">{{ $item->label }}</a>
+
+                            {{-- The sponsor sits second, as on the live site. --}}
+                            @if ($loop->first)
+                                @include('site.partials.sponsor', ['sponsor' => $sponsor, 'wide' => true])
+                            @endif
                         @endforeach
                     </nav>
                 @endif
