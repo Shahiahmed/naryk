@@ -90,9 +90,9 @@
         </button>
     </div>
 
-    {{-- Phone only: the burger opens БІЗ ТУРАЛЫ, not the rubrics. --}}
+    {{-- Phone only: the burger opens БІЗ ТУРАЛЫ and the socials, not the rubrics. --}}
     <div class="site-menu" id="site-menu">
-        <div class="shell">
+        <div class="shell site-menu__inner">
             <a class="site-nav__link" href="/about">БІЗ ТУРАЛЫ</a>
             @include('site.partials.socials', ['socials' => $socials, 'modifier' => 'socials--menu'])
         </div>
