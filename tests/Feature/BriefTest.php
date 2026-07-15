@@ -98,7 +98,7 @@ it('serves Roboto self-hosted and sets it on the body', function () {
     // Point 9: the font the old site used, the files the client sent.
     $css = file_get_contents(public_path('assets/site.css'));
 
-    expect($css)->toContain("@font-face")
+    expect($css)->toContain('@font-face')
         ->and($css)->toContain('Roboto-Regular.woff2')
         ->and($css)->toContain('Roboto-Bold.woff2')
         ->and($css)->toMatch("/font-family: 'Roboto'/");

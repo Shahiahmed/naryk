@@ -327,22 +327,18 @@ a:hover {
 }
 
 /* The drawer stacks: each rubric, БІЗ ТУРАЛЫ, then the row of socials. */
+/* БІЗ ТУРАЛЫ on the left, the socials on the right, one row. */
 .site-menu__inner {
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    padding-top: var(--space-2);
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-top: var(--space-3);
     padding-bottom: var(--space-3);
 }
 
 .site-menu__inner .site-nav__link {
-    padding: var(--space-3) 0;
-    border-bottom: 1px solid rgba(66, 94, 64, 0.15);
     font-size: var(--text-md);
-}
-
-.site-menu__inner .socials {
-    padding-top: var(--space-3);
 }
 
 .site-menu--open {
