@@ -1037,11 +1037,15 @@ a:hover {
     min-width: 0;
 }
 
+/*
+ * The wordmark is a 15.5:1 strip, so at 44px it stretched almost 700px wide
+ * and dominated the footer. A shorter cap and a tighter chip settle it down.
+ */
 .site-footer__logo {
-    max-height: 44px;
+    max-height: 30px;
     width: auto;
-    padding: var(--space-2) var(--space-3);
-    border-radius: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    border-radius: 6px;
     background: #fff;
 }
 

@@ -33,6 +33,17 @@ class SocialMediaResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
+    /**
+     * Hidden from the sidebar to avoid confusion: the site reads its socials
+     * from Settings → Contacts (the `settings` table), not from this legacy
+     * `socialmedia` table. The resource still works by direct URL, so nothing
+     * is lost — flip this back to show it again.
+     */
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return SocialMediaForm::configure($schema);
