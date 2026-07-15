@@ -94,6 +94,22 @@ it('drives every gap from one spacing scale', function () {
     expect($raw)->toBeEmpty('these gaps bypass the spacing scale: '.implode(' | ', $raw));
 });
 
+it('serves Roboto self-hosted and sets it on the body', function () {
+    // Point 9: the font the old site used, the files the client sent.
+    $css = file_get_contents(public_path('assets/site.css'));
+
+    expect($css)->toContain("@font-face")
+        ->and($css)->toContain('Roboto-Regular.woff2')
+        ->and($css)->toContain('Roboto-Bold.woff2')
+        ->and($css)->toMatch("/font-family: 'Roboto'/");
+
+    expect(file_exists(public_path('fonts/Roboto-Regular.woff2')))->toBeTrue()
+        ->and(file_exists(public_path('fonts/Roboto-Bold.woff2')))->toBeTrue();
+
+    // Real woff2 files, not stray HTML error pages.
+    expect(substr(file_get_contents(public_path('fonts/Roboto-Regular.woff2')), 0, 4))->toBe('wOF2');
+});
+
 it('keeps time in Almaty, where the client writes it', function () {
     /*
      * The publishing hours in the client's table run 09:00-18:00 — a working

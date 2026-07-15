@@ -8,6 +8,28 @@
  * every size from the --text scale. Nothing hard-codes a pixel.
  */
 
+/*
+ * Roboto, the font the old site used and the client sent. Self-hosted rather
+ * than pulled from Google Fonts — the server has no outbound guarantees, and
+ * this keeps the site off a third party. The files carry the Cyrillic and
+ * Kazakh glyphs the content needs.
+ */
+@font-face {
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    src: url('../fonts/Roboto-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+    src: url('../fonts/Roboto-Bold.woff2') format('woff2');
+}
+
 :root {
     /* The green of the wordmark. The ticker takes it too (point 2). */
     --green-logo: #425e40;
@@ -55,7 +77,9 @@ body {
     margin: 0;
     background: var(--page-bg);
     color: var(--ink);
-    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    /* Point 9: Roboto everywhere, as on the old site. System fonts only
+       stand in for the split second before the woff2 loads. */
+    font-family: 'Roboto', -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
     font-size: var(--text-base);
     line-height: 1.45;
     /* No stray element may push the page wider than the screen. */
@@ -125,7 +149,7 @@ a:hover {
     min-width: 0;
     color: var(--green-logo);
     font-size: var(--text-xl);
-    font-weight: 800;
+    font-weight: 700;
 }
 
 /* A 15.5:1 strip: capped by width, or it would run into its neighbours. */
@@ -1004,7 +1028,7 @@ a:hover {
 .notfound__code {
     margin: 0;
     font-size: 88px;
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1;
     color: var(--green-logo);
 }
