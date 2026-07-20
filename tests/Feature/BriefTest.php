@@ -75,6 +75,14 @@ it('gives the rubric strip and the ticker the same height', function () {
         ->and($css)->toMatch('/\.ticker \{[^}]*min-height: var\(--strip-height\)/s');
 });
 
+it('keeps the ticker marquee from compressing its quotes onto each other', function () {
+    $css = file_get_contents(public_path('assets/site.css'));
+
+    expect($css)->toMatch('/\.ticker__track \{[^}]*flex:\s*0 0 auto/s')
+        ->and($css)->toMatch('/\.ticker__group \{[^}]*flex:\s*0 0 auto/s')
+        ->and($css)->toMatch('/\.ticker__item \{[^}]*flex:\s*0 0 auto/s');
+});
+
 it('drives every gap from one spacing scale', function () {
     // Points 3, 9 and 15 all ask for the same rhythm site-wide.
     $css = file_get_contents(public_path('assets/site.css'));

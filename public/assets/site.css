@@ -368,6 +368,11 @@ a:hover {
 .ticker__track {
     display: flex;
     width: max-content;
+    /* The ticker itself is a flex row; without this the track gets compressed
+       below its content width and the two marquee copies paint on top of each
+       other at the right edge (CCBN under ASBN, etc.). */
+    flex: 0 0 auto;
+    min-width: max-content;
     animation: ticker-scroll 60s linear infinite;
 }
 
@@ -384,6 +389,7 @@ a:hover {
 .ticker__group {
     display: flex;
     align-items: center;
+    flex: 0 0 auto;
     gap: var(--space-3);
     white-space: nowrap;
 }
