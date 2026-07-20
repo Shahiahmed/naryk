@@ -139,3 +139,46 @@ it('does not let a category page shadow the article route', function () {
     // /category/{slug} is registered before news/{slug}.
     $this->get('/category/'.$post->post_name)->assertNotFound();
 });
+
+it('hides the view count from a reader, and shows it to the newsroom', function () {
+    /*
+     * The client wants to see how an article is doing without handing the
+     * number to everyone who opens the page. A logged-out visitor gets no
+     * trace of it in the markup, so there is nothing to dig out of the source.
+     */
+    $post = anArticle();
+
+    $this->get($post->url())->assertOk()->assertDontSee('meta__hits');
+
+    $staff = App\Models\User::where('email', 'info@sait.kz')->firstOrFail();
+
+    expect($staff->isStaff())->toBeTrue();
+
+    $this->actingAs($staff)
+        ->get($post->url())
+        ->assertOk()
+        ->assertSee('meta__hits');
+});
+
+it('keeps the count out of the cards, where staff would only get clutter', function () {
+    $staff = App\Models\User::where('email', 'info@sait.kz')->firstOrFail();
+
+    $this->actingAs($staff)->get('/')->assertOk()->assertDontSee('meta__hits');
+});
+
+it('shows a signed-in reader no more than a stranger', function () {
+    /*
+     * `member` is a front-end-only role the legacy site handed out, and every
+     * account in the client's dump happens to carry a newsroom role. The reader
+     * is built rather than saved: the point is the role check, and the client's
+     * tables are not ours to write to even inside a transaction.
+     */
+    $reader = App\Models\User::factory()->make(['status' => 'active']);
+
+    expect($reader->isStaff())->toBeFalse();
+
+    $this->actingAs($reader)
+        ->get(anArticle()->url())
+        ->assertOk()
+        ->assertDontSee('meta__hits');
+});

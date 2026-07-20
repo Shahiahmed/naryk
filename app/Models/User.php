@@ -42,6 +42,16 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
+        return $this->isStaff();
+    }
+
+    /**
+     * Someone who works on the site, as opposed to a reader. The front end asks
+     * this before showing anything the public has no business seeing — the view
+     * count under an article, for one.
+     */
+    public function isStaff(): bool
+    {
         return $this->status === 'active'
             && $this->banned_at === null
             && $this->hasAnyRole(self::PANEL_ROLES);

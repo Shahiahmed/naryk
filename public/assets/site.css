@@ -65,6 +65,8 @@
 
     /* The rubric strip and the ticker share a height (point 3). */
     --strip-height: 44px;
+
+    --eye: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z'/%3E%3C/svg%3E");
 }
 
 *,
@@ -601,6 +603,27 @@ a:hover {
 .meta__rubric {
     color: var(--green-accent);
     font-weight: 600;
+}
+
+/*
+ * The view count, shown to staff only. The eye marks it as a count rather than
+ * another date, and is drawn here so the markup stays a plain number that reads
+ * sensibly without CSS.
+ */
+.meta__hits {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.meta__hits::before {
+    content: '';
+    width: 15px;
+    height: 15px;
+    background: currentColor;
+    /* Simple Icons eye (CC0), inlined so the strict CSP has nothing to fetch. */
+    -webkit-mask: var(--eye) center / contain no-repeat;
+    mask: var(--eye) center / contain no-repeat;
 }
 
 .meta--inverse,

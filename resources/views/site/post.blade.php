@@ -22,6 +22,7 @@
                     'post' => $post,
                     'category' => $post->categories->first(),
                     'inverse' => false,
+                    'hits' => true,
                 ])
             </div>
 
