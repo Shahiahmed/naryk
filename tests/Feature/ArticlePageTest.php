@@ -24,6 +24,18 @@ it('opens an article by its slug under the news prefix', function () {
     expect($post->url())->toStartWith('/news/');
 });
 
+it('embeds NewsArticle JSON-LD for Google and AI crawlers', function () {
+    $post = anArticle();
+
+    $html = $this->get($post->url())->assertOk()->getContent();
+
+    expect($html)->toContain('application/ld+json')
+        ->and($html)->toContain('"@type":"NewsArticle"')
+        ->and($html)->toContain('"headline":')
+        ->and($html)->toContain('"datePublished":')
+        ->and($html)->toContain('"publisher":');
+});
+
 it('404s on an unknown slug and on a draft', function () {
     $this->get('/news/eshtene-joq')->assertNotFound();
 

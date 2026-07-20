@@ -31,6 +31,7 @@ class SiteComposer
             'logo' => Setting::assetPath($settings['logo_image']['logowebsite'] ?? null),
             'logoFooter' => Setting::assetPath($settings['logo_image']['logowebsite_footer'] ?? null),
             'favicon' => Setting::assetPath($settings['logo_image']['favicon'] ?? null),
+            'ogImage' => Setting::assetPath($settings['logo_image']['ogimage'] ?? null),
             'socials' => Social::links($settings['social_media'] ?? []),
             'sponsor' => $this->sponsor($settings['sponsor'] ?? []),
         ]);

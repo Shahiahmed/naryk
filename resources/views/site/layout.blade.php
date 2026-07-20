@@ -18,6 +18,9 @@
         $metaUrl = url()->current();
 
         $metaImage = trim($__env->yieldContent('og_image'));
+        if ($metaImage === '' && ! empty($ogImage)) {
+            $metaImage = Storage::disk('public')->url($ogImage);
+        }
         if ($metaImage === '' && file_exists(public_path('img/logo-desktop.png'))) {
             $metaImage = asset('img/logo-desktop.png');
         }
@@ -75,6 +78,8 @@
             gtag('config', '{{ $ga }}');
         </script>
     @endif
+
+    @stack('head')
 </head>
 <body>
 

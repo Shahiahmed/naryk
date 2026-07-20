@@ -1,9 +1,13 @@
 @extends('site.layout')
 
 @section('title', $post->post_title.' — Naryk.kz')
-@section('description', $post->lead() ?? $post->meta_description)
+@section('description', $post->seoDescription())
 @section('og_type', 'article')
 @section('og_image', $post->hasImage() ? $post->imageUrl() : '')
+
+@push('head')
+    @include('site.partials.structured-data', ['post' => $post])
+@endpush
 
 @section('content')
     <div class="article-layout">

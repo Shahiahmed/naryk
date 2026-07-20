@@ -1,7 +1,7 @@
 @extends('site.layout')
 
 @section('title', $page->post_title.' — Naryk.kz')
-@section('description', $page->meta_description)
+@section('description', $page->seoDescription())
 @section('og_image', $page->hasImage() ? $page->imageUrl() : '')
 
 @section('content')

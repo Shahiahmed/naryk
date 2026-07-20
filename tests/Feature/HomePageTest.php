@@ -217,6 +217,29 @@ it('strips the html the editors leave in a lead', function () {
     expect((new Post(['post_summary' => '<p><br></p>']))->lead())->toBeNull();
 });
 
+it('falls back to the first 200 characters of the body when description is empty', function () {
+    $body = str_repeat('Сөз ', 80);
+
+    $post = new Post([
+        'meta_description' => '',
+        'post_summary' => '',
+        'post_content' => '<p>'.$body.'</p>',
+    ]);
+
+    $description = $post->seoDescription();
+
+    expect($description)->not->toBeEmpty()
+        ->and(mb_strlen($description))->toBeLessThanOrEqual(201)
+        ->and($description)->toEndWith('…');
+
+    $withMeta = new Post([
+        'meta_description' => 'Қолмен жазылған сипаттама',
+        'post_content' => '<p>'.$body.'</p>',
+    ]);
+
+    expect($withMeta->seoDescription())->toBe('Қолмен жазылған сипаттама');
+});
+
 it('builds the post url from the permalink setting', function () {
     $post = Post::published()->newest()->first();
 

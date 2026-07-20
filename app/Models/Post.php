@@ -243,4 +243,50 @@ class Post extends Model
 
         return $text !== '' ? $text : null;
     }
+
+    /**
+     * Meta / Open Graph description: explicit SEO field, else the lead, else
+     * the first 200 characters of the body (client request).
+     */
+    public function seoDescription(int $limit = 200): string
+    {
+        if (filled($this->meta_description)) {
+            return trim((string) $this->meta_description);
+        }
+
+        $lead = $this->lead();
+        if ($lead !== null) {
+            return $this->limitPlainText($lead, $limit);
+        }
+
+        $body = $this->plainTextFromHtml((string) $this->post_content);
+        if ($body === '') {
+            return '';
+        }
+
+        return $this->limitPlainText($body, $limit);
+    }
+
+    protected function plainTextFromHtml(string $html): string
+    {
+        $text = trim(html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+
+        return trim(preg_replace('/\s+/u', ' ', $text) ?? '');
+    }
+
+    protected function limitPlainText(string $text, int $limit): string
+    {
+        if (mb_strlen($text) <= $limit) {
+            return $text;
+        }
+
+        $truncated = mb_substr($text, 0, $limit);
+        $breakAt = mb_strrpos($truncated, ' ');
+
+        if ($breakAt !== false && $breakAt >= (int) ($limit * 0.6)) {
+            $truncated = mb_substr($truncated, 0, $breakAt);
+        }
+
+        return rtrim($truncated, " \t.,;:!-").'…';
+    }
 }
