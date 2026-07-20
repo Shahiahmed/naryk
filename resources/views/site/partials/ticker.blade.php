@@ -17,13 +17,8 @@
                             @endif
                             <span class="ticker__code">{{ $item['ticker'] }}</span>
                             <span class="ticker__price">{{ $item['last'] }}</span>
-                            <span class="ticker__arrow ticker__arrow--{{ strtolower($item['status']) ?: 'flat' }}">
-                                @switch($item['status'])
-                                    @case('UP') &#9650; @break
-                                    @case('DOWN') &#9660; @break
-                                    @default &#9644;
-                                @endswitch
-                            </span>
+                            {{-- No stray whitespace: it renders as a space and crowds the divider. --}}
+                            <span class="ticker__arrow ticker__arrow--{{ strtolower($item['status']) ?: 'flat' }}">@switch($item['status'])@case('UP')&#9650;@break @case('DOWN')&#9660;@break @default&#9644;@endswitch</span>
                         </span>
                         <span class="ticker__sep">|</span>
                     @endforeach

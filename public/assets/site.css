@@ -410,10 +410,23 @@ a:hover {
     color: #cbd5e1;
 }
 
-/* Point 13: the divider was there but too faint to read against the green. */
+/*
+ * Point 13. The divider was in the markup all along, but as a `|` glyph it
+ * inherited the arrow's optical weight and sat close enough to the triangle to
+ * read as part of it — red or green, not a separator. Drawing it as a rule of
+ * its own gives it a fixed width and symmetric room that a glyph's side
+ * bearings kept eating.
+ */
 .ticker__sep {
-    margin: 0 var(--space-2);
-    color: rgba(255, 255, 255, 0.65);
+    display: inline-block;
+    width: 1px;
+    height: 14px;
+    margin: 0 var(--space-4);
+    background: rgba(255, 255, 255, 0.55);
+    /* The character stays in the markup; the rule stands in for it. */
+    font-size: 0;
+    line-height: 0;
+    color: transparent;
 }
 
 @keyframes ticker-scroll {
