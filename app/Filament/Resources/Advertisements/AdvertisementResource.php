@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Advertisements;
 
+use App\Filament\Concerns\SuperadminOnly;
 use App\Filament\Resources\Advertisements\Pages\CreateAdvertisement;
 use App\Filament\Resources\Advertisements\Pages\EditAdvertisement;
 use App\Filament\Resources\Advertisements\Pages\ListAdvertisements;
@@ -17,6 +18,8 @@ use UnitEnum;
 
 class AdvertisementResource extends Resource
 {
+    use SuperadminOnly;
+
     protected static ?string $model = Advertisement::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhoto;

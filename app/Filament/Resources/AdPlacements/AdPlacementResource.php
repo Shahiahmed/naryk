@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\AdPlacements;
 
+use App\Filament\Concerns\SuperadminOnly;
 use App\Filament\Resources\AdPlacements\Pages\EditAdPlacement;
 use App\Filament\Resources\AdPlacements\Pages\ListAdPlacements;
 use App\Filament\Resources\AdPlacements\Schemas\AdPlacementForm;
@@ -17,6 +18,8 @@ use UnitEnum;
 
 class AdPlacementResource extends Resource
 {
+    use SuperadminOnly;
+
     protected static ?string $model = AdPlacement::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;

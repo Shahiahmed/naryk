@@ -37,9 +37,10 @@ class ManageSettings extends Page
     /** @var array<string, mixed>|null */
     public ?array $data = [];
 
+    /** Reserved for the site's owner, like the rest of Настройки and Доступ. */
     public static function canAccess(): bool
     {
-        return Filament::auth()->user()?->hasAnyRole(['superadmin', 'admin']) ?? false;
+        return Filament::auth()->user()?->hasRole('superadmin') ?? false;
     }
 
     public function mount(): void

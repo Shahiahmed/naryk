@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SocialMedia;
 
+use App\Filament\Concerns\SuperadminOnly;
 use App\Filament\Resources\SocialMedia\Pages\CreateSocialMedia;
 use App\Filament\Resources\SocialMedia\Pages\EditSocialMedia;
 use App\Filament\Resources\SocialMedia\Pages\ListSocialMedia;
@@ -17,6 +18,8 @@ use UnitEnum;
 
 class SocialMediaResource extends Resource
 {
+    use SuperadminOnly;
+
     protected static ?string $model = SocialMedia::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedGlobeAlt;
