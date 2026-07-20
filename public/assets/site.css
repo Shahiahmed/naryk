@@ -373,15 +373,29 @@ a:hover {
     animation-play-state: paused;
 }
 
+/*
+ * The spacing around the divider belongs here, not on the divider itself. As
+ * its own margins it measured from the arrow's box, which ends flush against
+ * the triangle, so the left side always looked tighter than the right. A gap
+ * on the strip spaces every child by the same amount.
+ */
 .ticker__group {
     display: flex;
     align-items: center;
+    gap: var(--space-3);
     white-space: nowrap;
 }
 
+/*
+ * Nothing on the strip may shrink. The track is wider than the screen by
+ * design — that is what there is to scroll — so flex read the overflow as
+ * pressure and squeezed each quote, which pushed its arrow out past its own
+ * box and straight onto the divider.
+ */
 .ticker__item {
     display: inline-flex;
     align-items: center;
+    flex: 0 0 auto;
     gap: var(--space-1);
 }
 
@@ -398,16 +412,38 @@ a:hover {
     letter-spacing: 0.02em;
 }
 
+/*
+ * Roboto has no ▲ or ▼, so the browser substituted them from a fallback that
+ * gives the glyph almost no advance width: the ink drew ~15px past its own box
+ * and swallowed the space before the divider, which is why the divider looked
+ * glued to the arrow while the next logo sat a clear gap away. Drawing the
+ * arrows as borders gives them geometry the layout can actually measure, and
+ * the same shape on every machine. The character stays in the markup.
+ */
+.ticker__arrow {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: 10px;
+    height: 8px;
+    font-size: 0;
+    line-height: 0;
+    color: transparent;
+}
+
 .ticker__arrow--up {
-    color: #7ee2a8;
+    background: #7ee2a8;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
 
 .ticker__arrow--down {
-    color: #ff9d9d;
+    background: #ff9d9d;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
 }
 
+/* Unchanged prices get a bar rather than a triangle. */
 .ticker__arrow--flat {
-    color: #cbd5e1;
+    height: 3px;
+    background: #cbd5e1;
 }
 
 /*
@@ -419,9 +455,9 @@ a:hover {
  */
 .ticker__sep {
     display: inline-block;
+    flex: 0 0 auto;
     width: 1px;
     height: 14px;
-    margin: 0 var(--space-4);
     background: rgba(255, 255, 255, 0.55);
     /* The character stays in the markup; the rule stands in for it. */
     font-size: 0;
