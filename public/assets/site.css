@@ -1241,8 +1241,17 @@ a:hover {
         display: block;
     }
 
-    /* Point 7 and 19: Freedom, НАРЫҚ, burger — the old shape. */
+    /*
+     * Point 7 and 19: Freedom, НАРЫҚ, burger — the old shape.
+     *
+     * The middle track was `auto`, so it sized itself to the wordmark's own
+     * width — around 740px at this height — and grew past the screen, squeezing
+     * the side tracks to nothing and laying the words over the Freedom shield.
+     * Giving the middle track what is left instead of what it wants keeps all
+     * three in a row, and the wordmark scales down to fit.
+     */
     .site-header__inner {
+        grid-template-columns: auto minmax(0, 1fr) auto;
         min-height: 64px;
         gap: var(--space-2);
     }
@@ -1262,9 +1271,9 @@ a:hover {
     }
 
     .site-header__logo img {
-        width: auto;
+        width: 100%;
         max-width: 100%;
-        max-height: 48px;
+        max-height: 40px;
     }
 
     /*

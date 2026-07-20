@@ -126,3 +126,17 @@ it('serves the sponsor logo with a viewBox, so it scales', function () {
     // which pins it at 1569px wide.
     expect($svg)->toContain('viewBox="0 0 1569 1790"');
 });
+
+it('keeps the wordmark from covering the sponsor on a phone', function () {
+    /*
+     * The middle grid track used to be `auto`, so it took the wordmark's own
+     * width — about 740px at that height — grew past the screen, squeezed the
+     * side tracks to nothing and laid the words over the Freedom shield. The
+     * track now takes what is left, and the wordmark scales down into it.
+     */
+    $css = file_get_contents(public_path('assets/site.css'));
+
+    $phone = str($css)->after('@media (max-width: 800px)')->toString();
+
+    expect($phone)->toContain('grid-template-columns: auto minmax(0, 1fr) auto;');
+});
