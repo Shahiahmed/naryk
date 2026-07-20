@@ -2,6 +2,7 @@
 
 @section('title', $page->post_title.' — Naryk.kz')
 @section('description', $page->meta_description)
+@section('og_image', $page->hasImage() ? $page->imageUrl() : '')
 
 @section('content')
     <nav class="breadcrumbs">

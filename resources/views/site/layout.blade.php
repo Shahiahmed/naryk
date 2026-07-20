@@ -4,9 +4,57 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('title', $settings['site_information']['sitename'] ?? 'Naryk.kz')</title>
-    <meta name="description" content="@yield('description', $settings['site_information']['sitedescription'] ?? '')">
+    @php
+        $metaTitle = trim($__env->yieldContent('title'));
+        if ($metaTitle === '') {
+            $metaTitle = $settings['site_information']['sitename'] ?? 'Naryk.kz';
+        }
+
+        $metaDescription = trim($__env->yieldContent('description'));
+        if ($metaDescription === '') {
+            $metaDescription = (string) ($settings['site_information']['sitedescription'] ?? '');
+        }
+
+        $metaUrl = url()->current();
+
+        $metaImage = trim($__env->yieldContent('og_image'));
+        if ($metaImage === '' && file_exists(public_path('img/logo-desktop.png'))) {
+            $metaImage = asset('img/logo-desktop.png');
+        }
+        if ($metaImage === '' && $favicon) {
+            $metaImage = Storage::disk('public')->url($favicon);
+        }
+        if ($metaImage !== '' && ! str_starts_with($metaImage, 'http://') && ! str_starts_with($metaImage, 'https://')) {
+            $metaImage = url($metaImage);
+        }
+    @endphp
+
+    {{-- Primary Meta Tags --}}
+    <title>{{ $metaTitle }}</title>
+    <meta name="title" content="{{ $metaTitle }}">
+    <meta name="description" content="{{ $metaDescription }}">
     <meta name="keywords" content="{{ $settings['site_information']['metakeyword'] ?? '' }}">
+    <link rel="canonical" href="{{ $metaUrl }}">
+
+    {{-- Open Graph / Facebook --}}
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:url" content="{{ $metaUrl }}">
+    <meta property="og:title" content="{{ $metaTitle }}">
+    <meta property="og:description" content="{{ $metaDescription }}">
+    @if ($metaImage !== '')
+        <meta property="og:image" content="{{ $metaImage }}">
+    @endif
+    <meta property="og:locale" content="kk_KZ">
+    <meta property="og:site_name" content="{{ $settings['site_information']['company_name'] ?? 'Naryk.kz' }}">
+
+    {{-- X (Twitter) --}}
+    <meta name="twitter:card" content="{{ $metaImage !== '' ? 'summary_large_image' : 'summary' }}">
+    <meta name="twitter:url" content="{{ $metaUrl }}">
+    <meta name="twitter:title" content="{{ $metaTitle }}">
+    <meta name="twitter:description" content="{{ $metaDescription }}">
+    @if ($metaImage !== '')
+        <meta name="twitter:image" content="{{ $metaImage }}">
+    @endif
 
     @if ($favicon)
         <link rel="icon" href="{{ Storage::disk('public')->url($favicon) }}">

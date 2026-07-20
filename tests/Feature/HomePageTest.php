@@ -41,6 +41,20 @@ it('renders the home page', function () {
         ->assertSee('Тағы да');
 });
 
+it('exposes Open Graph and Twitter meta tags on the home page', function () {
+    fakeQuotes();
+
+    $this->get('/')
+        ->assertOk()
+        ->assertSee('<meta property="og:type" content="website">', false)
+        ->assertSee('<meta property="og:url"', false)
+        ->assertSee('<meta property="og:title"', false)
+        ->assertSee('<meta property="og:description"', false)
+        ->assertSee('<meta name="twitter:card"', false)
+        ->assertSee('<meta name="twitter:title"', false)
+        ->assertSee('<link rel="canonical"', false);
+});
+
 it('shows fifteen posts and a load-more button', function () {
     fakeQuotes();
 

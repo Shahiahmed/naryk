@@ -2,6 +2,8 @@
 
 @section('title', $post->post_title.' — Naryk.kz')
 @section('description', $post->lead() ?? $post->meta_description)
+@section('og_type', 'article')
+@section('og_image', $post->hasImage() ? $post->imageUrl() : '')
 
 @section('content')
     <div class="article-layout">
