@@ -15,6 +15,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Models\Role;
+use UnitEnum;
 
 class RoleResource extends Resource
 {
@@ -29,6 +30,8 @@ class RoleResource extends Resource
     protected static ?string $pluralModelLabel = 'Роли';
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Доступ';
 
     protected static ?int $navigationSort = 2;
 

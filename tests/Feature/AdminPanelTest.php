@@ -123,3 +123,27 @@ it('keeps the bare filename in the column when saving the edit form', function (
 
     expect($target->fresh()->photo)->toBe('DJM02813.jpg');
 });
+
+it('puts Контент first in the sidebar, right under the dashboard', function () {
+    /*
+     * The client lives in Контент and asked for it at the top. Filament renders
+     * ungrouped items above every group, so Пользователи and Роли had to become
+     * a group of their own — no ordering alone could have moved Контент past
+     * them. This pins the order the client asked for.
+     */
+    $superadmin = User::role('superadmin')->firstOrFail();
+
+    $html = $this->actingAs($superadmin)->get('/admin')->assertOk()->getContent();
+
+    // The label sits on its own line inside the group's button, not tight
+    // against the tags, so match the word itself.
+    $at = function (string $group) use ($html) {
+        expect($html)->toContain($group);
+
+        return strpos($html, $group);
+    };
+
+    expect($at('Контент'))->toBeLessThan($at('Реклама'))
+        ->and($at('Реклама'))->toBeLessThan($at('Настройки'))
+        ->and($at('Настройки'))->toBeLessThan($at('Доступ'));
+});

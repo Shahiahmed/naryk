@@ -29,6 +29,18 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            /*
+             * The client works in Контент all day and wanted it first, right
+             * under the dashboard. Filament keeps ungrouped items above every
+             * group, so Пользователи and Роли moved into Доступ — otherwise no
+             * ordering here could push Контент past them.
+             */
+            ->navigationGroups([
+                'Контент',
+                'Реклама',
+                'Настройки',
+                'Доступ',
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
