@@ -29,10 +29,10 @@ class Social
      */
     public const DEFAULTS = [
         'telegram' => 'https://t.me/narykkz',
-        'instagram' => 'https://www.instagram.com/narykkz',
-        'tiktok' => 'https://www.tiktok.com/@naryk.kz',
-        'threads' => 'https://www.threads.com/@narykkz',
-        'facebook' => 'https://www.facebook.com/naryk.kz',
+        'instagram' => 'https://www.instagram.com/narykkz?igsh=dzdiZDdtczF6aDlk',
+        'tiktok' => 'https://www.tiktok.com/@naryk.kz?_r=1&_t=ZS-97ssDY5MmuX',
+        'threads' => 'https://www.threads.com/@narykkz?igshid=NTc4MTIwNjQ2YQ==',
+        'facebook' => 'https://www.facebook.com/naryk.kz?mibextid=wwXIfr',
     ];
 
     public static function url(string $network, ?string $value): ?string
@@ -45,6 +45,16 @@ class Social
 
         if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
             return $value;
+        }
+
+        /*
+         * The dump holds `naryk.kz` as the telegram and twitter handle — the
+         * site's own domain, not an account. Building t.me/naryk.kz from it
+         * gives a link that leads nowhere, so treat a bare domain as missing
+         * and let the account the client gave stand in.
+         */
+        if ($network !== 'whatsapp' && preg_match('/^[\w-]+\.(kz|com|net|org|io|ru)$/i', $value)) {
+            return null;
         }
 
         if ($network === 'whatsapp') {

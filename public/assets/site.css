@@ -410,9 +410,10 @@ a:hover {
     color: #cbd5e1;
 }
 
+/* Point 13: the divider was there but too faint to read against the green. */
 .ticker__sep {
     margin: 0 var(--space-2);
-    color: rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.65);
 }
 
 @keyframes ticker-scroll {
@@ -444,10 +445,10 @@ a:hover {
     position: sticky;
     top: var(--space-4);
     /*
-     * Point 18: the column used to cut off mid-headline. Leaving it a little
-     * taller than the viewport lets the last item finish.
+     * Point 6: the column cut off mid-headline and left a gap under it. It now
+     * runs the full height of the viewport, so the last item finishes.
      */
-    max-height: calc(100vh - var(--space-6));
+    max-height: calc(100vh - var(--space-4) * 2);
     overflow-y: auto;
     background: var(--column-bg);
     border-radius: var(--radius);
@@ -492,17 +493,22 @@ a:hover {
     border-radius: var(--radius) var(--radius) 0 0;
 }
 
+/*
+ * Point 2: the headlines were larger than everything else. They now take the
+ * rubric strip's size, which is what the brief asks the whole front page to
+ * settle on.
+ */
 .card__title {
     margin: 0 0 var(--space-2);
-    font-size: var(--text-lg);
-    line-height: 1.25;
+    font-size: var(--text-base);
+    line-height: 1.3;
     font-weight: 700;
 }
 
 .card__lead {
     margin: 0 0 var(--space-3);
     color: var(--ink-muted);
-    font-size: var(--text-md);
+    font-size: var(--text-base);
 }
 
 /* Tall image: the text sits on the photo, low. */
@@ -565,7 +571,8 @@ a:hover {
  */
 .pr-badge {
     display: inline-block;
-    margin-right: var(--space-2);
+    /* Point 9: the gap after the badge was too wide. */
+    margin-right: var(--space-1);
     padding: 1px var(--space-2);
     border-radius: var(--space-1);
     background: var(--green-accent);
@@ -703,9 +710,12 @@ a:hover {
     margin-bottom: var(--space-4);
 }
 
-/* Point 14: the banner and the first line of the text were too close. */
+/*
+ * Point 3: too close first, then too far after the last fix. One step of the
+ * scale, the same as everything else.
+ */
 .article__body {
-    margin-top: var(--space-5);
+    margin-top: var(--space-3);
     font-size: var(--text-md);
     line-height: 1.65;
 }
@@ -1186,19 +1196,37 @@ a:hover {
     }
 
     /*
-     * Point 29: the rubric strip stays on a phone; the burger opens БІЗ ТУРАЛЫ.
-     * It scrolls sideways on its own — `body { overflow-x: hidden }` keeps that
-     * scroll from pushing the whole page wider and clipping the headlines.
+     * The rubric strip scrolls sideways on a phone. Point 11: the last rubric
+     * was cut in half at the edge, so the row carries its own padding — the
+     * scroll now ends past the final word, with equal air on both sides.
      */
     .site-nav__inner {
         justify-content: flex-start;
         overflow-x: auto;
         flex-wrap: nowrap;
         scrollbar-width: none;
+        gap: var(--space-5);
+        padding-right: var(--space-4);
+        scroll-padding-inline: var(--space-4);
     }
 
     .site-nav__inner::-webkit-scrollbar {
         display: none;
+    }
+
+    /* Point 15: the burger matches the Freedom shield on the other side. */
+    .burger {
+        width: 40px;
+        height: 40px;
+        padding: var(--space-2);
+    }
+
+    .burger[aria-expanded='true'] .burger__bar:nth-child(1) {
+        transform: translateY(10px) rotate(45deg);
+    }
+
+    .burger[aria-expanded='true'] .burger__bar:nth-child(3) {
+        transform: translateY(-10px) rotate(-45deg);
     }
 
     .card__title {

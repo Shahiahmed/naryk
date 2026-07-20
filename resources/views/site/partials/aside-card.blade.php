@@ -2,7 +2,6 @@
     /** @var \App\Models\Post $post */
     // Point 13: a thumbnail on the left, the headline beside it.
     $withImage ??= false;
-    $category = $post->categories->first();
     $image = $withImage && $post->hasImage() ? $post->imageUrl() : null;
 @endphp
 
@@ -18,6 +17,10 @@
             @includeWhen($post->pr_news, 'site.partials.pr-badge')
             <a href="{{ $post->url() }}">{{ $post->post_title }}</a>
         </h3>
-        @include('site.partials.meta', ['post' => $post, 'category' => $category, 'inverse' => false])
+        {{--
+            Point 12: every card in these columns carried the same rubric name
+            as the column heading above it. Only the date is left.
+        --}}
+        @include('site.partials.meta', ['post' => $post, 'category' => null, 'inverse' => false])
     </div>
 </article>

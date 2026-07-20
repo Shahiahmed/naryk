@@ -38,7 +38,6 @@
     $siteName = $settings['site_information']['company_name'] ?? 'Naryk.kz';
     $tagline = $settings['site_information']['sitedescription'] ?? null;
     $logoDesktop = file_exists(public_path('img/logo-desktop.png')) ? asset('img/logo-desktop.png') : null;
-    $logoPhone = file_exists(public_path('img/logo-phone.png')) ? asset('img/logo-phone.png') : null;
 @endphp
 
 {{--
@@ -62,13 +61,11 @@
 
         <a class="site-header__logo" href="/">
             @if ($logoDesktop)
-                {{-- The browser picks the file; no JS, no layout shift. --}}
-                <picture>
-                    @if ($logoPhone)
-                        <source media="(max-width: 800px)" srcset="{{ $logoPhone }}">
-                    @endif
-                    <img src="{{ $logoDesktop }}" alt="{{ $siteName }}">
-                </picture>
+                {{--
+                    Point 14: one wordmark everywhere — НАРЫҚ ЖАҢАЛЫҚТАРЫ, as on
+                    the site. The two-line phone variant is no longer swapped in.
+                --}}
+                <img src="{{ $logoDesktop }}" alt="{{ $siteName }}">
             @elseif ($logo)
                 <img src="{{ Storage::disk('public')->url($logo) }}" alt="{{ $siteName }}">
             @else
@@ -123,11 +120,8 @@
 --}}
 <footer class="site-footer">
     <div class="shell site-footer__inner">
+        {{-- Point 10: the wordmark is gone from the foot; the tagline stays. --}}
         <div class="site-footer__brand">
-            @if ($logoDesktop)
-                <img src="{{ $logoDesktop }}" alt="{{ $siteName }}" class="site-footer__logo">
-            @endif
-
             @if ($tagline)
                 <p class="site-footer__desc">{{ $tagline }}</p>
             @endif

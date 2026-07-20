@@ -4,19 +4,18 @@
     $title = urlencode($post->post_title);
 
     /*
-     * Point 16: the same networks, in the same order, as everywhere else.
-     * TikTok and Threads have no share endpoint, so they drop out here.
+     * Point 4: the same networks, in the same order, as everywhere else, with
+     * the extras gone. Only these two can take a shared link — Instagram,
+     * TikTok and Threads have no share endpoint at all.
      */
     $links = [
         'telegram' => "https://t.me/share/url?url={$url}&text={$title}",
         'facebook' => "https://www.facebook.com/sharer/sharer.php?u={$url}",
-        'whatsapp' => "https://api.whatsapp.com/send?text={$title}%20{$url}",
     ];
 
     $labels = [
         'telegram' => 'Telegram',
         'facebook' => 'Facebook',
-        'whatsapp' => 'WhatsApp',
     ];
 @endphp
 

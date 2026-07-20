@@ -13,7 +13,7 @@ it('keeps a full url as it is', function () {
 });
 
 it('turns a bare handle into a url', function () {
-    expect(Social::url('twitter', 'naryk.kz'))->toBe('https://twitter.com/naryk.kz')
+    expect(Social::url('twitter', 'narykkz'))->toBe('https://twitter.com/narykkz')
         ->and(Social::url('telegram', '@narykkz'))->toBe('https://t.me/narykkz');
 });
 
@@ -44,14 +44,26 @@ it('shows only the five networks the client listed, in their order', function ()
         ->and($links['facebook'])->toBe('https://www.facebook.com/naryk.kz');
 });
 
-it('falls back to the accounts the client gave', function () {
-    // The settings hold `naryk.kz` for telegram, which is not a valid handle,
-    // and have no rows at all for tiktok or threads.
+it('ignores a bare domain stored as a handle', function () {
+    /*
+     * The dump holds `naryk.kz` as the telegram handle — the site's own domain.
+     * t.me/naryk.kz leads nowhere, which is why the icons opened nothing.
+     */
+    expect(Social::url('telegram', 'naryk.kz'))->toBeNull()
+        ->and(Social::url('telegram', 'narykkz'))->toBe('https://t.me/narykkz');
+
     $links = Social::links(['telegram' => 'naryk.kz']);
 
-    expect($links['telegram'])->toBe('https://t.me/naryk.kz')
-        ->and($links['tiktok'])->toBe('https://www.tiktok.com/@naryk.kz')
-        ->and($links['threads'])->toBe('https://www.threads.com/@narykkz');
+    expect($links['telegram'])->toBe('https://t.me/narykkz');
+});
+
+it('falls back to the accounts the client gave', function () {
+    // The settings have no rows at all for tiktok or threads.
+    $links = Social::links([]);
+
+    expect($links['tiktok'])->toContain('tiktok.com/@naryk.kz')
+        ->and($links['threads'])->toContain('threads.com/@narykkz')
+        ->and($links['instagram'])->toContain('instagram.com/narykkz');
 });
 
 it('has a glyph for every network it shows', function () {

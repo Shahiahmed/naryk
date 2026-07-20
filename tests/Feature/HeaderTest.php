@@ -106,62 +106,18 @@ it('uses the wordmark the client supplied', function () {
     expect($html)->toContain('img/logo-desktop.png');
 });
 
-it('swaps in a phone wordmark that is legible on the white masthead', function () {
-    $phone = public_path('img/logo-phone.png');
+it('shows one wordmark everywhere, phone included', function () {
+    /*
+     * The masthead used to swap in a two-line phone variant below 800px. The
+     * brief's point 14 asks for НАРЫҚ ЖАҢАЛЫҚТАРЫ on the phone too, so the
+     * swap is gone and one file serves both.
+     */
     $html = $this->get('/about')->assertOk()->getContent();
 
-    if (! file_exists($phone)) {
-        expect($html)->not->toContain('logo-phone.png');
-
-        return;
-    }
-
-    expect($html)->toContain('logo-phone.png');
-
-    /*
-     * The client drew this one white, for a dark header. On our white masthead
-     * it would have been invisible, so it was recoloured to the green of the
-     * desktop wordmark. Guard both failures: a blank file, and one that is too
-     * pale to read.
-     */
-    [$ink, $luminance] = wordmarkInk($phone);
-
-    expect($ink)->toBeGreaterThan(0, 'public/img/logo-phone.png is blank');
-    expect($luminance)->toBeLessThan(200, 'public/img/logo-phone.png is too light for a white header');
+    expect($html)->toContain('img/logo-desktop.png')
+        ->and($html)->not->toContain('logo-phone.png')
+        ->and($html)->not->toContain('<picture>');
 });
-
-/**
- * @return array{0: int, 1: float} opaque pixel count, and their mean luminance
- */
-function wordmarkInk(string $path): array
-{
-    $image = imagecreatefrompng($path);
-    $width = imagesx($image);
-    $height = imagesy($image);
-    $ink = 0;
-    $sum = 0.0;
-
-    for ($x = 0; $x < $width; $x += max(1, (int) ($width / 80))) {
-        for ($y = 0; $y < $height; $y += max(1, (int) ($height / 80))) {
-            $rgba = imagecolorat($image, $x, $y);
-            $alpha = ($rgba >> 24) & 0x7F;
-
-            // 0 is opaque, 127 is fully transparent.
-            if ($alpha > 40) {
-                continue;
-            }
-
-            $ink++;
-            $sum += 0.2126 * (($rgba >> 16) & 0xFF)
-                + 0.7152 * (($rgba >> 8) & 0xFF)
-                + 0.0722 * ($rgba & 0xFF);
-        }
-    }
-
-    imagedestroy($image);
-
-    return [$ink, $ink > 0 ? $sum / $ink : 255.0];
-}
 
 it('serves the sponsor logo with a viewBox, so it scales', function () {
     $svg = file_get_contents(public_path('img/broker.svg'));
