@@ -1,12 +1,27 @@
 #!/usr/bin/env bash
 #
-# Deploys naryk.kz. Run as root on the VPS; the GitHub workflow calls it over
-# SSH on every push to main.
+# Contabo / generic VPS deploy (in-repo). For the FASTPANEL client server use
+# /usr/local/sbin/naryk-deploy.sh instead (see deploy/fastpanel-naryk.sh) so the
+# GitHub deploy key cannot execute a mutable script from git and cannot touch
+# other vhosts.
 #
 set -euo pipefail
 
-APP_DIR=/var/www/naryk
 export COMPOSER_ALLOW_SUPERUSER=1
+
+APP_DIR=/var/www/naryk
+APP_USER=www-data
+PHP=php
+COMPOSER=composer
+
+if [[ ! -d "$APP_DIR/.git" ]]; then
+    echo "Refusing to deploy: $APP_DIR is not a git checkout." >&2
+    exit 1
+fi
+
+if ! git config --global --get-all safe.directory 2>/dev/null | grep -qx "$APP_DIR"; then
+    git config --global --add safe.directory "$APP_DIR"
+fi
 
 cd "$APP_DIR"
 
@@ -15,35 +30,28 @@ git fetch --prune origin
 git reset --hard origin/main
 
 echo "==> Installing dependencies"
-composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+"$PHP" "$COMPOSER" install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
-# No `php artisan migrate` on purpose.
-#
-# This project has no migrations: the schema belongs to the client and must not
-# change. `database/migrations/` holds only a .gitkeep. Running migrate would be
-# a no-op today, but it would quietly become a way to alter their live database
-# the day somebody adds a file there. If a schema change ever is agreed, run it
-# by hand, with a dump taken first.
+# No `php artisan migrate` on purpose — client schema must not change.
 
 echo "==> Publishing Filament assets"
-php artisan filament:optimize-clear
-php artisan filament:assets
-php artisan filament:optimize
+"$PHP" artisan filament:optimize-clear
+"$PHP" artisan filament:assets
+"$PHP" artisan filament:optimize
 
 echo "==> Caching config and views"
-php artisan config:clear
-php artisan config:cache
-php artisan view:clear
-php artisan view:cache
-# `route:cache` is skipped, per the server memo.
+"$PHP" artisan config:clear
+"$PHP" artisan config:cache
+"$PHP" artisan view:clear
+"$PHP" artisan view:cache
 
-if [ ! -L public/storage ]; then
+if [[ ! -L public/storage ]]; then
     echo "==> Linking storage"
-    php artisan storage:link
+    "$PHP" artisan storage:link
 fi
 
-echo "==> Fixing ownership"
-chown -R www-data:www-data "$APP_DIR"
+echo "==> Fixing ownership (app dir only)"
+chown -R "$APP_USER:$APP_USER" "$APP_DIR"
 chmod -R 775 storage bootstrap/cache
 chmod 640 .env
 

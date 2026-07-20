@@ -13,7 +13,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Run deploy.sh on the VPS
+      - name: Deploy naryk.kz only (forced remote script)
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -21,4 +21,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
-          script: bash /var/www/naryk/deploy.sh
+          # User is restricted via authorized_keys force-command to this script.
+          # Do not run shell/commands from the repo here.
+          script: sudo /usr/local/sbin/naryk-deploy.sh
