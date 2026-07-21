@@ -82,8 +82,32 @@ it('renders the share buttons as inline svg, not letters', function () {
 
     expect($html)->toContain('<svg class="icon');
 
-    // Two rails, one beside the article and one below it.
-    expect(substr_count($html, 'share__link--telegram'))->toBe(2);
+    // Point 5: one set, under the article. The rail beside it is gone.
+    expect(substr_count($html, 'share__link--telegram'))->toBe(1)
+        ->and($html)->not->toContain('article-rail');
+});
+
+it('shows all five networks under an article, in their usual order', function () {
+    /*
+     * Point 4. Telegram and Facebook share the article; Instagram, TikTok and
+     * Threads have no share endpoint, so they open the paper's own account
+     * rather than pretending to.
+     */
+    $post = Post::published()->newest()->firstOrFail();
+
+    $html = $this->get($post->url())->assertOk()->getContent();
+
+    $share = str($html)->after('class="share ')->before('</div>')->toString();
+
+    $positions = collect(Icons::ORDER)
+        ->map(fn (string $network) => strpos($share, 'share__link--'.$network));
+
+    expect($positions->every(fn ($at) => $at !== false))->toBeTrue()
+        ->and($positions->toArray())->toBe($positions->sort()->values()->toArray());
+
+    expect($share)->toContain('t.me/share/url')
+        ->and($share)->toContain('facebook.com/sharer')
+        ->and($share)->toContain('instagram.com/');
 });
 
 it('draws the same five icons in the header and the footer', function () {

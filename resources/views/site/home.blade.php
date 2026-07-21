@@ -10,7 +10,10 @@
         {{-- Left: paid special projects. Smaller images than the centre. --}}
         <aside class="columns__side columns__side--left">
             @if ($specialProjects->isNotEmpty())
-                <h2 class="column-title">Арнайы жобалар</h2>
+                @include('site.partials.column-title', [
+                    'title' => 'Арнайы жобалар',
+                    'slug' => config('naryk.columns.special_projects'),
+                ])
                 <div class="aside-list">
                     @foreach ($specialProjects as $post)
                         @include('site.partials.aside-card', ['post' => $post, 'withImage' => true])
@@ -36,7 +39,10 @@
         {{-- Right: expert opinions, as today. --}}
         <aside class="columns__side columns__side--right">
             @if ($expertOpinions->isNotEmpty())
-                <h2 class="column-title">Мамандар пікірі</h2>
+                @include('site.partials.column-title', [
+                    'title' => 'Мамандар пікірі',
+                    'slug' => config('naryk.columns.expert_opinions'),
+                ])
                 <div class="aside-list">
                     @foreach ($expertOpinions as $post)
                         @include('site.partials.aside-card', ['post' => $post, 'withImage' => false])

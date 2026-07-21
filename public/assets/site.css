@@ -129,16 +129,19 @@ a:hover {
     padding-bottom: var(--space-3);
 }
 
+/*
+ * Point 14: the search box sat against the Freedom logo and the socials against
+ * the right edge, so both read as belonging to the wrong neighbour. Pushing
+ * each side's inner element toward the middle puts them either side of the
+ * wordmark, which is what they annotate.
+ */
 .site-header__left,
 .site-header__right {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: var(--space-4);
     min-width: 0;
-}
-
-.site-header__right {
-    justify-content: flex-end;
 }
 
 .site-header__about {
@@ -154,11 +157,14 @@ a:hover {
     font-weight: 700;
 }
 
-/* A 15.5:1 strip: capped by width, or it would run into its neighbours. */
+/*
+ * A 15.5:1 strip: capped by width, or it would run into its neighbours.
+ * Point 9: a step smaller, so it no longer crowds the Freedom shield.
+ */
 .site-header__logo img {
     width: 100%;
-    max-width: 440px;
-    max-height: 64px;
+    max-width: 380px;
+    max-height: 52px;
     height: auto;
     object-fit: contain;
 }
@@ -224,8 +230,9 @@ a:hover {
     flex-shrink: 0;
 }
 
+/* Point 9: the sponsor comes down with the wordmark, to keep their balance. */
 .sponsor--wide img {
-    height: 36px;
+    height: 30px;
     width: auto;
 }
 
@@ -245,10 +252,11 @@ a:hover {
 
 /* ---------- socials ---------- */
 
+/* Point 14: the five sit closer together, so they read as one set. */
 .socials {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-1);
 }
 
 .social-link {
@@ -353,9 +361,14 @@ a:hover {
  * The green of the wordmark (point 2), and inset from the edges rather than
  * bleeding across the screen (point 8).
  */
+/*
+ * Point 8: the ticker sat flush against the rubric strip, so the two green
+ * bands read as one. It now keeps the same gap above it that the content keeps
+ * below it — the site's one interval, used here too.
+ */
 .ticker {
     max-width: var(--shell);
-    margin: 0 auto;
+    margin: var(--gap) auto 0;
     background: var(--green-logo);
     color: #fff;
     overflow: hidden;
@@ -418,6 +431,11 @@ a:hover {
 .ticker__code {
     font-weight: 700;
     letter-spacing: 0.02em;
+}
+
+/* Point 10: a note on the code, not a value of its own. */
+.ticker__currency {
+    opacity: 0.75;
 }
 
 /*
@@ -522,6 +540,11 @@ a:hover {
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--green-logo);
+}
+
+/* Point 12: the heading opens the rubric, so it has to look like it does. */
+.column-title__link:hover {
+    color: var(--green-accent);
 }
 
 /* ---------- feed cards ---------- */
@@ -696,7 +719,7 @@ a:hover {
 
 .aside-card__title {
     margin: 0 0 var(--space-1);
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     line-height: 1.3;
     font-weight: 600;
 }
@@ -754,15 +777,10 @@ a:hover {
 
 .article-layout {
     display: grid;
-    grid-template-columns: 64px minmax(0, 1fr) 300px;
+    grid-template-columns: minmax(0, 1fr) 300px;
     gap: var(--gap);
     align-items: start;
     padding: var(--gap) 0 var(--space-6);
-}
-
-.article-rail {
-    position: sticky;
-    top: var(--space-4);
 }
 
 .article {
@@ -778,10 +796,15 @@ a:hover {
     margin-bottom: var(--space-4);
 }
 
+/*
+ * Point 3: the article headline was the one outlier on the site, a full step
+ * above everything around it. It stays the largest type — it is the page's
+ * heading — but by one step of the scale rather than two.
+ */
 .article__title {
     margin: 0 0 var(--space-3);
-    font-size: var(--text-xl);
-    line-height: 1.2;
+    font-size: var(--text-lg);
+    line-height: 1.25;
 }
 
 .article__meta {
@@ -847,12 +870,9 @@ a:hover {
     gap: var(--space-2);
 }
 
-.share--rail {
-    flex-direction: column;
-}
-
+/* Point 5: one set, under the article. The vertical rail beside it is gone. */
 .share--bottom {
-    margin-top: var(--space-2);
+    margin-top: var(--space-4);
 }
 
 .share__link {
@@ -951,10 +971,11 @@ a:hover {
     flex: 1;
 }
 
+/* Point 3: every headline on the page is one size. */
 .grid-card__title {
     margin: 0;
-    font-size: var(--text-md);
-    line-height: 1.25;
+    font-size: var(--text-base);
+    line-height: 1.3;
 }
 
 .grid-card__lead {
@@ -1211,7 +1232,7 @@ a:hover {
         max-height: none;
     }
     .article-layout {
-        grid-template-columns: 64px minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr);
     }
     .article-layout .columns__side--right {
         grid-column: 1 / -1;
@@ -1283,22 +1304,51 @@ a:hover {
     }
 
     /*
-     * The rubric strip scrolls sideways on a phone. Point 11: the last rubric
-     * was cut in half at the edge, so the row carries its own padding — the
-     * scroll now ends past the final word, with equal air on both sides.
+     * Point 6: the strip used to scroll sideways, which left Сыртқы сауда cut
+     * off mid-word at the edge — a rubric you had to drag to finish reading.
+     * Five rubrics fit outright now, so the row holds still and shares the
+     * width evenly, with the same air at both ends.
      */
     .site-nav__inner {
-        justify-content: flex-start;
-        overflow-x: auto;
+        /*
+         * Centred, not spread: the divider belongs to the rubric after it, so
+         * spreading the row pushed each bar against its right-hand neighbour
+         * — Билік    | Қаржы. Centring keeps every gap the same and leaves
+         * equal air at both ends.
+         */
+        justify-content: center;
+        overflow-x: visible;
         flex-wrap: nowrap;
-        scrollbar-width: none;
-        gap: var(--space-5);
-        padding-right: var(--space-4);
-        scroll-padding-inline: var(--space-4);
+        gap: 0;
     }
 
-    .site-nav__inner::-webkit-scrollbar {
+    /* Points 6 and 11: the rest belong to the desktop. */
+    .site-nav__link--wide-only {
         display: none;
+    }
+
+    /*
+     * The five names run about 285px at the desktop size, which overflows a
+     * 375px screen once the shell's padding is counted. The type scales with
+     * the viewport between 11 and 14px so the row fits a 320px phone without
+     * shrinking needlessly on a large one.
+     */
+    .site-nav__link {
+        font-size: clamp(11px, 3.4vw, var(--text-sm));
+        white-space: nowrap;
+    }
+
+    /* Билік | Қаржы | Бизнес | Әлеумет | Сыртқы сауда, as the brief writes it. */
+    .site-nav__link + .site-nav__link::before {
+        content: '|';
+        margin: 0 var(--space-1);
+        color: rgba(66, 94, 64, 0.45);
+        font-weight: 400;
+    }
+
+    /* The strip needs its width; the shell's default padding is too generous. */
+    .site-nav .shell {
+        padding: 0 var(--space-2);
     }
 
     /* Point 15: the burger matches the Freedom shield on the other side. */
@@ -1316,8 +1366,32 @@ a:hover {
         transform: translateY(-10px) rotate(-45deg);
     }
 
+    /* Point 3: one headline size here too — this used to jump a step up. */
     .card__title {
-        font-size: var(--text-md);
+        font-size: var(--text-base);
+    }
+
+    /*
+     * Point 7: half the gap between cards. On a phone the feed is the whole
+     * page, and at the desktop's spacing it read as a list of loose scraps
+     * rather than one column of news.
+     */
+    .feed {
+        gap: var(--space-3);
+    }
+
+    /* Point 15: the same for the headlines in Мамандар пікірі, which folds
+       into the feed here and was the loosest block on the page. */
+    .aside-list {
+        gap: var(--space-2);
+    }
+
+    .aside-card {
+        padding-bottom: var(--space-2);
+    }
+
+    .columns {
+        padding-top: var(--space-3);
     }
 
     /* One column: the sticky rail and the latest list drop out of the grid. */
@@ -1327,18 +1401,6 @@ a:hover {
 
     .article {
         padding: var(--space-4);
-    }
-
-    .article__title {
-        font-size: var(--text-lg);
-    }
-
-    /*
-     * On a phone the share buttons live under the article. Hide the sticky
-     * rail and keep the bottom copy, so there is one set, not two.
-     */
-    .article-rail {
-        display: none;
     }
 
     .article-layout .columns__side--right {

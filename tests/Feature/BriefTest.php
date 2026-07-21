@@ -140,3 +140,38 @@ it('shows the press address in the footer, and no phone number', function () {
         ->and($html)->not->toContain('tel:')
         ->and($html)->not->toContain('+7 778 112 1332');
 });
+
+it('puts Freedom first in the ticker, marked in dollars', function () {
+    /*
+     * Point 10. The endpoint calls it FRHC_KZ; asking for FRHC matched nothing
+     * and the quote quietly dropped out of the strip. Freedom alone is quoted
+     * in dollars, so it alone carries the note.
+     */
+    expect(config('naryk.quotes.order')[0])->toBe('FRHC_KZ')
+        ->and(config('naryk.quotes.labels')['FRHC_KZ'])->toBe('FRHC')
+        ->and(config('naryk.quotes.currency'))->toBe(['FRHC_KZ' => 'USD']);
+});
+
+it('opens the column headings in their own tab', function () {
+    // Point 12: the headings were plain text, with no way into the rubric.
+    $html = $this->get('/')->assertOk()->getContent();
+
+    expect($html)->toContain('/category/'.config('naryk.columns.special_projects').'" target="_blank"')
+        ->and($html)->toContain('/category/'.config('naryk.columns.expert_opinions').'" target="_blank"');
+});
+
+it('gives Мамандар пікірі enough headlines to scroll', function () {
+    // Point 13: six filled the column exactly, leaving nothing below the fold.
+    expect($this->get('/')->viewData('expertOpinions'))->toHaveCount(9);
+});
+
+it('keeps every headline on one size', function () {
+    // Point 3: the card, grid and column headlines each had their own size.
+    $css = file_get_contents(public_path('assets/site.css'));
+
+    $size = fn (string $rule) => str($css)->after($rule)->before('}')->after('font-size:')->before(';')->trim()->toString();
+
+    expect($size('.card__title {'))->toBe('var(--text-base)')
+        ->and($size('.grid-card__title {'))->toBe('var(--text-base)')
+        ->and($size('.aside-card__title {'))->toBe('var(--text-base)');
+});

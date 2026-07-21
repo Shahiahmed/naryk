@@ -38,11 +38,21 @@ return [
         'ttl' => 60,
 
         /*
-         * FRHC comes first per the brief, but the endpoint does not return it
-         * yet: Freedom Holding trades on Nasdaq, not KASE. Tickers missing
-         * from the response are skipped rather than rendered empty.
+         * The keys are the endpoint's own, which is why Freedom is FRHC_KZ:
+         * asking for FRHC matched nothing and the ticker quietly dropped it.
+         * Anything missing from the response is skipped rather than rendered
+         * empty.
          */
-        'order' => ['FRHC', 'KSPI', 'KMGZ', 'HSBK', 'KCEL', 'KZAP', 'KEGC', 'AIRA', 'KZTO', 'CCBN', 'ASBN'],
+        'order' => ['FRHC_KZ', 'KSPI', 'KMGZ', 'HSBK', 'KCEL', 'KZAP', 'KEGC', 'AIRA', 'KZTO', 'CCBN', 'ASBN'],
+
+        /* What the reader sees, where it differs from the endpoint's key. */
+        'labels' => ['FRHC_KZ' => 'FRHC'],
+
+        /*
+         * Freedom alone is quoted in dollars, so it alone is marked. The brief
+         * is explicit that the others stay as they are.
+         */
+        'currency' => ['FRHC_KZ' => 'USD'],
     ],
 
 ];

@@ -53,21 +53,24 @@ class Quotes
 
     /**
      * @param  array<string, array{last?: string, status?: string}>  $kase
-     * @return array<int, array{ticker: string, last: string, status: string}>
+     * @return array<int, array{ticker: string, last: string, status: string, currency: ?string}>
      */
     protected function order(array $kase): array
     {
         $items = [];
+        $labels = config('naryk.quotes.labels', []);
+        $currencies = config('naryk.quotes.currency', []);
 
-        foreach (config('naryk.quotes.order') as $ticker) {
-            if (! isset($kase[$ticker]['last'])) {
+        foreach (config('naryk.quotes.order') as $key) {
+            if (! isset($kase[$key]['last'])) {
                 continue;
             }
 
             $items[] = [
-                'ticker' => $ticker,
-                'last' => $kase[$ticker]['last'],
-                'status' => strtoupper($kase[$ticker]['status'] ?? ''),
+                'ticker' => $labels[$key] ?? $key,
+                'last' => $kase[$key]['last'],
+                'status' => strtoupper($kase[$key]['status'] ?? ''),
+                'currency' => $currencies[$key] ?? null,
             ];
         }
 

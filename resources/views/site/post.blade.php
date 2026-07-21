@@ -10,11 +10,11 @@
 @endpush
 
 @section('content')
+    {{--
+        Point 5: the share buttons used to run down the left of the article as
+        well as under it. One set, under the text, is what the client asked for.
+    --}}
     <div class="article-layout">
-
-        <div class="article-rail">
-            @include('site.partials.share', ['post' => $post, 'modifier' => 'share--rail'])
-        </div>
 
         <article class="article">
             @if ($post->hasImage())

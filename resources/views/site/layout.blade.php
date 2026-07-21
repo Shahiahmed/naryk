@@ -152,9 +152,17 @@
     @if ($headerMenu)
         <nav class="site-nav">
             <div class="shell site-nav__inner">
+                @php $shown = 0; @endphp
                 @foreach ($headerMenu->items as $item)
                     @continue($item->link === '/about')
-                    <a class="site-nav__link {{ $item->class }}" href="{{ $item->link }}">{{ $item->label }}</a>
+                    {{--
+                        Points 6 and 11: the desktop carries every rubric, the
+                        phone only the first five — Сыртқы сауда used to be cut
+                        off mid-word at the edge. Everything past the fifth is
+                        marked so CSS can drop it on a narrow screen.
+                    --}}
+                    <a class="site-nav__link {{ $item->class }} {{ $shown++ >= 5 ? 'site-nav__link--wide-only' : '' }}"
+                       href="{{ $item->link }}">{{ $item->label }}</a>
                 @endforeach
             </div>
         </nav>
