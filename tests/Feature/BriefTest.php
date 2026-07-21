@@ -153,16 +153,36 @@ it('puts Freedom first in the ticker, marked in dollars', function () {
 });
 
 it('opens the column headings in their own tab', function () {
-    // Point 12: the headings were plain text, with no way into the rubric.
+    /*
+     * Point 12: the headings were plain text, with no way into the rubric.
+     *
+     * Only Мамандар пікірі is asserted against the live page: Арнайы жобалар
+     * has no posts in the client's data yet, so its column does not render at
+     * all. The heading itself is checked directly, which holds either way.
+     */
     $html = $this->get('/')->assertOk()->getContent();
 
-    expect($html)->toContain('/category/'.config('naryk.columns.special_projects').'" target="_blank"')
-        ->and($html)->toContain('/category/'.config('naryk.columns.expert_opinions').'" target="_blank"');
+    expect($html)->toContain('/category/'.config('naryk.columns.expert_opinions').'" target="_blank"');
+
+    $heading = view('site.partials.column-title', [
+        'title' => 'Арнайы жобалар',
+        'slug' => config('naryk.columns.special_projects'),
+    ])->render();
+
+    expect($heading)->toContain('/category/arnayy-jobalar')
+        ->and($heading)->toContain('target="_blank"');
 });
 
-it('gives Мамандар пікірі enough headlines to scroll', function () {
-    // Point 13: six filled the column exactly, leaving nothing below the fold.
-    expect($this->get('/')->viewData('expertOpinions'))->toHaveCount(9);
+it('holds both side columns to five headlines', function () {
+    /*
+     * This went 6 → 9 → 5 across two briefs: nine made Мамандар пікірі the
+     * longest thing on a phone, where the columns unfold into the feed and
+     * nothing scrolls within them.
+     */
+    $response = $this->get('/');
+
+    expect($response->viewData('expertOpinions'))->toHaveCount(5);
+    expect($response->viewData('specialProjects')->count())->toBeLessThanOrEqual(5);
 });
 
 it('keeps every headline on one size', function () {
@@ -174,4 +194,53 @@ it('keeps every headline on one size', function () {
     expect($size('.card__title {'))->toBe('var(--text-base)')
         ->and($size('.grid-card__title {'))->toBe('var(--text-base)')
         ->and($size('.aside-card__title {'))->toBe('var(--text-base)');
+});
+
+it('lines the rubric strip up with the cards on a phone', function () {
+    /*
+     * Point 1: the strip ran wider than the grey cards below it. Its ends now
+     * match theirs, and the bars are real elements rather than :before — as a
+     * pseudo-element each bar belonged to the rubric after it, so spreading the
+     * row jammed every bar against a word.
+     */
+    $css = file_get_contents(public_path('assets/site.css'));
+    $phone = str($css)->after('@media (max-width: 800px)')->toString();
+
+    expect($phone)->toContain('.site-nav .shell')
+        ->and($phone)->toContain('padding: 0 var(--space-4);')
+        ->and($css)->not->toContain('.site-nav__link + .site-nav__link::before');
+
+    $html = $this->get('/')->assertOk()->getContent();
+
+    expect(substr_count($html, 'site-nav__sep'))->toBeGreaterThan(0);
+});
+
+it('gives the ticker the same gap above as below, on a phone', function () {
+    // Point 2: a full interval above and half of one below left it lopsided.
+    $css = file_get_contents(public_path('assets/site.css'));
+    $phone = str($css)->after('@media (max-width: 800px)')->toString();
+
+    $ticker = str($phone)->after('.ticker {')->before('}')->toString();
+    $columns = str($phone)->after('.columns {')->before('}')->toString();
+
+    expect($ticker)->toContain('margin-top: var(--space-3)')
+        ->and($columns)->toContain('padding-top: var(--space-3)');
+});
+
+it('carries a logo for Freedom in the ticker, like the rest', function () {
+    // Point 4: every other company had one; FRHC showed its code alone.
+    expect(App\Support\Quotes::logo('FRHC'))->not->toBeNull();
+});
+
+it('overrules the inline font sizes the old editor left in articles', function () {
+    /*
+     * Point 9: paragraphs came out at different sizes within one article —
+     * 3393 posts carry an inline font-size. The content is the client's data,
+     * so the styling is overruled rather than the text rewritten.
+     */
+    $css = file_get_contents(public_path('assets/site.css'));
+
+    expect($css)->toContain('.article__body font')
+        ->and(str($css)->after('.article__body font')->before('}')->toString())
+        ->toContain('font-size: inherit !important');
 });

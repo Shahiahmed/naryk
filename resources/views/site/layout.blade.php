@@ -156,11 +156,20 @@
                 @foreach ($headerMenu->items as $item)
                     @continue($item->link === '/about')
                     {{--
-                        Points 6 and 11: the desktop carries every rubric, the
-                        phone only the first five — Сыртқы сауда used to be cut
-                        off mid-word at the edge. Everything past the fifth is
-                        marked so CSS can drop it on a narrow screen.
+                        The desktop carries every rubric, the phone only the
+                        first five — Сыртқы сауда used to be cut off mid-word at
+                        the edge. Everything past the fifth is marked so CSS can
+                        drop it on a narrow screen.
+
+                        The bars are elements rather than :before, so the row can
+                        be spread edge to edge: as a pseudo-element each bar
+                        belonged to the rubric after it and ended up jammed
+                        against that word.
                     --}}
+                    @if ($shown > 0)
+                        <span class="site-nav__sep {{ $shown >= 5 ? 'site-nav__link--wide-only' : '' }}"
+                              aria-hidden="true">|</span>
+                    @endif
                     <a class="site-nav__link {{ $item->class }} {{ $shown++ >= 5 ? 'site-nav__link--wide-only' : '' }}"
                        href="{{ $item->link }}">{{ $item->label }}</a>
                 @endforeach

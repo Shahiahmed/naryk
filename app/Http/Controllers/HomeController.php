@@ -16,13 +16,13 @@ class HomeController extends Controller
         return view('site.home', [
             'quotes' => $quotes->get(),
             'feed' => $this->feed(),
-            'specialProjects' => $this->column(config('naryk.columns.special_projects')),
             /*
-             * Point 13: Мамандар пікірі scrolls on its own, like Арнайы
-             * жобалар, but with only six headlines there was nothing under the
-             * fold to scroll to. Three more give the column its own run.
+             * Five each. Nine made Мамандар пікірі the longest thing on a phone,
+             * where the columns unfold into the feed and there is no scrolling
+             * within them to justify the extra.
              */
-            'expertOpinions' => $this->column(config('naryk.columns.expert_opinions'), 9),
+            'specialProjects' => $this->column(config('naryk.columns.special_projects')),
+            'expertOpinions' => $this->column(config('naryk.columns.expert_opinions')),
             'feedBanner' => AdPlacement::bannerFor(config('naryk.placements.feed')),
             'bannerAfter' => config('naryk.feed.banner_after'),
         ]);
@@ -43,7 +43,7 @@ class HomeController extends Controller
     /**
      * @return Collection<int, Post>
      */
-    protected function column(string $slug, int $limit = 6): Collection
+    protected function column(string $slug, int $limit = 5): Collection
     {
         return Post::query()
             ->published()

@@ -130,18 +130,31 @@ a:hover {
 }
 
 /*
- * Point 14: the search box sat against the Freedom logo and the socials against
- * the right edge, so both read as belonging to the wrong neighbour. Pushing
- * each side's inner element toward the middle puts them either side of the
- * wordmark, which is what they annotate.
+ * The search box first sat against the Freedom logo, then — asked to move —
+ * ended up against the wordmark instead. It splits the difference now: the
+ * sponsor keeps the outer edge, the search centres itself in what is left, and
+ * the socials mirror that on the right. Same for both sides, so the masthead
+ * reads as symmetrical.
  */
-.site-header__left,
+.site-header__left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-4);
+    min-width: 0;
+}
+
 .site-header__right {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: var(--space-4);
     min-width: 0;
+}
+
+.site-header__left .site-search,
+.site-header__right .socials {
+    margin: 0 auto;
 }
 
 .site-header__about {
@@ -194,6 +207,11 @@ a:hover {
 .site-nav__link:hover {
     color: var(--green-darker);
     text-decoration: none;
+}
+
+/* The bars are a phone-only device; the desktop strip spaces itself out. */
+.site-nav__sep {
+    display: none;
 }
 
 /* ---------- search ---------- */
@@ -825,6 +843,41 @@ a:hover {
     margin: 0 0 1.1em;
 }
 
+/*
+ * Point 9: paragraphs came out at different sizes within one article. Half the
+ * archive — 3393 posts — carries an inline font-size left by the old editor,
+ * anything from 1rem to a point value, often changing mid-article.
+ *
+ * The content is the client's data and is not ours to rewrite, so the styling
+ * is overruled here instead. !important is the only thing that outranks an
+ * inline attribute; it is confined to the body text, and headings, which have
+ * an editorial reason to differ, keep their own sizes below.
+ */
+.article__body p,
+.article__body span,
+.article__body div,
+.article__body li,
+.article__body td,
+.article__body font {
+    font-size: inherit !important;
+    line-height: inherit !important;
+    font-family: inherit !important;
+}
+
+.article__body h1,
+.article__body h2,
+.article__body h3,
+.article__body h4 {
+    font-size: var(--text-lg);
+    line-height: 1.3;
+    margin: 1.4em 0 0.5em;
+}
+
+.article__body h3,
+.article__body h4 {
+    font-size: var(--text-md);
+}
+
 .article__body img {
     height: auto;
     border-radius: 6px;
@@ -1280,7 +1333,12 @@ a:hover {
     .site-header__inner {
         grid-template-columns: auto minmax(0, 1fr) auto;
         min-height: 64px;
-        gap: var(--space-2);
+        /*
+         * Point 3: the wordmark all but touched the Freedom shield. The gap is
+         * the same on both sides of it, so shield — НАРЫҚ — burger now sit at
+         * equal distances, and the wordmark gives up the height to pay for it.
+         */
+        gap: var(--space-4);
     }
 
     .sponsor--compact {
@@ -1300,7 +1358,7 @@ a:hover {
     .site-header__logo img {
         width: 100%;
         max-width: 100%;
-        max-height: 40px;
+        max-height: 34px;
     }
 
     /*
@@ -1309,17 +1367,22 @@ a:hover {
      * Five rubrics fit outright now, so the row holds still and shares the
      * width evenly, with the same air at both ends.
      */
+    /*
+     * Point 1: the row runs edge to edge, lining its two ends up with the grey
+     * cards below. The bars are real elements now, so spreading the row spaces
+     * words and bars alike instead of jamming each bar against a word.
+     */
     .site-nav__inner {
-        /*
-         * Centred, not spread: the divider belongs to the rubric after it, so
-         * spreading the row pushed each bar against its right-hand neighbour
-         * — Билік    | Қаржы. Centring keeps every gap the same and leaves
-         * equal air at both ends.
-         */
-        justify-content: center;
+        justify-content: space-between;
         overflow-x: visible;
         flex-wrap: nowrap;
         gap: 0;
+    }
+
+    .site-nav__sep {
+        display: inline;
+        color: rgba(66, 94, 64, 0.45);
+        font-weight: 400;
     }
 
     /* Points 6 and 11: the rest belong to the desktop. */
@@ -1334,21 +1397,17 @@ a:hover {
      * shrinking needlessly on a large one.
      */
     .site-nav__link {
-        font-size: clamp(11px, 3.4vw, var(--text-sm));
+        font-size: clamp(11px, 3.6vw, var(--text-base));
         white-space: nowrap;
     }
 
-    /* Билік | Қаржы | Бизнес | Әлеумет | Сыртқы сауда, as the brief writes it. */
-    .site-nav__link + .site-nav__link::before {
-        content: '|';
-        margin: 0 var(--space-1);
-        color: rgba(66, 94, 64, 0.45);
-        font-weight: 400;
-    }
-
-    /* The strip needs its width; the shell's default padding is too generous. */
+    /*
+     * Point 1: the strip used to run wider than the cards below it, so its two
+     * ends stuck out past the grey column. It takes the shell's own padding,
+     * which is what the cards are set to, and the two line up.
+     */
     .site-nav .shell {
-        padding: 0 var(--space-2);
+        padding: 0 var(--space-4);
     }
 
     /* Point 15: the burger matches the Freedom shield on the other side. */
@@ -1392,6 +1451,15 @@ a:hover {
 
     .columns {
         padding-top: var(--space-3);
+    }
+
+    /*
+     * Point 2: the ticker had a full interval above it and a half one below, so
+     * it hung closer to the news than to the strip it belongs with. Both sides
+     * match now.
+     */
+    .ticker {
+        margin-top: var(--space-3);
     }
 
     /* One column: the sticky rail and the latest list drop out of the grid. */
