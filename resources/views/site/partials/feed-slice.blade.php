@@ -5,8 +5,13 @@
      * sixth, special projects after the ninth. The blocks ship in the markup
      * and CSS hides them on the desktop, where the columns are back.
      */
-    $expertOpinions ??= collect();
-    $specialProjects ??= collect();
+    /*
+     * Five apiece here, however many the desktop columns carry: nothing scrolls
+     * within a block folded into the feed, so a longer list only makes the page
+     * longer.
+     */
+    $expertOpinions = ($expertOpinions ?? collect())->take(5);
+    $specialProjects = ($specialProjects ?? collect())->take(5);
 @endphp
 
 @foreach ($feed as $index => $post)

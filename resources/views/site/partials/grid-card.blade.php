@@ -4,11 +4,14 @@
 @endphp
 
 <article class="grid-card">
-    @if ($post->hasImage())
-        <a class="grid-card__media" href="{{ $post->url() }}">
-            <img src="{{ $post->imageUrl() }}" alt="" loading="lazy">
-        </a>
-    @endif
+    {{--
+        A rubric page lays its cards out on a grid, so a post without a picture
+        left a hole where every neighbour had one. It gets the wordmark on green
+        instead. The home feed is not this partial and keeps its text-only cards.
+    --}}
+    <a class="grid-card__media {{ $post->hasImage() ? '' : 'grid-card__media--fallback' }}" href="{{ $post->url() }}">
+        <img src="{{ $post->coverUrl() }}" alt="" loading="lazy">
+    </a>
 
     <div class="grid-card__body">
         @includeWhen($post->pr_news, 'site.partials.pr-badge')

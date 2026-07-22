@@ -227,6 +227,18 @@ class Post extends Model
         return $path ? Storage::disk('public')->url($path) : null;
     }
 
+    /**
+     * Never null: a post without a picture of its own gets the wordmark on
+     * green. Used where a hole would show — the rubric grid and the share card
+     * — and deliberately not by the home feed.
+     */
+    public function coverUrl(): string
+    {
+        return $this->hasImage()
+            ? (string) $this->imageUrl()
+            : asset((string) config('naryk.fallback_image'));
+    }
+
     public function url(): string
     {
         return '/'.trim((string) config('naryk.post_prefix'), '/').'/'.$this->post_name;

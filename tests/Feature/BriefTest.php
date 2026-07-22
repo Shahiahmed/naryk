@@ -173,16 +173,66 @@ it('opens the column headings in their own tab', function () {
         ->and($heading)->toContain('target="_blank"');
 });
 
-it('holds both side columns to five headlines', function () {
+it('gives Мамандар пікірі enough headlines to scroll, and the phone five', function () {
     /*
-     * This went 6 → 9 → 5 across two briefs: nine made Мамандар пікірі the
-     * longest thing on a phone, where the columns unfold into the feed and
-     * nothing scrolls within them.
+     * This went 6 → 9 → 5 → 9 across three briefs. The column scrolls within
+     * itself; at five nothing sat under the fold, so the scroll vanished and
+     * the client noticed the same day. On a phone the column unfolds into the
+     * feed, where only the page scrolls, so there it is trimmed back to five.
      */
     $response = $this->get('/');
 
-    expect($response->viewData('expertOpinions'))->toHaveCount(5);
+    expect($response->viewData('expertOpinions'))->toHaveCount(9);
     expect($response->viewData('specialProjects')->count())->toBeLessThanOrEqual(5);
+
+    $html = $response->getContent();
+    $phone = str($html)->after('feed-block--phone')->before('</div>'.PHP_EOL)->toString();
+
+    expect(substr_count($phone, 'aside-card__title'))->toBeLessThanOrEqual(5);
+});
+
+it('fills a rubric card that has no picture with the wordmark', function () {
+    /*
+     * Rubric pages lay their cards on a grid, so a post without a picture left
+     * a hole beside neighbours that had one.
+     */
+    $post = Post::published()->newest()->firstOrFail();
+    $post->post_image = null;
+    $post->save();
+
+    expect($post->coverUrl())->toEndWith(config('naryk.fallback_image'))
+        ->and(file_exists(public_path(config('naryk.fallback_image'))))->toBeTrue();
+
+    $html = view('site.partials.grid-card', ['post' => $post])->render();
+
+    expect($html)->toContain('grid-card__media--fallback')
+        ->and($html)->toContain(config('naryk.fallback_image'));
+});
+
+it('shares a pictureless post with the wordmark, not a blank slip', function () {
+    // Point 5: og:image fell through to the logo on white.
+    $post = Post::published()->newest()->firstOrFail();
+    $post->post_image = null;
+    $post->save();
+
+    $html = $this->get($post->url())->assertOk()->getContent();
+
+    $og = str($html)->after('property="og:image" content="')->before('"')->toString();
+
+    expect($og)->toStartWith('http')
+        ->and($og)->toEndWith(config('naryk.fallback_image'));
+});
+
+it('leaves the pictureless cards in the home feed alone', function () {
+    // "БІРАҚ БАС БЕТТЕ СУРЕТСІЗ МАТЕРИАЛДАР ҚАЗІРГІДЕЙ ТҰРА БЕРСІН"
+    $post = Post::published()->newest()->firstOrFail();
+    $post->post_image = null;
+    $post->save();
+
+    $html = view('site.partials.card', ['post' => $post])->render();
+
+    expect($html)->not->toContain(config('naryk.fallback_image'))
+        ->and($html)->not->toContain('card__media');
 });
 
 it('keeps every headline on one size', function () {

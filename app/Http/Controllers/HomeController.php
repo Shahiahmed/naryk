@@ -17,12 +17,14 @@ class HomeController extends Controller
             'quotes' => $quotes->get(),
             'feed' => $this->feed(),
             /*
-             * Five each. Nine made Мамандар пікірі the longest thing on a phone,
-             * where the columns unfold into the feed and there is no scrolling
-             * within them to justify the extra.
+             * Мамандар пікірі is a column that scrolls within itself, and five
+             * headlines all fitted at once, so there was nothing to scroll to
+             * and the scroll disappeared. Nine give it its run back. The phone,
+             * where the column unfolds into the feed and only the page scrolls,
+             * still takes five — feed-slice trims it.
              */
             'specialProjects' => $this->column(config('naryk.columns.special_projects')),
-            'expertOpinions' => $this->column(config('naryk.columns.expert_opinions')),
+            'expertOpinions' => $this->column(config('naryk.columns.expert_opinions'), 9),
             'feedBanner' => AdPlacement::bannerFor(config('naryk.placements.feed')),
             'bannerAfter' => config('naryk.feed.banner_after'),
         ]);

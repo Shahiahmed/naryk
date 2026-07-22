@@ -1016,6 +1016,18 @@ a:hover {
     object-fit: cover;
 }
 
+/*
+ * The stand-in wordmark is wider than the card's window, so it is fitted rather
+ * than cropped and the green fills what is left over.
+ */
+.grid-card__media--fallback {
+    background: var(--green-logo);
+}
+
+.grid-card__media--fallback img {
+    object-fit: contain;
+}
+
 .grid-card__body {
     padding: var(--space-4);
     display: flex;

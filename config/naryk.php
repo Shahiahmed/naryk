@@ -27,6 +27,15 @@ return [
         'expert_opinions' => 'mamandar-pikiri',
     ],
 
+    /*
+     * The wordmark on green, shown where a post has no picture of its own: on
+     * the rubric pages, which lay their cards out on a grid and left a hole,
+     * and on the share card, which otherwise fell back to the site logo on
+     * white. The home feed keeps its text-only cards — the client asked for
+     * that in as many words.
+     */
+    'fallback_image' => 'img/no-cover.jpg',
+
     'placements' => [
         'feed' => 'home-horizontal',
         'sidebar_top' => 'sidebar-right-top',

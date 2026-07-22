@@ -3,7 +3,12 @@
 @section('title', $post->post_title.' — Naryk.kz')
 @section('description', $post->seoDescription())
 @section('og_type', 'article')
-@section('og_image', $post->hasImage() ? $post->imageUrl() : '')
+{{--
+    A post with no picture used to fall through to the site logo on white, and
+    a share in a messenger came out looking like a blank slip. The wordmark on
+    green fills the card instead.
+--}}
+@section('og_image', $post->coverUrl())
 
 @push('head')
     @include('site.partials.structured-data', ['post' => $post])
