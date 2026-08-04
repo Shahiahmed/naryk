@@ -21,8 +21,8 @@
         if ($metaImage === '' && ! empty($ogImage)) {
             $metaImage = Storage::disk('public')->url($ogImage);
         }
-        if ($metaImage === '' && file_exists(public_path('img/logo-desktop.png'))) {
-            $metaImage = asset('img/logo-desktop.png');
+        if ($metaImage === '' && file_exists(public_path('img/logo-new.png'))) {
+            $metaImage = asset('img/logo-new.png');
         }
         if ($metaImage === '' && $favicon) {
             $metaImage = Storage::disk('public')->url($favicon);
@@ -90,7 +90,7 @@
 @php
     $siteName = $settings['site_information']['company_name'] ?? 'Naryk.kz';
     $tagline = $settings['site_information']['sitedescription'] ?? null;
-    $logoDesktop = file_exists(public_path('img/logo-desktop.png')) ? asset('img/logo-desktop.png') : null;
+    $logoDesktop = file_exists(public_path('img/logo-new.png')) ? asset('img/logo-new.png') : null;
 @endphp
 
 {{--
@@ -140,12 +140,37 @@
         </button>
     </div>
 
-    {{-- Phone only: the burger opens БІЗ ТУРАЛЫ and the socials, not the rubrics. --}}
+    {{-- Phone only: the burger opens БІЗ ТУРАЛЫ, a search icon and the socials. --}}
     <div class="site-menu" id="site-menu">
         <div class="shell site-menu__inner">
             <a class="site-nav__link" href="/about">БІЗ ТУРАЛЫ</a>
+
+            {{--
+                Point 4 (brief B): the whole row stays on one line, so search is
+                an icon between БІЗ ТУРАЛЫ and the socials, not a field. Tapping
+                it floats the field over the page as a modal — see #menu-search.
+            --}}
+            <button class="menu-search-toggle" type="button" id="menu-search-toggle"
+                    aria-label="Іздеу" aria-expanded="false" aria-controls="menu-search">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+                </svg>
+            </button>
+
             @include('site.partials.socials', ['socials' => $socials, 'modifier' => 'socials--menu'])
         </div>
+    </div>
+
+    {{-- The field the icon opens: floated over the page, dismissed by ×, Esc or a tap outside. --}}
+    <div class="menu-search" id="menu-search" hidden>
+        <form class="menu-search__box" method="GET" action="{{ route('search') }}" role="search">
+            <input class="menu-search__input" type="search" name="q"
+                   value="{{ request()->routeIs('search') ? request('q') : '' }}"
+                   placeholder="Іздеу…" aria-label="Іздеу">
+            <button class="menu-search__close" type="button" id="menu-search-close" aria-label="Жабу">&times;</button>
+        </form>
     </div>
 
     {{-- The rubric strip: same height and rhythm as the ticker. --}}

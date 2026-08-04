@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
     'post_title', 'post_name', 'post_content', 'post_summary', 'post_image',
     'post_status', 'post_visibility', 'comment_status', 'show_image',
     'marquee', 'ads_show', 'pr_news', 'meta_description', 'meta_keyword',
-    'post_hits', 'post_author',
+    'post_hits', 'post_author', 'created_at',
 ])]
 class Post extends Model
 {
@@ -153,7 +153,28 @@ class Post extends Model
      */
     public function scopePublished(Builder $query): void
     {
-        $query->where('post_status', 'publish')->where('post_visibility', 'public');
+        /*
+         * `created_at` is the publish date in this schema, as `post_date` was in
+         * the old CMS. Bounding it at the present lets an editor set a future
+         * date and have the post surface on its own when the time comes — no
+         * cron, no extra column. Draft and private posts stay out as before.
+         */
+        $query->where('post_status', 'publish')
+            ->where('post_visibility', 'public')
+            ->where('created_at', '<=', now());
+    }
+
+    /**
+     * The row-level twin of {@see scopePublished()}: is this post live right now?
+     * A draft, a private post or one dated in the future is not, and the site
+     * shows it only as a staff preview.
+     */
+    public function isPublished(): bool
+    {
+        return $this->post_status === 'publish'
+            && $this->post_visibility === 'public'
+            && $this->created_at !== null
+            && $this->created_at->lessThanOrEqualTo(now());
     }
 
     /**

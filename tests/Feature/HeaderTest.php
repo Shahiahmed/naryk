@@ -101,9 +101,10 @@ it('scales the wide sponsor logo, rather than pinning it to a 1920x1080 canvas',
 });
 
 it('uses the wordmark the client supplied', function () {
+    // Brief B point 1: the client replaced it with logo-new.png.
     $html = $this->get('/about')->assertOk()->getContent();
 
-    expect($html)->toContain('img/logo-desktop.png');
+    expect($html)->toContain('img/logo-new.png');
 });
 
 it('shows one wordmark everywhere, phone included', function () {
@@ -114,7 +115,7 @@ it('shows one wordmark everywhere, phone included', function () {
      */
     $html = $this->get('/about')->assertOk()->getContent();
 
-    expect($html)->toContain('img/logo-desktop.png')
+    expect($html)->toContain('img/logo-new.png')
         ->and($html)->not->toContain('logo-phone.png')
         ->and($html)->not->toContain('<picture>');
 });

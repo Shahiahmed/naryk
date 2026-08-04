@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -293,4 +294,98 @@ it('overrules the inline font sizes the old editor left in articles', function (
     expect($css)->toContain('.article__body font')
         ->and(str($css)->after('.article__body font')->before('}')->toString())
         ->toContain('font-size: inherit !important');
+});
+
+/*
+ * Brief B (03.08) — the five points below.
+ */
+
+it('flies the new logo in the masthead', function () {
+    // Brief B point 1: logo-desktop.png → logo-new.png.
+    expect(file_exists(public_path('img/logo-new.png')))->toBeTrue();
+
+    $html = $this->get('/')->assertOk()->getContent();
+
+    expect($html)->toContain('img/logo-new.png')
+        ->and($html)->not->toContain('img/logo-desktop.png');
+});
+
+it('keeps the view count and the date on one line', function () {
+    /*
+     * Brief B point 3. The count is grouped in threes with a space — "12 345" —
+     * which the phone would break onto a second line under the date.
+     */
+    $css = file_get_contents(public_path('assets/site.css'));
+    $meta = str($css)->after('.meta {')->before('}')->toString();
+
+    expect($meta)->toContain('flex-wrap: nowrap')
+        ->and($meta)->toContain('white-space: nowrap');
+});
+
+it('adds a one-line search to the phone burger: an icon between about and the socials', function () {
+    // Brief B point 4.
+    $html = $this->get('/')->assertOk()->getContent();
+
+    $menu = strpos($html, 'id="site-menu"');
+    $about = strpos($html, 'БІЗ ТУРАЛЫ', $menu);
+    $toggle = strpos($html, 'menu-search-toggle', $menu);
+    $socials = strpos($html, 'socials--menu', $menu);
+
+    // In the drawer, in order: about, the search icon, then the socials — one row.
+    expect($about)->toBeLessThan($toggle)
+        ->and($toggle)->toBeLessThan($socials)
+        ->and($html)->toContain('id="menu-search"');
+
+    // The icon opens the field as a modal floated over the page, not a box in the row.
+    $css = file_get_contents(public_path('assets/site.css'));
+    $overlay = str($css)->after('.menu-search {')->before('}')->toString();
+
+    expect($overlay)->toContain('position: fixed');
+});
+
+it('holds a post dated in the future out of the feed until its time', function () {
+    // Brief B point 5: scheduled publishing rides on created_at, the publish date.
+    $post = Post::published()->newest()->firstOrFail();
+
+    $post->created_at = now()->addDay();
+    $post->save();
+
+    expect($post->isPublished())->toBeFalse()
+        ->and(Post::published()->whereKey($post->getKey())->exists())->toBeFalse();
+
+    $post->created_at = now()->subMinute();
+    $post->save();
+
+    expect($post->isPublished())->toBeTrue()
+        ->and(Post::published()->whereKey($post->getKey())->exists())->toBeTrue();
+});
+
+it('offers an editable publish date in the admin, for scheduling', function () {
+    // Brief B point 5: the field the editor sets.
+    $this->actingAs(User::role('superadmin')->firstOrFail())
+        ->get('/admin/posts/create')
+        ->assertOk()
+        ->assertSee('Дата и время публикации');
+});
+
+it('previews an unpublished material by its link for staff, and hides it from readers', function () {
+    // Brief B point 2.
+    $post = Post::published()->has('categories')->has('tags')->newest()->firstOrFail();
+    $hits = $post->post_hits;
+
+    // A future date takes it out of publication without touching its status.
+    $post->created_at = now()->addWeek();
+    $post->save();
+
+    // A reader gets a 404 — the material is simply not there.
+    $this->get($post->url())->assertNotFound();
+
+    // Staff opens it by the same link, marked as a preview.
+    $this->actingAs(User::where('email', 'info@sait.kz')->firstOrFail())
+        ->get($post->url())
+        ->assertOk()
+        ->assertSee('article-preview-note');
+
+    // The preview must not inflate the view count.
+    expect($post->fresh()->post_hits)->toBe($hits);
 });

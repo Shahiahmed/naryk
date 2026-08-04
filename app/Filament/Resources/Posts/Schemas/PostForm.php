@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\TermTaxonomy;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -103,6 +104,23 @@ class PostForm
                             ->default('publish')
                             ->selectablePlaceholder(false)
                             ->required(),
+
+                        /*
+                         * `created_at` is the publish date in this schema (as
+                         * `post_date` was in the old CMS), and the feed is ordered
+                         * by it. Setting it in the future schedules the post — it
+                         * stays hidden until then and surfaces on its own, without
+                         * a cron, because `published()` bounds the date at now().
+                         * Changing it moves the post in the feed.
+                         */
+                        DateTimePicker::make('created_at')
+                            ->label('Дата и время публикации')
+                            ->seconds(false)
+                            ->native(false)
+                            ->displayFormat('d.m.Y H:i')
+                            ->default(now())
+                            ->required()
+                            ->helperText('Будущие дата и время — материал появится сам, когда они наступят. Изменение времени меняет его место в ленте.'),
 
                         Select::make('post_visibility')
                             ->label('Видимость')

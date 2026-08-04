@@ -84,8 +84,8 @@ final class StructuredData
             }
         }
 
-        if (file_exists(public_path('img/logo-desktop.png'))) {
-            return self::absoluteUrl(asset('img/logo-desktop.png'));
+        if (file_exists(public_path('img/logo-new.png'))) {
+            return self::absoluteUrl(asset('img/logo-new.png'));
         }
 
         return url('/');

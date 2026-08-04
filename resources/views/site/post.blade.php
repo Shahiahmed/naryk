@@ -22,6 +22,15 @@
     <div class="article-layout">
 
         <article class="article">
+            {{--
+                Shown only on a staff preview of a material that is not yet live
+                (a draft, or one scheduled for later). Readers never reach this
+                page — the controller answers them with a 404.
+            --}}
+            @if ($preview ?? false)
+                <p class="article-preview-note">Превью — материал ещё не опубликован. Виден только вам, по прямой ссылке.</p>
+            @endif
+
             @if ($post->hasImage())
                 <img class="article__image" src="{{ $post->imageUrl() }}" alt="{{ $post->post_title }}">
             @endif

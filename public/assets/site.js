@@ -50,6 +50,58 @@
 })();
 
 /*
+ * Point 4 (brief B): the phone drawer's search icon floats the field over the
+ * page as a modal, so the row itself — БІЗ ТУРАЛЫ, icon, socials — stays on one
+ * line. Dismissed by ×, Escape, or a tap on the dimmed backdrop.
+ */
+(function () {
+    'use strict';
+
+    var toggle = document.getElementById('menu-search-toggle');
+    var overlay = document.getElementById('menu-search');
+
+    if (!toggle || !overlay) {
+        return;
+    }
+
+    var input = overlay.querySelector('.menu-search__input');
+    var close = document.getElementById('menu-search-close');
+
+    function setOpen(open) {
+        overlay.hidden = !open;
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open && input) {
+            input.focus();
+        }
+    }
+
+    toggle.addEventListener('click', function () {
+        setOpen(overlay.hidden);
+    });
+
+    if (close) {
+        close.addEventListener('click', function () {
+            setOpen(false);
+            toggle.focus();
+        });
+    }
+
+    // A tap on the dimmed backdrop, clear of the field, closes it.
+    overlay.addEventListener('click', function (event) {
+        if (event.target === overlay) {
+            setOpen(false);
+        }
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && !overlay.hidden) {
+            setOpen(false);
+            toggle.focus();
+        }
+    });
+})();
+
+/*
  * "Тағы да" — appends the next 15 cards into the centre column.
  * The old site auto-loaded on scroll; the brief asks for a button.
  */
