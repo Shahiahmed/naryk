@@ -13,14 +13,48 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy naryk.kz only (forced remote script)
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          script_stop: true
-          # User is restricted via authorized_keys force-command to this script.
-          # Do not run shell/commands from the repo here.
-          script: sudo /usr/local/sbin/naryk-deploy.sh
+      # The old step used appleboy/ssh-action, which downloads a drone-ssh
+      # helper from GitHub releases at run time — a 403 there once failed the
+      # whole deploy before it ever reached the server. This uses the runner's
+      # own OpenSSH client instead, so there is nothing to fetch, and retries a
+      # few times to ride out a transient network or SSH hiccup.
+      - name: Deploy naryk.kz (native ssh, forced remote script)
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          set -euo pipefail
+
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+          port="${SSH_PORT:-22}"
+
+          # The account is pinned to the deploy script by an authorized_keys
+          # force-command; the command we send is ignored on the server, but we
+          # send it anyway so this still works if the pin is ever removed. The
+          # remote script is idempotent (git reset --hard, composer install,
+          # cache rebuilds), so retrying a whole run is safe.
+          attempt=0
+          until [ "$attempt" -ge 3 ]; do
+            attempt=$((attempt + 1))
+            echo "Deploy attempt $attempt..."
+            if ssh -i ~/.ssh/deploy_key \
+                   -p "$port" \
+                   -o StrictHostKeyChecking=accept-new \
+                   -o ConnectTimeout=20 \
+                   -o ServerAliveInterval=15 \
+                   -o ServerAliveCountMax=8 \
+                   "$SSH_USER@$SSH_HOST" 'sudo /usr/local/sbin/naryk-deploy.sh'; then
+              echo "Deploy succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Attempt $attempt failed."
+            [ "$attempt" -lt 3 ] && { echo "Retrying in 15s..."; sleep 15; }
+          done
+
+          echo "Deploy failed after $attempt attempts." >&2
+          exit 1
