@@ -389,3 +389,49 @@ it('previews an unpublished material by its link for staff, and hides it from re
     // The preview must not inflate the view count.
     expect($post->fresh()->post_hits)->toBe($hits);
 });
+
+it('opens a hidden material for anyone holding its signed share link', function () {
+    // Brief B point 2 — shareable link: a logged-out visitor gets in through the
+    // signed URL, so an editor can show a draft without handing out an account.
+    $post = Post::published()->has('categories')->has('tags')->newest()->firstOrFail();
+    $hits = $post->post_hits;
+
+    $post->post_visibility = 'private';
+    $post->save();
+
+    // A plain guess of the address is still hidden.
+    $this->get($post->url())->assertNotFound();
+
+    // The signed link opens for a guest, marked as a preview, no login needed.
+    $this->get($post->previewUrl())
+        ->assertOk()
+        ->assertSee('article-preview-note');
+
+    // A tampered signature is refused.
+    $this->get($post->previewUrl().'x')->assertNotFound();
+
+    // Sharing a preview must not inflate the view count either.
+    expect($post->fresh()->post_hits)->toBe($hits);
+});
+
+it('shows the share link in the admin only while the post is hidden', function () {
+    $staff = User::where('email', 'info@sait.kz')->firstOrFail();
+
+    $hidden = Post::published()->newest()->firstOrFail();
+    $hidden->post_visibility = 'private';
+    $hidden->save();
+
+    $this->actingAs($staff)
+        ->get('/admin/posts/'.$hidden->getKey().'/edit')
+        ->assertOk()
+        ->assertSee('Ссылка, чтобы показать до публикации');
+
+    // A public, live post has nothing to share — the field stays hidden.
+    $live = Post::published()->where('post_visibility', 'public')
+        ->whereKeyNot($hidden->getKey())->newest()->firstOrFail();
+
+    $this->actingAs($staff)
+        ->get('/admin/posts/'.$live->getKey().'/edit')
+        ->assertOk()
+        ->assertDontSee('Ссылка, чтобы показать до публикации');
+});

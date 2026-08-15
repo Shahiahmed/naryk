@@ -6,10 +6,11 @@ use App\Models\AdPlacement;
 use App\Models\Post;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function __invoke(string $slug): View
+    public function __invoke(Request $request, string $slug): View
     {
         $post = Post::query()
             ->with(['categories.term', 'tags.term', 'author'])
@@ -18,12 +19,16 @@ class PostController extends Controller
 
         /*
          * A material that is not yet live — a draft or one dated in the future —
-         * opens only for signed-in staff, so an editor can proof it by its own
-         * link before it is published. To everyone else it is simply not there.
+         * opens for signed-in staff (so an editor can proof it) and for anyone
+         * holding its signed preview link (Post::previewUrl(), for showing a
+         * client a draft without an account). To everyone else it is simply not
+         * there — a plain guess of the URL gets a 404.
          */
         $preview = ! $post->isPublished();
 
-        abort_if($preview && ! auth()->user()?->isStaff(), 404);
+        $mayPreview = auth()->user()?->isStaff() || $request->hasValidSignature();
+
+        abort_if($preview && ! $mayPreview, 404);
 
         // A preview must not inflate the view count.
         if (! $preview) {

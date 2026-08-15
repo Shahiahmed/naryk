@@ -8,6 +8,7 @@ use App\Models\Tag;
 use App\Models\TermTaxonomy;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -16,6 +17,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 
 class PostForm
@@ -131,6 +133,32 @@ class PostForm
                             ->default('public')
                             ->selectablePlaceholder(false)
                             ->required(),
+
+                        /*
+                         * While a post is not live (draft, private or dated in
+                         * the future) it 404s for the public. This is its signed
+                         * share link: anyone who opens it sees the preview
+                         * without an account. Shown only when the post is hidden;
+                         * once it is published the normal address works for all.
+                         * Reflects the saved visibility, so it appears after a
+                         * save, not mid-edit.
+                         */
+                        Placeholder::make('preview_link')
+                            ->label('Ссылка, чтобы показать до публикации')
+                            ->visible(fn (?Post $record): bool => $record !== null && ! $record->isPublished())
+                            ->content(function (?Post $record): HtmlString {
+                                if ($record === null) {
+                                    return new HtmlString('');
+                                }
+
+                                $url = e($record->previewUrl());
+
+                                return new HtmlString(
+                                    '<a href="'.$url.'" target="_blank" rel="noopener" '
+                                    .'style="text-decoration:underline;word-break:break-all">'.$url.'</a>'
+                                );
+                            })
+                            ->helperText('Материал скрыт с сайта. По этой ссылке его откроет кто угодно — без входа, без 404. Скопируйте и отправьте, кому нужно показать.'),
 
                         Select::make('comment_status')
                             ->label('Комментарии')

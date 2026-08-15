@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 
 #[Fillable([
     'post_title', 'post_name', 'post_content', 'post_summary', 'post_image',
@@ -263,6 +264,18 @@ class Post extends Model
     public function url(): string
     {
         return '/'.trim((string) config('naryk.post_prefix'), '/').'/'.$this->post_name;
+    }
+
+    /**
+     * A shareable link to a material that is not live yet. It carries a
+     * signature bound to `APP_KEY`, so the post route lets anyone who holds the
+     * link open the preview — without signing in and without a 404 — while a
+     * plain guess of the URL stays hidden. No token column is stored: the secret
+     * lives in the link itself. See PostController for the matching check.
+     */
+    public function previewUrl(): string
+    {
+        return URL::signedRoute('post', ['slug' => $this->post_name]);
     }
 
     /**
