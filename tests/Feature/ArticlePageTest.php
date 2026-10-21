@@ -154,13 +154,14 @@ it('does not let a category page shadow the article route', function () {
 
 it('hides the view count from a reader, and shows it to the newsroom', function () {
     /*
-     * The client wants to see how an article is doing without handing the
-     * number to everyone who opens the page. A logged-out visitor gets no
-     * trace of it in the markup, so there is nothing to dig out of the source.
+     * The count is for staff only. A logged-out visitor gets no trace of it
+     * in the markup, so there is nothing to dig out of the source.
      */
     $post = anArticle();
 
-    $this->get($post->url())->assertOk()->assertDontSee('meta__hits');
+    $this->get($post->url())->assertOk()
+        ->assertDontSee('meta__hits')
+        ->assertDontSee('meta--hits');
 
     $staff = App\Models\User::where('email', 'info@sait.kz')->firstOrFail();
 
@@ -169,7 +170,8 @@ it('hides the view count from a reader, and shows it to the newsroom', function 
     $this->actingAs($staff)
         ->get($post->url())
         ->assertOk()
-        ->assertSee('meta__hits');
+        ->assertSee('meta__hits')
+        ->assertSee('meta--hits');
 });
 
 it('keeps the count out of the cards, where staff would only get clutter', function () {
@@ -192,5 +194,6 @@ it('shows a signed-in reader no more than a stranger', function () {
     $this->actingAs($reader)
         ->get(anArticle()->url())
         ->assertOk()
-        ->assertDontSee('meta__hits');
+        ->assertDontSee('meta__hits')
+        ->assertDontSee('meta--hits');
 });

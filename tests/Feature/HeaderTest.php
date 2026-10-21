@@ -130,14 +130,16 @@ it('serves the sponsor logo with a viewBox, so it scales', function () {
 
 it('keeps the wordmark from covering the sponsor on a phone', function () {
     /*
-     * The middle grid track used to be `auto`, so it took the wordmark's own
-     * width — about 740px at that height — grew past the screen, squeezed the
-     * side tracks to nothing and laid the words over the Freedom shield. The
-     * track now takes what is left, and the wordmark scales down into it.
+     * The middle track used to take the wordmark's own width — about 740px —
+     * and laid the words over the Freedom shield. The side tracks now share
+     * one width, so the wordmark stays centred and still scales down into
+     * what is left.
      */
     $css = file_get_contents(public_path('assets/site.css'));
 
     $phone = str($css)->after('@media (max-width: 800px)')->toString();
 
-    expect($phone)->toContain('grid-template-columns: auto minmax(0, 1fr) auto;');
+    expect($phone)->toContain('grid-template-columns: minmax(4.25rem, 1fr) minmax(0, auto) minmax(4.25rem, 1fr);')
+        ->and($phone)->toContain('min-width: 0;')
+        ->and($phone)->toContain('max-width: calc(100vw - 4 * var(--space-4) - 8.5rem);');
 });

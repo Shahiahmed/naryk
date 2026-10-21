@@ -159,6 +159,7 @@ a:hover {
 
 .site-header__about {
     letter-spacing: 0.04em;
+    line-height: 1;
 }
 
 .site-header__logo {
@@ -201,6 +202,9 @@ a:hover {
     color: var(--green-logo);
     font-weight: 600;
     font-size: var(--text-base);
+    /* The strip centres this box. The body's 1.45 leading left the glyphs
+       high inside it, so the words sat above the middle of the bar. */
+    line-height: 1;
     white-space: nowrap;
 }
 
@@ -462,8 +466,13 @@ a:hover {
  * below it — the site's one interval, used here too.
  */
 .ticker {
-    max-width: var(--shell);
+    /* .shell's padding is inside the border box, so the green painted 16px
+       past the cards on both sides. The bar itself is the content width. */
+    width: calc(100% - 2 * var(--space-4));
+    max-width: calc(var(--shell) - 2 * var(--space-4));
     margin: var(--gap) auto 0;
+    padding-left: 0;
+    padding-right: 0;
     background: var(--green-logo);
     color: #fff;
     overflow: hidden;
@@ -521,6 +530,14 @@ a:hover {
     border-radius: 3px;
     object-fit: contain;
     background: #fff;
+}
+
+.ticker__code,
+.ticker__currency,
+.ticker__price {
+    /* Same reason as the rubric links: 1.45 leading put the digits above
+       the logos, the arrows and the dividers. */
+    line-height: 1;
 }
 
 .ticker__code {
@@ -738,7 +755,7 @@ a:hover {
 }
 
 /*
- * The view count, shown to staff only. The eye marks it as a count rather than
+ * The view count. The eye marks it as a count rather than
  * another date, and is drawn here so the markup stays a plain number that reads
  * sensibly without CSS.
  */
@@ -756,6 +773,20 @@ a:hover {
     /* Simple Icons eye (CC0), inlined so the strict CSP has nothing to fetch. */
     -webkit-mask: var(--eye) center / contain no-repeat;
     mask: var(--eye) center / contain no-repeat;
+}
+
+/*
+ * Baseline alignment leaves the eye high against the date glyphs. Only staff
+ * see the count, and only that row gets this centering. Cards stay on the baseline.
+ */
+.meta--hits {
+    align-items: center;
+}
+
+.meta--hits .meta__rubric,
+.meta--hits .meta__date,
+.meta--hits .meta__hits {
+    line-height: 1;
 }
 
 .meta--inverse,
@@ -1433,21 +1464,31 @@ a:hover {
     /*
      * Point 7 and 19: Freedom, НАРЫҚ, burger — the old shape.
      *
-     * The middle track was `auto`, so it sized itself to the wordmark's own
-     * width — around 740px at this height — and grew past the screen, squeezing
-     * the side tracks to nothing and laying the words over the Freedom shield.
-     * Giving the middle track what is left instead of what it wants keeps all
-     * three in a row, and the wordmark scales down to fit.
+     * A grid track sized to the wordmark laid the words over the Freedom
+     * shield. Equal side tracks keep the wordmark on the centre of the screen,
+     * and it scales down into the space those tracks leave.
      */
     .site-header__inner {
-        grid-template-columns: auto minmax(0, 1fr) auto;
+        display: grid;
+        /* Equal side tracks: the wordmark lands on the centre of the screen,
+           not in the gap between a wide Freedom lockup and a narrow burger. */
+        grid-template-columns: minmax(4.25rem, 1fr) minmax(0, auto) minmax(4.25rem, 1fr);
+        align-items: center;
         min-height: 64px;
-        /*
-         * Point 3: the wordmark all but touched the Freedom shield. The gap is
-         * the same on both sides of it, so shield — НАРЫҚ — burger now sit at
-         * equal distances, and the wordmark gives up the height to pay for it.
-         */
         gap: var(--space-4);
+    }
+
+    .site-header__left {
+        justify-self: start;
+        min-width: 0;
+    }
+
+    .site-header__logo {
+        justify-self: center;
+        min-width: 0;
+        /* Room for the two side tracks, the gaps and the shell padding,
+           so the words cannot cover the Freedom lockup. */
+        max-width: calc(100vw - 4 * var(--space-4) - 8.5rem);
     }
 
     .sponsor--compact {
@@ -1462,10 +1503,11 @@ a:hover {
 
     .burger {
         display: flex;
+        justify-self: end;
     }
 
     .site-header__logo img {
-        width: 100%;
+        width: auto;
         max-width: 100%;
         max-height: 34px;
     }
@@ -1489,9 +1531,19 @@ a:hover {
     }
 
     .site-nav__sep {
-        display: inline;
+        display: inline-flex;
+        align-items: center;
         color: rgba(66, 94, 64, 0.45);
         font-weight: 400;
+        /* The links shrink with the viewport; the bar stayed at 16px and
+           stood taller than the words beside it. */
+        font-size: clamp(11px, 3.6vw, var(--text-base));
+        line-height: 1;
+    }
+
+    /* Two classes, so this still wins over the display set on .site-nav__sep. */
+    .site-nav__sep.site-nav__link--wide-only {
+        display: none;
     }
 
     /* Points 6 and 11: the rest belong to the desktop. */
@@ -1521,7 +1573,6 @@ a:hover {
 
     /* Point 15: the burger matches the Freedom shield on the other side. */
     .burger {
-        width: 40px;
         height: 40px;
         padding: var(--space-2);
     }
@@ -1584,17 +1635,18 @@ a:hover {
         margin-top: var(--space-5);
     }
 
-    /* The footer stacks: brand, then socials and email, each on its own row. */
+    /* The footer stacks and shares the copyright line's centre. */
     .site-footer__inner {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+        text-align: center;
         gap: var(--space-4);
     }
 
     /* Logo above the tagline, not fighting it for a narrow row. */
     .site-footer__brand {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
         gap: var(--space-3);
         width: 100%;
     }
@@ -1605,6 +1657,8 @@ a:hover {
 
     .site-footer__right {
         flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
         gap: var(--space-4);
     }
 }

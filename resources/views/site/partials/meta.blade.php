@@ -4,9 +4,19 @@
     $inverse ??= false;
     // Off by default: the cards in the narrow columns have no room for it.
     $hits ??= false;
+    $showHits = $hits && auth()->user()?->isStaff();
+    $metaClasses = ['meta'];
+
+    if ($inverse) {
+        $metaClasses[] = 'meta--inverse';
+    }
+
+    if ($showHits) {
+        $metaClasses[] = 'meta--hits';
+    }
 @endphp
 
-<div class="meta {{ $inverse ? 'meta--inverse' : '' }}">
+<div class="{{ implode(' ', $metaClasses) }}">
     @if ($category)
         <a class="meta__rubric" href="/category/{{ $category->term->slug }}">{{ $category->term->name }}</a>
     @endif
@@ -15,11 +25,10 @@
         {{ $post->created_at->format('d.m.Y') }}
     </time>
     {{--
-        The view count is for the newsroom, not the reader: it shows only to a
-        signed-in member of staff. A logged-out visitor gets no trace of it in
-        the markup at all, so there is nothing to read out of the page source.
+        The view count is for the newsroom, not the reader. A guest or a
+        signed-in reader gets no trace of it in the markup.
     --}}
-    @if ($hits && auth()->user()?->isStaff())
+    @if ($showHits)
         <span class="meta__hits" title="Қаралым саны">
             {{ number_format($post->post_hits, 0, ',', ' ') }}
         </span>
