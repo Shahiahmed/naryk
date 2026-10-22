@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Pages\Schemas;
 
+use App\Filament\RichContent\EmbedBlock;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -43,9 +44,11 @@ class PageForm
                             ->label('Краткое описание')
                             ->toolbarButtons(['bold', 'italic', 'underline', 'strike', 'superscript', 'subscript']),
 
-                        RichEditor::make('post_content')
-                            ->label('Текст')
-                            ->required(),
+                        EmbedBlock::attachTo(
+                            RichEditor::make('post_content')
+                                ->label('Текст')
+                                ->required()
+                        ),
                     ]),
 
                 Section::make('Оформление')

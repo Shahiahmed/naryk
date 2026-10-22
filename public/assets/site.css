@@ -1027,6 +1027,27 @@ a:hover {
     max-width: 100%;
 }
 
+/* Embeds from the admin's "Встраивание" block, see App\Support\Embeds. */
+.article__body .embed {
+    margin: var(--space-4) 0;
+}
+
+.article__body .embed iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+}
+
+.article__body .embed--video iframe {
+    aspect-ratio: 16 / 9;
+    height: auto;
+}
+
+/* No height given: a sensible window until site.js measures the page. */
+.article__body .embed--page iframe:not([height]) {
+    height: min(80vh, 900px);
+}
+
 /* Point 17: tags below the article. */
 .article__tags {
     display: flex;

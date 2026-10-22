@@ -158,3 +158,71 @@
             });
     });
 })();
+
+/*
+ * Embedded pages of our own (data-autoheight, set by App\Support\Embeds) grow
+ * to fit their content, so the reader scrolls the article, not a small box.
+ * Same-origin only; anything else keeps the CSS height.
+ */
+(function () {
+    'use strict';
+
+    var frames = document.querySelectorAll('iframe[data-autoheight]');
+
+    if (!frames.length) {
+        return;
+    }
+
+    function contentHeight(doc) {
+        var height = Math.max(doc.documentElement.scrollHeight, doc.body ? doc.body.scrollHeight : 0);
+
+        // Some pages (PDFs converted by pdf2htmlEX) scroll an inner box
+        // instead of the document, so the document alone reports one screen.
+        if (doc.body) {
+            Array.prototype.forEach.call(doc.body.children, function (child) {
+                height = Math.max(height, child.scrollHeight);
+            });
+        }
+
+        return height;
+    }
+
+    function fit(frame) {
+        var doc;
+
+        try {
+            doc = frame.contentDocument;
+        } catch (error) {
+            return;
+        }
+
+        if (!doc || !doc.documentElement) {
+            return;
+        }
+
+        var height = contentHeight(doc);
+
+        if (height > 0) {
+            frame.style.height = height + 'px';
+        }
+    }
+
+    Array.prototype.forEach.call(frames, function (frame) {
+        frame.addEventListener('load', function () {
+            fit(frame);
+            // Fonts and images inside arrive after load.
+            setTimeout(function () { fit(frame); }, 1000);
+        });
+
+        if (window.ResizeObserver) {
+            var width = 0;
+            new ResizeObserver(function (entries) {
+                var current = entries[0].contentRect.width;
+                if (current !== width) {
+                    width = current;
+                    fit(frame);
+                }
+            }).observe(frame);
+        }
+    });
+})();

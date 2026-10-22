@@ -50,9 +50,10 @@
                 @include('site.partials.banner', ['banner' => $banner])
             @endif
 
-            {{-- Editors write HTML in the admin's rich editor. --}}
+            {{-- Editors write HTML in the admin's rich editor; render() also turns
+             iframe code that was saved as text into the frame itself. --}}
             <div class="article__body">
-                {!! $post->post_content !!}
+                {!! \App\Support\Embeds::render($post->post_content) !!}
             </div>
 
             @if ($post->tags->isNotEmpty())

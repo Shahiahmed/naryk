@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Posts\Schemas;
 
+use App\Filament\RichContent\EmbedBlock;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
@@ -47,9 +48,11 @@ class PostForm
                             ->maxLength(200)
                             ->unique(ignoreRecord: true),
 
-                        RichEditor::make('post_content')
-                            ->label('Текст')
-                            ->required(),
+                        EmbedBlock::attachTo(
+                            RichEditor::make('post_content')
+                                ->label('Текст')
+                                ->required()
+                        ),
 
                         // 333 of the 363 non-empty summaries hold HTML.
                         RichEditor::make('post_summary')
