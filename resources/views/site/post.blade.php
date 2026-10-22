@@ -67,8 +67,12 @@
             @include('site.partials.share', ['post' => $post, 'modifier' => 'share--bottom'])
         </article>
 
+        @if($post->id == 7137) 
+              @include('site.partials.kase')
+        @else
         <aside class="columns__side columns__side--right">
-            <h2 class="column-title">Соңғы жаңалықтар</h2>
+     
+          <h2 class="column-title">Соңғы жаңалықтар</h2>
             <ol class="latest">
                 @foreach ($latest as $item)
                     <li class="latest__item">
@@ -80,6 +84,7 @@
                 @endforeach
             </ol>
         </aside>
+   @endif
 
     </div>
 @endsection
