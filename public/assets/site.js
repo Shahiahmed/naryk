@@ -187,6 +187,24 @@
         return height;
     }
 
+    // The biggest page on screen, if the document is a PDF converted by
+    // pdf2htmlEX (its pages are .pf).
+    function largestPage(doc) {
+        var best = null;
+        var area = 0;
+
+        Array.prototype.forEach.call(doc.querySelectorAll('.pf'), function (page) {
+            var rect = page.getBoundingClientRect();
+
+            if (rect.width * rect.height > area) {
+                area = rect.width * rect.height;
+                best = rect;
+            }
+        });
+
+        return best;
+    }
+
     function fit(frame) {
         var doc;
 
@@ -201,6 +219,21 @@
         }
 
         var height = contentHeight(doc);
+
+        /*
+         * A page that does not scroll but scales itself to fit the window
+         * (7.html: a PDF infographic, its other pages open as a popup) reports
+         * whatever height it is given. Take the proportions of the page it
+         * shows instead, keeping its own margin around it.
+         */
+        if (height <= doc.documentElement.clientHeight) {
+            var page = largestPage(doc);
+
+            if (page) {
+                var inset = Math.max(0, Math.min(page.left, page.top));
+                height = Math.round((frame.clientWidth - 2 * inset) * page.height / page.width + 2 * inset);
+            }
+        }
 
         if (height > 0) {
             frame.style.height = height + 'px';
