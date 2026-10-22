@@ -87,7 +87,9 @@ body {
     /* No stray element may push the page wider than the screen. */
     overflow-x: hidden;
 }
-
+.embeds{height: 800px;}
+@media (max-width: 900px) {.embeds{height:380px;}}
+@media (max-width: 400px) {.embeds{height:320px;}}
 img {
     max-width: 100%;
     display: block;
