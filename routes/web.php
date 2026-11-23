@@ -27,7 +27,7 @@ Route::get('/tag/{slug}', [ArchiveController::class, 'tag'])->name('tag');
 
 Route::get(config('naryk.post_prefix').'/{slug}', PostController::class)->name('post');
 
-// Route::get('/urpaq-kapitaly', UrpaqKapitalyController::class)->name('urpaq-kapitaly');
+Route::get('/urpaq-kapitaly', UrpaqKapitalyController::class)->name('urpaq-kapitaly');
 
 /*
  * Pages sit at the site root (`page_permalink_type` is `page_name`), so this
