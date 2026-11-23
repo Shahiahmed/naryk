@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\UrpaqKapitalyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -26,11 +27,13 @@ Route::get('/tag/{slug}', [ArchiveController::class, 'tag'])->name('tag');
 
 Route::get(config('naryk.post_prefix').'/{slug}', PostController::class)->name('post');
 
+Route::get('/urpaq-kapitaly', UrpaqKapitalyController::class)->name('urpaq-kapitaly');
+
 /*
  * Pages sit at the site root (`page_permalink_type` is `page_name`), so this
  * has to be the last route, and it must not swallow the admin panel or the
  * asset directories.
  */
 Route::get('/{slug}', PageController::class)
-    ->where('slug', '(?!admin|livewire|storage|assets|img|feed|search|contact|category|tag|'.config('naryk.post_prefix').')[a-z0-9][a-z0-9\-]*')
+    ->where('slug', '(?!admin|livewire|storage|assets|img|feed|search|contact|category|tag|urpaq-kapitaly|'.config('naryk.post_prefix').')[a-z0-9][a-z0-9\-]*')
     ->name('page');
