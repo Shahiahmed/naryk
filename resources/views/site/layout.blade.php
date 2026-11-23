@@ -198,8 +198,8 @@
                     <a class="site-nav__link {{ $item->class }} {{ $shown++ >= 5 ? 'site-nav__link--wide-only' : '' }}"
                        href="{{ $item->link }}">{{ $item->label }}</a>
                 @endforeach
-<span class="site-nav__sep" aria-hidden="true">|</span>
-                <a class="site-nav__link {{ request()->routeIs('urpaq-kapitaly') ? 'is-active' : '' }}" href="{{ route('urpaq-kapitaly') }}">Ұрпақ капиталы</a>
+{{-- <span class="site-nav__sep" aria-hidden="true">|</span>
+                <a class="site-nav__link {{ request()->routeIs('urpaq-kapitaly') ? 'is-active' : '' }}" href="{{ route('urpaq-kapitaly') }}">Ұрпақ капиталы</a> --}}
             </div>
         </nav>
     @endif
