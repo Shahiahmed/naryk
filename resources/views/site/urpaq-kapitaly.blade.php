@@ -1,4 +1,4 @@
-@extends('site.layout')
+@extends(request()->boolean('embed') ? 'site.embed' : 'site.layout')
 @section('title', 'Ұрпақ капиталы — калькулятор')
 @section('description', 'Бүгінгі инвестиция — ертеңгі ұрпақтың капиталы. Балаңыз 21 жасқа толғанша капитал жинау калькуляторы.')
 @push('head')
@@ -56,7 +56,7 @@
 .uk-results-icon{width:48px;height:48px;border-radius:999px;background:#e0efe6;color:#16573b;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
 .uk-results-title{margin:0;font-family:inherit;font-size:19px;font-weight:700;color:#111827}
 .uk-total-block{margin:24px 0 20px}
-.uk-total-value{font-size:clamp(36px,4.2vw,50px);font-weight:800;color:#16573b;letter-spacing:-.025em;line-height:1.08;margin-bottom:8px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.uk-total-value{font-size:clamp(28px,4vw,48px);font-weight:800;color:#16573b;letter-spacing:-.025em;line-height:1.08;margin-bottom:8px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .uk-total-caption{font-size:15px;color:#374151}
 .uk-yield-box{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-radius:14px;background:#e1efe7;margin-bottom:20px}
 .uk-yield-left{display:flex;align-items:center;gap:10px;font-size:15.5px;font-weight:600;color:#1f2937}
@@ -69,11 +69,11 @@
 .uk-dot{width:10px;height:10px;border-radius:50%;margin-top:4px;flex-shrink:0}
 .uk-dot--dark{background:#16573b}
 .uk-dot--light{background:#78b997}
-.uk-stat-amount{font-size:21px;font-weight:800;color:#111827;font-variant-numeric:tabular-nums;white-space:nowrap;margin-bottom:4px}
+.uk-stat-amount{font-size:clamp(15px,2vw,21px);font-weight:800;color:#111827;font-variant-numeric:tabular-nums;white-space:nowrap;margin-bottom:4px}
 .uk-stat-share{font-size:14px;font-weight:500;color:#6b7280}
 .uk-disclaimer{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:12px;background:#f7faf8;border:1px solid #e8eeea;color:#6b7280;font-size:12px;line-height:1.45}
 .uk-disclaimer-icon{width:18px;height:18px;border-radius:50%;border:1.5px solid #9ca3af;color:#6b7280;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-@media(max-width:920px){.uk-main{grid-template-columns:1fr;padding:0 14px 18px}.uk-hero{aspect-ratio:auto;height:165px}}
+@media(max-width:700px){.uk-main{grid-template-columns:1fr;padding:0 14px 18px}.uk-hero{aspect-ratio:auto;height:165px}}
 @media(max-width:560px){.uk-card,.uk-results-panel{padding:16px}.uk-inputs-grid,.uk-breakdown-card{grid-template-columns:1fr}.uk-stat-half:first-child{border-right:none;border-bottom:1px solid #e6eee9}.uk-total-value{font-size:32px}}
 </style>
 @endpush
