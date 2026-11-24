@@ -21,7 +21,7 @@
 .uk-step-title{margin:0;font-size:15px;font-weight:700;color:#111827;line-height:1.3}
 .uk-step-sub{margin:-4px 0 10px 36px;font-size:12.5px;color:#6b7280}
 .uk-label{display:block;font-size:13px;font-weight:500;color:#6b7280;margin-bottom:6px}
-.uk-slider-scale-top{position:relative;display:flex;justify-content:space-between;align-items:center;height:22px;margin-bottom:6px;font-size:12.5px;color:#6b7280;font-weight:500}
+.uk-slider-scale-top{position:relative;display:flex;justify-content:space-between;align-items:flex-end;height:40px;padding-top:18px;margin-bottom:6px;font-size:12.5px;color:#6b7280;font-weight:500}
 .uk-age-floating{position:absolute;top:0;transform:translateX(-50%);font-size:14px;font-weight:800;color:#16573b;white-space:nowrap;pointer-events:none}
 .uk-range{-webkit-appearance:none;appearance:none;width:100%;height:7px;border-radius:999px;background:linear-gradient(to right,#16573b 0%,#16573b 52.38%,#e2e8f0 52.38%,#e2e8f0 100%);outline:none;cursor:pointer}
 .uk-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:5px solid #16573b;box-shadow:0 2px 6px rgba(22,87,59,.28)}
@@ -93,7 +93,7 @@
           <label class="uk-label" for="uk-age-slider">Балаңыздың қазіргі жасы</label>
           <div class="uk-slider-scale-top">
             <span id="uk-scale-min">0 жас</span>
-            <span class="uk-age-floating" id="uk-age-display" style="left:12%">0 жас</span>
+            <span class="uk-age-floating" id="uk-age-display" style="left:7%">0 жас</span>
             <span id="uk-scale-max">21 жас</span>
           </div>
           <input type="range" id="uk-age-slider" class="uk-range" min="0" max="21" step="1" value="0">
@@ -217,7 +217,7 @@
     const pct = (a / 21) * 100;
     ageSlider.style.background = 'linear-gradient(to right,#16573b 0%,#16573b ' + pct + '%,#e2e8f0 ' + pct + '%,#e2e8f0 100%)';
     ageDisplay.textContent = a + ' жас';
-    const clamped = Math.min(88, Math.max(12, pct));
+    const clamped = Math.min(93, Math.max(7, pct));
     ageDisplay.style.left = clamped + '%';
     document.getElementById('uk-scale-min').style.visibility = a === 0 ? 'hidden' : '';
     document.getElementById('uk-scale-max').style.visibility = a === 21 ? 'hidden' : '';
