@@ -53,7 +53,14 @@
             {{-- Editors write HTML in the admin's rich editor; render() also turns
              iframe code that was saved as text into the frame itself. --}}
             <div class="article__body">
-                {!! \App\Support\Embeds::render($post->post_content) !!}
+                @php
+                    $renderedPostContent = \App\Support\Embeds::render($post->post_content);
+                if (str_contains($renderedPostContent, 'КАЛЬКУЛЯТОР ОРНЫ')) {
+                    $calcIframe = '<div class="uk-article-embed" style="margin:24px 0;"><iframe src="' . e(route('urpaq-kapitaly')) . '?embed=1" title="Ұрпақ капиталы — калькулятор" style="width:100%;border:0;overflow:hidden;display:block;min-height:720px;background:transparent;" loading="lazy" onload="try{var f=this,d=f.contentWindow.document,r=function(){var h=d.body?d.body.scrollHeight:720;if(h>100)f.style.height=(h+4)+\'px\';};r();if(window.ResizeObserver&&d.body){new ResizeObserver(r).observe(d.body);}setInterval(r,500);}catch(e){}"></iframe></div>';
+                $renderedPostContent = preg_replace('/(?:<p[^>]*>\s*)?\/+\s*КАЛЬКУЛЯТОР ОРНЫ\s*\/+(?:\s*<\/p>)?/iu', $calcIframe, $renderedPostContent);
+                }
+                @endphp
+                    {!! $renderedPostContent !!}
             </div>
 
             @if ($post->tags->isNotEmpty())
