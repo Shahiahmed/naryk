@@ -92,10 +92,10 @@
           <label class="uk-label" for="uk-age-slider">Балаңыздың қазіргі жасы</label>
           <div class="uk-slider-scale-top">
             <span>0 жас</span>
-            <span class="uk-age-floating" id="uk-age-display" style="left:52.38%">11 жас</span>
+            <span class="uk-age-floating" id="uk-age-display" style="left:12%">0 жас</span>
             <span>21 жас</span>
           </div>
-          <input type="range" id="uk-age-slider" class="uk-range" min="0" max="21" step="1" value="11">
+          <input type="range" id="uk-age-slider" class="uk-range" min="0" max="21" step="1" value="0">
         </div>
 
         <div class="uk-step">
@@ -111,14 +111,14 @@
             <div class="uk-field">
               <label class="uk-label" for="uk-initial-input">Бастапқы инвестиция</label>
               <div class="uk-input-wrap">
-                <input type="text" id="uk-initial-input" class="uk-input" inputmode="numeric" value="2 000 000" autocomplete="off">
+                <input type="text" id="uk-initial-input" class="uk-input" inputmode="numeric" value="" placeholder="0" autocomplete="off">
                 <span class="uk-currency">₸</span>
               </div>
             </div>
             <div class="uk-field">
               <label class="uk-label" for="uk-monthly-input">Ай сайынғы толықтыру</label>
               <div class="uk-input-wrap">
-                <input type="text" id="uk-monthly-input" class="uk-input" inputmode="numeric" value="50 000" autocomplete="off">
+                <input type="text" id="uk-monthly-input" class="uk-input" inputmode="numeric" value="" placeholder="0" autocomplete="off">
                 <span class="uk-currency">₸</span>
               </div>
             </div>
@@ -151,7 +151,7 @@
               </svg>
               <span>Болжамды табыстылық</span>
             </div>
-            <span class="uk-yield-rate" id="uk-yield-output">6,17%</span>
+            <span class="uk-yield-rate" id="uk-yield-output">0%</span>
           </div>
 
           <div class="uk-breakdown-card">
@@ -178,8 +178,8 @@
 </div>
 <script>
 (function(){
-  const COMPANIES = [{"ticker": "KZTO", "name": "ҚазТрансОйл", "rate": 10.2, "logo": "data:image/webp;base64,UklGRlYDAABXRUJQVlA4IEoDAACQDwCdASowADAAPj0Yi0OiIaEVWq4AIAPEsYBOmbsoUSbvyeru+Pfvn5UZPz8Fw27wn+Tf3LJdPln+A7+n+k9GfpTrXkgfnufQHpX+oP+T6tf/KWHArb1S6zMEgsUvwxM/jLAEOHKpEw5LP3wpaIEXLsLgnzbjy6MurcVlYqHF1CzZJ6AAAP7//moQfXJ0nsGXey77AMbs4HWVz8qs8KWcvAv67IKpub0aRuiYT0ZNue3wQ7OrmIe51iGEOmfoI/70uo/oSlM9x8KGmX+cx7fmTQYseL5TSMPyIEzXBBp3Vyq0uVPFmAKdIB9SoUUrMm+vSFiVQeUf0mfvq8PkHufiWFFS7/0MPOj/+lOkaoizWingw9eBFfwpmSqQS3+4F+J2Uts/CP0NJ/TbCjG3I3ERWSIOo9+mdNfu2oaZeav75rb3+ZlM3YsGCvB/0tSpyDigWb0SDgQuBCIx7lN1Gm52M5IqiW7t1duKRfvh/+Asgm6B/PP/nd6fqdV+H8EJvaWbtH11VG7VBLBwsCNMG1I+g2zldefzZtnLLleMCaoOdj9AKvor2Bu4KBswKgrXY+fyDTYFL8uw/P+X8L23WH9oHabcxGBFMNjbA0J1fBVeOz7OZ0QXHO08wmP02voc1/xex6/jHIgSEEcys2iRT/J0b+wyMWf+KldO/zoUJJNcWE5NF7sYs2TXenL2sG4/+w5fzYbee3ahi7vWZjF3PzwKEfmrt9su4EPTApntR31xXn4uEpN/nsF4ptwYnZd0DTQ6zIhmSm0X4yP+efVirJIb1/h7psbwiAUdSOr7wGU6fdz1c7QGXHS/nnc4ucyW3zI2+a8CmU7zsMUdVDhYT6PtQuB+VDHte184rl2PhVF8d2aZ5gyeN6eF1pPqLzf3AIr/wE4qFdr7Xn+RhaEzEkHmwwBTf64X9btSZ+rtSZkTnRGlFdxdgH3WAEl+XnPqemqOR05qePD7nqgmWP/AVgX0LR7mhRTIwRVguVK8TM4NPEE/t6HZvINkvtloa6C6QxMJfcABKNwE+Fhux8iOaQU/Zl2/zOvmSJBnN1G17Bal1/8Wwyenz8V/KI70JZvFDu6tGB7LqhLTyHOGuK6y0Dz0xUlo5hWi0AAAAA==", "defaultSelected": true}, {"ticker": "KEGC", "name": "KEGOC", "rate": 15.4, "logo": "data:image/webp;base64,UklGRtYCAABXRUJQVlA4IMoCAAAQDwCdASowADAAPjkWiEMiISEarVVUIAOEsoBlSmAXgBuKtCy5W/Dh8H9tzOmSU/Lv8xoz3HsRveqL/Y/9n8ZvaR9N+wV+sH+hTL79n80zTLkcFFmcyXpFj0GZEi3Rpp/w5Afv57VDKiAAnTISQDcyG76NSvgqiDIpUuJ0UagWaAAA/v/+WqWk7a4wPAdKUmWx8eAXxOeHTtyCsbSw5uztZC1eQbqSGSMBPnMQlw11FjJPr/1D2tPb4AmLpSAU/OBBE8evvlZgT3DxTQwalZBq/zfyIlf0avTkF2RVOKkSxaebXEgdk2T6/WuoXKL5zOo55KbtAorVgVBKeZfYN4ZyMm0jzTnePsyokQvOtwdCFar/rHncGqUWxmuS9iU6ZHCGNuToniFrJQo/1zltVwbsx6h0fYe94P6rDhUorsGcK2q6Uh1so3n40nRTBEmoUYBrSklqP6dfSRjapXRgHdeOZJ4MjeuIu75rZBFZaDjR+c8p8I+F+Ct2+oI8NK/2lD4wqwkl/Ey9kCeDEpbM1e1lCiEDWDT8cp9AlkvmnOKwftbq45FC/3bqnlyoq9JsPwflNUeDWMa9lbRuaL+34yK33e6OrGGM/lKfzln7eIv1J4IHT+D+WSL+ws8ukwR2rbwk838QOspbL0p3jVv6EtYB0RXlYZKzn9SPMoDgjvZ9EZpoWSsjtDIoso88TULd3XzOTIB4a69TbN4ch4LpmK/xQU1p/9pSF0W7Zf+xP2zanPBFmtlZK/VfGEkcf6XHedmjZSfAyW/AbduTTbj0upgSiX8v9q7QrxRtrRd4UbXmeWGAyIAN0Jyvf4gVkr+4Gu/zu8XLEeYaUV/9K4lYfVVOvMz5sOnF0OtAWblQxgAdf3nfCnH9rt6HrzccbBPscVs3zX8VurGKqomiXVBpALKgrtnZBs5RNeWJ73bYldtlp6bHD5qsnjoAAAA=", "defaultSelected": false}, {"ticker": "KZTK", "name": "Қазақтелеком", "rate": 5.7, "logo": "data:image/webp;base64,UklGRiYDAABXRUJQVlA4IBoDAADwDgCdASowADAAPj0YiUMiIaEarAQAIAPEswBajUJDQkCVD+sa70SOExtpfMZ+0HrG9EB1IG9JT7Lln9QICbsP4eceJbBmm/2jU0+WoHGvJaTev54xi+FTvMU0yMuyMxO9fnmII9ivJSobv5k2AA/52O1PGPolzUT+Fcv5PaJ+AAD+//5yKn1QRXr/OpPsdNKq2T6bS05PYA4UtthL7umnpOzWESlHo1qq4hQEXn/vS4T3oaPH/ZeAasSZ8m/WOSKeZeTJ8Dx8UUMWwUxHLt5zCje3Csnb9mDzJ4OFqnlH4iePM/8VYNTnNs9TtjoGb7CsIpeAwxAiw3wU5dYhIjO1E6ARDjuo7gkEoBoTxTlzLfZli1TmfJ70D3pMxp0DVcEwHp/6bHAH9uZgNyTzW/tk26XbbNbEnqPrsFXRe0HYIX5TPCKmO3pMHPTkqvn1fGxMs2l5H703+c+vWwr/57TQty8Ou/bdzfl2liVzNxiPp2H+LGBtgDDd/7Kv2SELlSdJz4CDwax6wKs4CKiDspmZTeg2c0rjgWu7M0wUn3phMot2orT+xIzvjAgb+4XW+NYUAOze8tJPQf+eAoPlIppSj0/HimtzeT/I/sHbW/brFLm0Lf4aJoeZ8f7dZCIs2CBKGLl+0pm12wR+JCgisxxJj/v0LZr6FfdHZDhlmFd3SlmHzS6f61s6wFG4rQ/G1M2jSUzNzM3q6CVnXvaDbVo+PbG3F+LcUQ5TR4pKSFfHOqVkzoIH++eCnh4ZVXVj/ieXN/6v9adwpwOkT6MsYs89omtIRuksx/wR+jr1j4Tpuv1cj+KRvyZn/jvmVkkni+2mEXjFWVyfZ4+F5c1e3fYOEdwkiWCWuEgYYSzxCIb/ere1+DlaLRTryTjQE2HtTUemBt5oc//dCMkFh0HWt3eT2RKYaAuFREZX/IZUhKPNYL6dYqwHcxEwuUv9UrrG0D8eE6z11+vzKNVF6CRGPpYJ4zUEEAAo+XoeURuzWcWbnn4PPqfntrKCaRoamepmE0Gv0BDQ82PB6e5p1aCnTNfjvl2Px9vpgAAAAA==", "defaultSelected": true}, {"ticker": "CCBN", "name": "ЦентрКредит Банкі", "rate": 7.5, "logo": "data:image/webp;base64,UklGRngCAABXRUJQVlA4IGwCAABQDACdASowADAAPjkWiUMiISEaqq6oIAOEoAvRNoEL6WBjHq8C3bzK6yPoT/kEZriNQHidpsge41cfFW+OfD+mlsJE2dmalYRlaNG/ugx+jOdiOmuGjpkXEBHlTTqt86VCl+5N2AtPcevAAAD+//4nqkzhIapssWTX0gzU+tMNZZBbuPz0iTEH61gixLUt4psp4WIkjDUZs+535VH4rcabtzHkV7E5qBc9N3Vm98t+HAIxH5hBpWv+XOpWHi8fNFx1+n5NJH6p59121WKWbecNDM6O9D1DlaOOnOr89QAyAvup7gtbsLOwX9+y89rYUaP9hVPBnubLJG5dvJY/LXBktYvuNRv2dj7UEc1iuSulAXZPkFePbiLc0I+5ZBXjyBU5lcjQl85KrHAqc6hFh6FTqwkoD/Ennfy/v1i5PZ3gHKAwIPdnWxQQzEKLA/bpOs8XdDjmdXcmmRyl4vab9+rJojBzp8bD25Pv26wrdNcVPpPLkkw7QFXjSxypqG6gaG56m82OYjX8XQ/a7BERjLOuJ9LyYX5/Q87kVrNeyO26vfdeapXQREt8B/bUVek2bPnjcATPJaMoesyg3dqrNJcEs5lBSX1vvMa5lXC/hh0t+GiIEnywqlI+UvBX8CuBCRD0r7Zl/gftblfS5BKEEGfjo6o1Zb/q0iFBHfY9cwCSEQxHvGD1mMRk73mIbclCzynFK59SNt6tDsFvLc6dYPlZ6IZ5DzqCtB6ImvKTRw7sXO2x0U65Zs/xWW8RtRjT8C4aa5+IATNPygHMk+1E+4BHYMmxAkVa6l3oaJjkbKH7KEKNX+WnS8xQcAAAAA==", "defaultSelected": false}, {"ticker": "HSBK", "name": "Halyk Bank", "rate": 2.6, "logo": "data:image/webp;base64,UklGRpgCAABXRUJQVlA4IIwCAACQDgCdASowADAAPjkWiEMiISEarAaoIAOEswBgh2NIUzF+p8IaUHqt5AN5G6aXmA88foT+oR3mv9qv2Z9iuKl1AVtaEKJ0DGuaYxAejvZmmzvddr9DFXvuDyBqpCVb2eyy/9INwS0BSh8+9il/5ZvaNpfFdmD6LVoM26GQAAD+//4wFymsJCaRUclEWXbf2pk6bJp0f6P40lj0bJPzJ+L6vRTbGP/Or0Bc+dDjZ17oX0Z5y9CzPE9YD+A5lnQu92dFKH28CQj81cfmpTXWOsxytZhu9ln2hmfrcImC1jrLczf+YIer+lkOOQHDcjtQCpKO2XMkPowBn6d0rgEvnVvLTvaCT9AhWZR3gjFCSYQ6rw8AbP419MYCb6V9eO9EDjazz8ZEX+j2Fy8slNfe+uPGUnCB7M03QSd/tjxiElcVeLnIydS8F6ym+Ah+UBFSVd57c/gvBfp/FTdG4mSnXK48HD4PbQGB/8NH4CLc02WCQ55z8iQC/VR+mFJzGB/z/2urJ1byi80PLP5RkmVa0/1T61Fj6FoMsJ5N19TfzAFl3Tqm9IEYTO/CNVlr7WdecYwf1YfJh/snkYswXacd+YbgbdQInQPhotf4m9EVLo6rDaL0s3jqGpidmU4Hf2WPNNhT8u0/vJ3LkMAbwWPQlj60nAAvd21pLrYT8f0SPTjVXOCUVDGqrPJPX0CmztvJnuGPXR1I/0gReOPsqty4qoT0JUIkav2oBmMHTIWlsqcDhnnMmVqH/+U4cqxK3sQHvo193wq/kprtIfztbvkaBV7Ru8/bZF8iCSPH4asil/nMlmqzhAA9BV9uI9d/X/9Aypf7dm+0ohEVA3IsHfUA6QYs5+l1WwrPMjcudgAA", "defaultSelected": true}, {"ticker": "KCEL", "name": "Kcell", "rate": 7.7, "logo": "data:image/webp;base64,UklGRhgDAABXRUJQVlA4IAwDAADwDQCdASowADAAPj0aiUOiIaEXHATMIAPEoAwiWXo1aWStGHv34+ZRr9BnIv6/j1f8PbSpm3lR+efRg/26k2hfJu5DKr48F4vmqxyJsFNIuNM+n5rNbVnKwE/hyP8jXD+XeEt8UhOvfW8vIntH94vnU7Bjx04OXQAA/v/+lO2G6x4Fystma0bZuegRL13pC2vobWTiG2qQ9QSTj2bZL+Qg2E6AH92YOZjRGt0mfn1txzfFwLLYkIrZBfJp++uOzTl+t1J/4HwMX6p5R19v0Wne82D/cNIdX66HenTra14CgPFmZtmZvKSanNaHi4PwK+nCBKYef+bCUC48grZijpH3Zkx23qc7X/DMB+DQA58P7oGbgAM+KAMkUBl8nUs7LBwRu8EaqHz7oWNCP6g9l/FpDatTeK8Wxz9RS4i39e5ojZAZv9FvSQju5hc9Lwgr4Vkp2Wf//iv9+tStns10DPuaUYXoypsekcf8slnc6VxruugL2rq3/QHdmjYtyT7NqwPFeWjeX4+kdUYOJawqeYFtiGyqye33tRwGPpNHaIKYdbA/aN1ln4jaMDS1tPxzyhb2upmO+ZVzc8CT1zokL+Evyf6MXdkbBdvdknPOYxrit90mtk1dlUnOO2FqBlOX5JatMFkYTj1FSp58HYkLAQcN4vXEOAZv5ONSZ91+TDzip1ILmrL7Kt3Q3/Jsx6RBbwb4tzQl3yEq5vp1Scytj8MEsiODvKvkh/trengYn6Rekdz59d2dBpFySladg51gmYh3JwbFmf8xnD9jxrM//lZopyUyqWNArejAnazmh/mxppDMOgc/LpUzPwcHn0E6O/xqsIvPG8/lOZoxI8+Fk6nQ0u1mDEUVrj368Getyp2mOUT4sQx0K7nGWCnpjmBCdFPYZoIZvmTJi82/ceeAzzu6XC8dqCh929FC898NQH1CiyyhSK6BZa5Yo3GBV1qG7WrLtGKAOfGEom3y5Nvi6MpAvUcgoM9ZlZZ4pOwY1nOwjJYUF3B+5F4GpItYwJYAeXrmJjx+bEG+oH8AAAA=", "defaultSelected": false}];
-  const selected = new Set(COMPANIES.filter(c => c.defaultSelected).map(c => c.ticker));
+  const COMPANIES = [{"ticker": "KZTO", "name": "ҚазТрансОйл", "rate": 10.2, "logo": "data:image/webp;base64,UklGRlYDAABXRUJQVlA4IEoDAACQDwCdASowADAAPj0Yi0OiIaEVWq4AIAPEsYBOmbsoUSbvyeru+Pfvn5UZPz8Fw27wn+Tf3LJdPln+A7+n+k9GfpTrXkgfnufQHpX+oP+T6tf/KWHArb1S6zMEgsUvwxM/jLAEOHKpEw5LP3wpaIEXLsLgnzbjy6MurcVlYqHF1CzZJ6AAAP7//moQfXJ0nsGXey77AMbs4HWVz8qs8KWcvAv67IKpub0aRuiYT0ZNue3wQ7OrmIe51iGEOmfoI/70uo/oSlM9x8KGmX+cx7fmTQYseL5TSMPyIEzXBBp3Vyq0uVPFmAKdIB9SoUUrMm+vSFiVQeUf0mfvq8PkHufiWFFS7/0MPOj/+lOkaoizWingw9eBFfwpmSqQS3+4F+J2Uts/CP0NJ/TbCjG3I3ERWSIOo9+mdNfu2oaZeav75rb3+ZlM3YsGCvB/0tSpyDigWb0SDgQuBCIx7lN1Gm52M5IqiW7t1duKRfvh/+Asgm6B/PP/nd6fqdV+H8EJvaWbtH11VG7VBLBwsCNMG1I+g2zldefzZtnLLleMCaoOdj9AKvor2Bu4KBswKgrXY+fyDTYFL8uw/P+X8L23WH9oHabcxGBFMNjbA0J1fBVeOz7OZ0QXHO08wmP02voc1/xex6/jHIgSEEcys2iRT/J0b+wyMWf+KldO/zoUJJNcWE5NF7sYs2TXenL2sG4/+w5fzYbee3ahi7vWZjF3PzwKEfmrt9su4EPTApntR31xXn4uEpN/nsF4ptwYnZd0DTQ6zIhmSm0X4yP+efVirJIb1/h7psbwiAUdSOr7wGU6fdz1c7QGXHS/nnc4ucyW3zI2+a8CmU7zsMUdVDhYT6PtQuB+VDHte184rl2PhVF8d2aZ5gyeN6eF1pPqLzf3AIr/wE4qFdr7Xn+RhaEzEkHmwwBTf64X9btSZ+rtSZkTnRGlFdxdgH3WAEl+XnPqemqOR05qePD7nqgmWP/AVgX0LR7mhRTIwRVguVK8TM4NPEE/t6HZvINkvtloa6C6QxMJfcABKNwE+Fhux8iOaQU/Zl2/zOvmSJBnN1G17Bal1/8Wwyenz8V/KI70JZvFDu6tGB7LqhLTyHOGuK6y0Dz0xUlo5hWi0AAAAA==", "defaultSelected": false}, {"ticker": "KEGC", "name": "KEGOC", "rate": 15.4, "logo": "data:image/webp;base64,UklGRtYCAABXRUJQVlA4IMoCAAAQDwCdASowADAAPjkWiEMiISEarVVUIAOEsoBlSmAXgBuKtCy5W/Dh8H9tzOmSU/Lv8xoz3HsRveqL/Y/9n8ZvaR9N+wV+sH+hTL79n80zTLkcFFmcyXpFj0GZEi3Rpp/w5Afv57VDKiAAnTISQDcyG76NSvgqiDIpUuJ0UagWaAAA/v/+WqWk7a4wPAdKUmWx8eAXxOeHTtyCsbSw5uztZC1eQbqSGSMBPnMQlw11FjJPr/1D2tPb4AmLpSAU/OBBE8evvlZgT3DxTQwalZBq/zfyIlf0avTkF2RVOKkSxaebXEgdk2T6/WuoXKL5zOo55KbtAorVgVBKeZfYN4ZyMm0jzTnePsyokQvOtwdCFar/rHncGqUWxmuS9iU6ZHCGNuToniFrJQo/1zltVwbsx6h0fYe94P6rDhUorsGcK2q6Uh1so3n40nRTBEmoUYBrSklqP6dfSRjapXRgHdeOZJ4MjeuIu75rZBFZaDjR+c8p8I+F+Ct2+oI8NK/2lD4wqwkl/Ey9kCeDEpbM1e1lCiEDWDT8cp9AlkvmnOKwftbq45FC/3bqnlyoq9JsPwflNUeDWMa9lbRuaL+34yK33e6OrGGM/lKfzln7eIv1J4IHT+D+WSL+ws8ukwR2rbwk838QOspbL0p3jVv6EtYB0RXlYZKzn9SPMoDgjvZ9EZpoWSsjtDIoso88TULd3XzOTIB4a69TbN4ch4LpmK/xQU1p/9pSF0W7Zf+xP2zanPBFmtlZK/VfGEkcf6XHedmjZSfAyW/AbduTTbj0upgSiX8v9q7QrxRtrRd4UbXmeWGAyIAN0Jyvf4gVkr+4Gu/zu8XLEeYaUV/9K4lYfVVOvMz5sOnF0OtAWblQxgAdf3nfCnH9rt6HrzccbBPscVs3zX8VurGKqomiXVBpALKgrtnZBs5RNeWJ73bYldtlp6bHD5qsnjoAAAA=", "defaultSelected": false}, {"ticker": "KZTK", "name": "Қазақтелеком", "rate": 5.7, "logo": "data:image/webp;base64,UklGRiYDAABXRUJQVlA4IBoDAADwDgCdASowADAAPj0YiUMiIaEarAQAIAPEswBajUJDQkCVD+sa70SOExtpfMZ+0HrG9EB1IG9JT7Lln9QICbsP4eceJbBmm/2jU0+WoHGvJaTev54xi+FTvMU0yMuyMxO9fnmII9ivJSobv5k2AA/52O1PGPolzUT+Fcv5PaJ+AAD+//5yKn1QRXr/OpPsdNKq2T6bS05PYA4UtthL7umnpOzWESlHo1qq4hQEXn/vS4T3oaPH/ZeAasSZ8m/WOSKeZeTJ8Dx8UUMWwUxHLt5zCje3Csnb9mDzJ4OFqnlH4iePM/8VYNTnNs9TtjoGb7CsIpeAwxAiw3wU5dYhIjO1E6ARDjuo7gkEoBoTxTlzLfZli1TmfJ70D3pMxp0DVcEwHp/6bHAH9uZgNyTzW/tk26XbbNbEnqPrsFXRe0HYIX5TPCKmO3pMHPTkqvn1fGxMs2l5H703+c+vWwr/57TQty8Ou/bdzfl2liVzNxiPp2H+LGBtgDDd/7Kv2SELlSdJz4CDwax6wKs4CKiDspmZTeg2c0rjgWu7M0wUn3phMot2orT+xIzvjAgb+4XW+NYUAOze8tJPQf+eAoPlIppSj0/HimtzeT/I/sHbW/brFLm0Lf4aJoeZ8f7dZCIs2CBKGLl+0pm12wR+JCgisxxJj/v0LZr6FfdHZDhlmFd3SlmHzS6f61s6wFG4rQ/G1M2jSUzNzM3q6CVnXvaDbVo+PbG3F+LcUQ5TR4pKSFfHOqVkzoIH++eCnh4ZVXVj/ieXN/6v9adwpwOkT6MsYs89omtIRuksx/wR+jr1j4Tpuv1cj+KRvyZn/jvmVkkni+2mEXjFWVyfZ4+F5c1e3fYOEdwkiWCWuEgYYSzxCIb/ere1+DlaLRTryTjQE2HtTUemBt5oc//dCMkFh0HWt3eT2RKYaAuFREZX/IZUhKPNYL6dYqwHcxEwuUv9UrrG0D8eE6z11+vzKNVF6CRGPpYJ4zUEEAAo+XoeURuzWcWbnn4PPqfntrKCaRoamepmE0Gv0BDQ82PB6e5p1aCnTNfjvl2Px9vpgAAAAA==", "defaultSelected": false}, {"ticker": "CCBN", "name": "ЦентрКредит Банкі", "rate": 7.5, "logo": "data:image/webp;base64,UklGRngCAABXRUJQVlA4IGwCAABQDACdASowADAAPjkWiUMiISEaqq6oIAOEoAvRNoEL6WBjHq8C3bzK6yPoT/kEZriNQHidpsge41cfFW+OfD+mlsJE2dmalYRlaNG/ugx+jOdiOmuGjpkXEBHlTTqt86VCl+5N2AtPcevAAAD+//4nqkzhIapssWTX0gzU+tMNZZBbuPz0iTEH61gixLUt4psp4WIkjDUZs+535VH4rcabtzHkV7E5qBc9N3Vm98t+HAIxH5hBpWv+XOpWHi8fNFx1+n5NJH6p59121WKWbecNDM6O9D1DlaOOnOr89QAyAvup7gtbsLOwX9+y89rYUaP9hVPBnubLJG5dvJY/LXBktYvuNRv2dj7UEc1iuSulAXZPkFePbiLc0I+5ZBXjyBU5lcjQl85KrHAqc6hFh6FTqwkoD/Ennfy/v1i5PZ3gHKAwIPdnWxQQzEKLA/bpOs8XdDjmdXcmmRyl4vab9+rJojBzp8bD25Pv26wrdNcVPpPLkkw7QFXjSxypqG6gaG56m82OYjX8XQ/a7BERjLOuJ9LyYX5/Q87kVrNeyO26vfdeapXQREt8B/bUVek2bPnjcATPJaMoesyg3dqrNJcEs5lBSX1vvMa5lXC/hh0t+GiIEnywqlI+UvBX8CuBCRD0r7Zl/gftblfS5BKEEGfjo6o1Zb/q0iFBHfY9cwCSEQxHvGD1mMRk73mIbclCzynFK59SNt6tDsFvLc6dYPlZ6IZ5DzqCtB6ImvKTRw7sXO2x0U65Zs/xWW8RtRjT8C4aa5+IATNPygHMk+1E+4BHYMmxAkVa6l3oaJjkbKH7KEKNX+WnS8xQcAAAAA==", "defaultSelected": false}, {"ticker": "HSBK", "name": "Halyk Bank", "rate": 2.6, "logo": "data:image/webp;base64,UklGRpgCAABXRUJQVlA4IIwCAACQDgCdASowADAAPjkWiEMiISEarAaoIAOEswBgh2NIUzF+p8IaUHqt5AN5G6aXmA88foT+oR3mv9qv2Z9iuKl1AVtaEKJ0DGuaYxAejvZmmzvddr9DFXvuDyBqpCVb2eyy/9INwS0BSh8+9il/5ZvaNpfFdmD6LVoM26GQAAD+//4wFymsJCaRUclEWXbf2pk6bJp0f6P40lj0bJPzJ+L6vRTbGP/Or0Bc+dDjZ17oX0Z5y9CzPE9YD+A5lnQu92dFKH28CQj81cfmpTXWOsxytZhu9ln2hmfrcImC1jrLczf+YIer+lkOOQHDcjtQCpKO2XMkPowBn6d0rgEvnVvLTvaCT9AhWZR3gjFCSYQ6rw8AbP419MYCb6V9eO9EDjazz8ZEX+j2Fy8slNfe+uPGUnCB7M03QSd/tjxiElcVeLnIydS8F6ym+Ah+UBFSVd57c/gvBfp/FTdG4mSnXK48HD4PbQGB/8NH4CLc02WCQ55z8iQC/VR+mFJzGB/z/2urJ1byi80PLP5RkmVa0/1T61Fj6FoMsJ5N19TfzAFl3Tqm9IEYTO/CNVlr7WdecYwf1YfJh/snkYswXacd+YbgbdQInQPhotf4m9EVLo6rDaL0s3jqGpidmU4Hf2WPNNhT8u0/vJ3LkMAbwWPQlj60nAAvd21pLrYT8f0SPTjVXOCUVDGqrPJPX0CmztvJnuGPXR1I/0gReOPsqty4qoT0JUIkav2oBmMHTIWlsqcDhnnMmVqH/+U4cqxK3sQHvo193wq/kprtIfztbvkaBV7Ru8/bZF8iCSPH4asil/nMlmqzhAA9BV9uI9d/X/9Aypf7dm+0ohEVA3IsHfUA6QYs5+l1WwrPMjcudgAA", "defaultSelected": false}, {"ticker": "KCEL", "name": "Kcell", "rate": 7.7, "logo": "data:image/webp;base64,UklGRhgDAABXRUJQVlA4IAwDAADwDQCdASowADAAPj0aiUOiIaEXHATMIAPEoAwiWXo1aWStGHv34+ZRr9BnIv6/j1f8PbSpm3lR+efRg/26k2hfJu5DKr48F4vmqxyJsFNIuNM+n5rNbVnKwE/hyP8jXD+XeEt8UhOvfW8vIntH94vnU7Bjx04OXQAA/v/+lO2G6x4Fystma0bZuegRL13pC2vobWTiG2qQ9QSTj2bZL+Qg2E6AH92YOZjRGt0mfn1txzfFwLLYkIrZBfJp++uOzTl+t1J/4HwMX6p5R19v0Wne82D/cNIdX66HenTra14CgPFmZtmZvKSanNaHi4PwK+nCBKYef+bCUC48grZijpH3Zkx23qc7X/DMB+DQA58P7oGbgAM+KAMkUBl8nUs7LBwRu8EaqHz7oWNCP6g9l/FpDatTeK8Wxz9RS4i39e5ojZAZv9FvSQju5hc9Lwgr4Vkp2Wf//iv9+tStns10DPuaUYXoypsekcf8slnc6VxruugL2rq3/QHdmjYtyT7NqwPFeWjeX4+kdUYOJawqeYFtiGyqye33tRwGPpNHaIKYdbA/aN1ln4jaMDS1tPxzyhb2upmO+ZVzc8CT1zokL+Evyf6MXdkbBdvdknPOYxrit90mtk1dlUnOO2FqBlOX5JatMFkYTj1FSp58HYkLAQcN4vXEOAZv5ONSZ91+TDzip1ILmrL7Kt3Q3/Jsx6RBbwb4tzQl3yEq5vp1Scytj8MEsiODvKvkh/trengYn6Rekdz59d2dBpFySladg51gmYh3JwbFmf8xnD9jxrM//lZopyUyqWNArejAnazmh/mxppDMOgc/LpUzPwcHn0E6O/xqsIvPG8/lOZoxI8+Fk6nQ0u1mDEUVrj368Getyp2mOUT4sQx0K7nGWCnpjmBCdFPYZoIZvmTJi82/ceeAzzu6XC8dqCh929FC898NQH1CiyyhSK6BZa5Yo3GBV1qG7WrLtGKAOfGEom3y5Nvi6MpAvUcgoM9ZlZZ4pOwY1nOwjJYUF3B+5F4GpItYwJYAeXrmJjx+bEG+oH8AAAA=", "defaultSelected": false}];
+  const selected = new Set();
   const ageSlider = document.getElementById('uk-age-slider');
   const ageDisplay = document.getElementById('uk-age-display');
   const grid = document.getElementById('uk-companies-grid');
@@ -196,6 +196,7 @@
 
   let cur = { total: 0, invested: 0, profit: 0 };
   let af = null;
+  let touched = false;
 
   const fmtT = v => Math.round(Number.isFinite(v) ? v : 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₸';
   const fmtN = r => {
@@ -226,8 +227,9 @@
       c.setAttribute('aria-pressed', s ? 'true' : 'false');
     });
     const ok = selected.size > 0;
-    errEl.classList.toggle('is-visible', !ok);
+    errEl.classList.toggle('is-visible', touched && !ok);
     btn.disabled = !ok;
+    if (!ok) calc();
   }
 
   function render() {
@@ -242,6 +244,7 @@
         '<span class="uk-company-text"><span class="uk-company-name">' + co.name + '</span> <span class="uk-company-ticker">(' + co.ticker + ')</span></span>' +
         '<span class="uk-checkbox" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
       b.addEventListener('click', () => {
+        touched = true;
         selected.has(co.ticker) ? selected.delete(co.ticker) : selected.add(co.ticker);
         updSel();
       });
@@ -280,7 +283,13 @@
   }
 
   function calc() {
-    if (!selected.size) return;
+    if (!selected.size) {
+      yldOut.textContent = '0%';
+      invSh.textContent = '0%';
+      prfSh.textContent = '0%';
+      anim({ total: 0, invested: 0, profit: 0 });
+      return;
+    }
     const a = parseInt(ageSlider.value, 10) || 0;
     const m = Math.max(0, (21 - a) * 12);
     const P = parseA(initIn);
@@ -293,7 +302,7 @@
     }
     const inv = P + PMT * m;
     const prf = Math.max(0, fv - inv);
-    const ip = fv > 0 ? Math.round((inv / fv) * 100) : 100;
+    const ip = fv > 0 ? Math.round((inv / fv) * 100) : 0;
     const pp = Math.max(0, 100 - ip);
     yldOut.textContent = fmtP(r);
     invSh.textContent = ip + '%';
