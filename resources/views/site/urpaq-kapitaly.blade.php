@@ -54,7 +54,7 @@
 .uk-results-panel{flex:1;background:#f1f8f4;border-radius:14px;padding:24px 24px 22px;display:flex;flex-direction:column;justify-content:space-between}
 .uk-results-head{display:flex;align-items:center;gap:12px}
 .uk-results-icon{width:48px;height:48px;border-radius:999px;background:#e0efe6;color:#16573b;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
-.uk-results-title{margin:0;font-family:Georgia,'Times New Roman',serif;font-size:21px;font-weight:700;color:#111827}
+.uk-results-title{margin:0;font-family:inherit;font-size:19px;font-weight:700;color:#111827}
 .uk-total-block{margin:24px 0 20px}
 .uk-total-value{font-size:clamp(36px,4.2vw,50px);font-weight:800;color:#16573b;letter-spacing:-.025em;line-height:1.08;margin-bottom:8px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .uk-total-caption{font-size:15px;color:#374151}
