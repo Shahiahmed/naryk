@@ -228,7 +228,6 @@
     });
     const ok = selected.size > 0;
     errEl.classList.toggle('is-visible', touched && !ok);
-    btn.disabled = !ok;
     if (!ok) calc();
   }
 
@@ -312,7 +311,7 @@
 
   ageSlider.addEventListener('input', updSlider);
   [initIn, monIn].forEach(el => el.addEventListener('input', () => { el.value = fmtN(el.value); }));
-  btn.addEventListener('click', calc);
+  btn.addEventListener('click', () => { touched = true; updSel(); calc(); });
 
   render();
   updSel();
