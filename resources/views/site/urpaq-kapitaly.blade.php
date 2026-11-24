@@ -73,6 +73,7 @@
 .uk-stat-share{font-size:14px;font-weight:500;color:#6b7280}
 .uk-disclaimer{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:12px;background:#f7faf8;border:1px solid #e8eeea;color:#6b7280;font-size:12px;line-height:1.45}
 .uk-disclaimer-icon{width:18px;height:18px;border-radius:50%;border:1.5px solid #9ca3af;color:#6b7280;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+@media(max-width:900px){.uk-company-text{white-space:normal}.uk-company-ticker{display:block;margin-left:0}}
 @media(max-width:700px){.uk-main{grid-template-columns:1fr;padding:0 14px 18px}.uk-hero{aspect-ratio:auto;height:165px}}
 @media(max-width:560px){.uk-card,.uk-results-panel{padding:16px}.uk-inputs-grid,.uk-breakdown-card{grid-template-columns:1fr}.uk-stat-half:first-child{border-right:none;border-bottom:1px solid #e6eee9}.uk-total-value{font-size:32px}}
 </style>
@@ -91,9 +92,9 @@
           <div class="uk-step-head"><span class="uk-step-num">1</span><h2 class="uk-step-title">Мақсат — балаңыз 21 жасқа толғанша капитал жинау</h2></div>
           <label class="uk-label" for="uk-age-slider">Балаңыздың қазіргі жасы</label>
           <div class="uk-slider-scale-top">
-            <span>0 жас</span>
+            <span id="uk-scale-min">0 жас</span>
             <span class="uk-age-floating" id="uk-age-display" style="left:12%">0 жас</span>
-            <span>21 жас</span>
+            <span id="uk-scale-max">21 жас</span>
           </div>
           <input type="range" id="uk-age-slider" class="uk-range" min="0" max="21" step="1" value="0">
         </div>
@@ -218,6 +219,8 @@
     ageDisplay.textContent = a + ' жас';
     const clamped = Math.min(88, Math.max(12, pct));
     ageDisplay.style.left = clamped + '%';
+    document.getElementById('uk-scale-min').style.visibility = a === 0 ? 'hidden' : '';
+    document.getElementById('uk-scale-max').style.visibility = a === 21 ? 'hidden' : '';
   }
 
   function updSel() {
