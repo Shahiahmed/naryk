@@ -12,7 +12,7 @@
 .uk-hero{position:relative;width:100%;aspect-ratio:1179/254;min-height:170px;background:#073322;overflow:hidden}
 .uk-hero-bg{width:100%;height:100%;object-fit:cover;object-position:left top;display:block}
 .uk-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.uk-main{position:relative;z-index:3;margin-top:-24px;padding:0 18px 20px;display:grid;grid-template-columns:minmax(0,44.5fr) minmax(0,55.5fr);gap:16px;align-items:stretch}
+.uk-main{position:relative;z-index:3;margin-top:-24px;padding:0 18px 20px;display:grid;grid-template-columns:minmax(0,44.5fr) minmax(0,55.5fr);gap:16px;align-items:start}
 .uk-card{background:#fff;border-radius:18px;padding:20px 22px;box-shadow:0 6px 22px rgba(15,52,33,.06);border:1px solid rgba(17,24,39,.05);display:flex;flex-direction:column}
 .uk-step{margin-bottom:16px}
 .uk-step:last-of-type{margin-bottom:16px}
@@ -51,14 +51,14 @@
 .uk-btn:hover:not(:disabled){background:#10432d}
 .uk-btn:disabled{opacity:.45;cursor:not-allowed}
 .uk-right-shell{background:#fff;border-radius:18px;padding:14px;box-shadow:0 6px 22px rgba(15,52,33,.06);border:1px solid rgba(17,24,39,.05);display:flex;flex-direction:column;gap:12px}
-.uk-results-panel{flex:1;background:#f1f8f4;border-radius:14px;padding:24px 24px 22px;display:flex;flex-direction:column;justify-content:space-between}
+.uk-results-panel{background:#f1f8f4;border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:18px}
 .uk-results-head{display:flex;align-items:center;gap:12px}
 .uk-results-icon{width:48px;height:48px;border-radius:999px;background:#e0efe6;color:#16573b;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
 .uk-results-title{margin:0;font-family:inherit;font-size:19px;font-weight:700;color:#111827}
-.uk-total-block{margin:24px 0 20px}
+.uk-total-block{margin:0}
 .uk-total-value{font-size:clamp(28px,4vw,48px);font-weight:800;color:#16573b;letter-spacing:-.025em;line-height:1.08;margin-bottom:8px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .uk-total-caption{font-size:15px;color:#374151}
-.uk-yield-box{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-radius:14px;background:#e1efe7;margin-bottom:20px}
+.uk-yield-box{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-radius:14px;background:#e1efe7;margin-bottom:0}
 .uk-yield-left{display:flex;align-items:center;gap:10px;font-size:15.5px;font-weight:600;color:#1f2937}
 .uk-yield-left svg{color:#16573b;flex-shrink:0}
 .uk-yield-rate{font-size:26px;font-weight:800;color:#16573b;font-variant-numeric:tabular-nums;white-space:nowrap}
