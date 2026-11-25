@@ -234,8 +234,19 @@
     <div class="shell site-footer__legal">
         © 2016–{{ date('Y') }} {{ $settings['site_information']['company_name'] ?? 'Naryk.kz' }}
         авторлық және жанама құқықтар сақталған.
+        <a href="https://www.liveinternet.ru/click"
+target="_blank"><img id="licnt8B81" width="31" height="31" style="border:0" 
+title="LiveInternet"
+src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+alt=""/></a>
     </div>
 </footer>
+<!--LiveInternet counter--><script>(function(d,s){d.getElementById("licnt8B81").src=
+"https://counter.yadro.ru/hit?t38.6;r"+escape(d.referrer)+
+((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+(s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+";h"+escape(d.title.substring(0,150))+";"+Math.random()})
+(document,screen)</script><!--/LiveInternet-->
 
 <script src="{{ asset('assets/site.js') }}?v={{ filemtime(public_path('assets/site.js')) }}" defer></script>
 </body>
