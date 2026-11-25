@@ -74,7 +74,8 @@
 .uk-disclaimer{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:12px;background:#f7faf8;border:1px solid #e8eeea;color:#6b7280;font-size:12px;line-height:1.45}
 .uk-disclaimer-icon{width:18px;height:18px;border-radius:50%;border:1.5px solid #9ca3af;color:#6b7280;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 @media(max-width:900px){.uk-company-text{white-space:normal}.uk-company-ticker{display:block;margin-left:0}}
-@media(max-width:700px){.uk-main{grid-template-columns:1fr;padding:0 14px 18px}.uk-hero{aspect-ratio:auto;height:165px}}
+@media(max-width:700px){.uk-main{grid-template-columns:1fr;padding:0 14px 18px}.uk-hero{aspect-ratio:1179/254;height:auto;min-height:0}.uk-hero-bg{object-fit:contain;object-position:center}.uk-main{margin-top:12px}}
+@media(max-width:900px){.uk-hero{min-height:0}}
 @media(max-width:560px){.uk-card,.uk-results-panel{padding:16px}.uk-inputs-grid,.uk-breakdown-card{grid-template-columns:1fr}.uk-stat-half:first-child{border-right:none;border-bottom:1px solid #e6eee9}.uk-total-value{font-size:32px}}
 </style>
 @endpush
