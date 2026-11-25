@@ -54,7 +54,7 @@
 .uk-results-panel{background:#f1f8f4;border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:18px}
 .uk-results-head{display:flex;align-items:center;gap:12px}
 .uk-results-icon{width:48px;height:48px;border-radius:999px;background:#e0efe6;color:#16573b;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
-.uk-results-title{margin:0;font-family:inherit;font-size:19px;font-weight:700;color:#111827}
+.uk-results-title{margin:0;font-family:inherit;font-size:15.5px;font-weight:600;color:#1f2937;line-height:1.3} .uk-cta-btn{text-decoration:none;margin-top:0}
 .uk-total-block{margin:0}
 .uk-total-value{font-size:clamp(28px,4vw,48px);font-weight:800;color:#16573b;letter-spacing:-.025em;line-height:1.08;margin-bottom:8px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .uk-total-caption{font-size:15px;color:#374151}
@@ -169,7 +169,7 @@
             </div>
           </div>
         </section>
-
+                <a href="https://fbroker.kz/kk" target="_blank" rel="noopener noreferrer" class="uk-btn uk-cta-btn"><span>Шот ашу</span></a>
         <div class="uk-disclaimer">
           <span class="uk-disclaimer-icon" aria-hidden="true">i</span>
           <span>Бұл есеп тарихи деректерге негізделген және болашақтағы нақты табыстылыққа кепілдік бермейді. Нарық жағдайына байланысты инвестицияның құны өзгеруі мүмкін.</span>
